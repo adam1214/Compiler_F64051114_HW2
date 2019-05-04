@@ -26,9 +26,11 @@ void dump_symbol();
 }
 
 /* Token without return */
-%token PRINT 
-%token IF ELSE FOR
-%token ID SEMICOLON
+%token ADD SUB MUL DIV MOD INC DEC MT LT MTE LTE EQ 
+%token NE ASGN ADDASGN SUBASGN MULASGN DIVASGN MODASGN
+%token AND OR NOT LB RB LCB RCB LSB RSB COMMA SEMICOLON
+%token PRINT IF ELSE WHILE INT FLOAT VOID BOOL
+%token TRUE FALSE RET CONT BREAK ID NEWLINE QUOTA FOR
 
 /* Token with return, which need to sepcify type */
 %token <i_val> I_CONST

@@ -45,27 +45,109 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    PRINT = 258,
-    IF = 259,
-    ELSE = 260,
-    FOR = 261,
-    ID = 262,
-    SEMICOLON = 263,
-    I_CONST = 264,
-    F_CONST = 265,
-    STRING = 266
+    ADD = 258,
+    SUB = 259,
+    MUL = 260,
+    DIV = 261,
+    MOD = 262,
+    INC = 263,
+    DEC = 264,
+    MT = 265,
+    LT = 266,
+    MTE = 267,
+    LTE = 268,
+    EQ = 269,
+    NE = 270,
+    ASGN = 271,
+    ADDASGN = 272,
+    SUBASGN = 273,
+    MULASGN = 274,
+    DIVASGN = 275,
+    MODASGN = 276,
+    AND = 277,
+    OR = 278,
+    NOT = 279,
+    LB = 280,
+    RB = 281,
+    LCB = 282,
+    RCB = 283,
+    LSB = 284,
+    RSB = 285,
+    COMMA = 286,
+    SEMICOLON = 287,
+    PRINT = 288,
+    IF = 289,
+    ELSE = 290,
+    WHILE = 291,
+    INT = 292,
+    FLOAT = 293,
+    VOID = 294,
+    BOOL = 295,
+    TRUE = 296,
+    FALSE = 297,
+    RET = 298,
+    CONT = 299,
+    BREAK = 300,
+    ID = 301,
+    NEWLINE = 302,
+    QUOTA = 303,
+    FOR = 304,
+    I_CONST = 305,
+    F_CONST = 306,
+    STRING = 307
   };
 #endif
 /* Tokens.  */
-#define PRINT 258
-#define IF 259
-#define ELSE 260
-#define FOR 261
-#define ID 262
-#define SEMICOLON 263
-#define I_CONST 264
-#define F_CONST 265
-#define STRING 266
+#define ADD 258
+#define SUB 259
+#define MUL 260
+#define DIV 261
+#define MOD 262
+#define INC 263
+#define DEC 264
+#define MT 265
+#define LT 266
+#define MTE 267
+#define LTE 268
+#define EQ 269
+#define NE 270
+#define ASGN 271
+#define ADDASGN 272
+#define SUBASGN 273
+#define MULASGN 274
+#define DIVASGN 275
+#define MODASGN 276
+#define AND 277
+#define OR 278
+#define NOT 279
+#define LB 280
+#define RB 281
+#define LCB 282
+#define RCB 283
+#define LSB 284
+#define RSB 285
+#define COMMA 286
+#define SEMICOLON 287
+#define PRINT 288
+#define IF 289
+#define ELSE 290
+#define WHILE 291
+#define INT 292
+#define FLOAT 293
+#define VOID 294
+#define BOOL 295
+#define TRUE 296
+#define FALSE 297
+#define RET 298
+#define CONT 299
+#define BREAK 300
+#define ID 301
+#define NEWLINE 302
+#define QUOTA 303
+#define FOR 304
+#define I_CONST 305
+#define F_CONST 306
+#define STRING 307
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -78,7 +160,7 @@ union YYSTYPE
     double f_val;
     char* string;
 
-#line 82 "y.tab.h" /* yacc.c:1909  */
+#line 164 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

@@ -3,6 +3,7 @@
 	#include "y.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
+	#include <string.h>
 	void C_comment();
 	void CPP_comment();
 	void str_const();
@@ -78,7 +79,7 @@ number {digit}+
 "continue"		{ /*printf("%s \t CONT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return CONT;}
 "break"		{ /*printf("%s \t BREAK\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return BREAK;}
 {number}		{ /*printf("%s \t I_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);yylval.i_val=atoi(yytext); return I_CONST;}
-{number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); yylval.f_val=atoi(yytext); return F_CONST;}
+{number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); yylval.f_val=atof(yytext); return F_CONST;}
 
 "/*"		{ /*C_comment();*/ if(line_cnt==1){printf("1: ");} printf("%s", yytext);}
 "//"		{ /*CPP_comment();*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);}

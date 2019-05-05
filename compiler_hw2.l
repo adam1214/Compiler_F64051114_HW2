@@ -1,9 +1,11 @@
 /* Definition section */
 %{
 	#include "y.tab.h"
+	#include "global.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
+
 	void C_comment();
 	void CPP_comment();
 	void str_const();
@@ -63,6 +65,7 @@ number {digit}+
 ","		{ /*printf("%s \t COMMA\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ',';}
 ";"		{ /*printf("%s \t SEMICOLON\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ';';}
 
+"string"		{ /*printf("%s \t STRING\n", yytext);*/  return STR_TYPE;}
 "print"		{ /*printf("%s \t PRINT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return PRINT;}
 "if"		{ /*printf("%s \t IF\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return IF;}
 "else"		{ /*printf("%s \t ELSE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ELSE;}
@@ -78,20 +81,20 @@ number {digit}+
 "return"		{ /*printf("%s \t RET\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return RET;}
 "continue"		{ /*printf("%s \t CONT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return CONT;}
 "break"		{ /*printf("%s \t BREAK\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return BREAK;}
-{number}		{ /*printf("%s \t I_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);yylval.i_val=atoi(yytext); return I_CONST;}
-{number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); yylval.f_val=atof(yytext); return F_CONST;}
+{number}		{ /*printf("%s \t I_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);yylval.val.i_val=atoi(yytext); return I_CONST;}
+{number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); yylval.val.f_val=atof(yytext); return F_CONST;}
 
 "/*"		{ /*C_comment();*/ if(line_cnt==1){printf("1: ");} printf("%s", yytext);}
 "//"		{ /*CPP_comment();*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);}
 
-{id}	{ /*printf("%s \t ID\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); printf("%s", yytext);yylval.string=strdup(yytext); return ID;}
+{id}	{ /*printf("%s \t ID\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); printf("%s", yytext);yylval.val.string=strdup(yytext); return ID;}
 \n			{ /*line_cnt++;*/ printf("%s%d: ", yytext,++line_cnt); return NEWLINE;} 
 [ \t]		{ if(line_cnt==1){printf("1: ");} printf("%s", yytext); }
 .			{ /* ignore bad characters */ }
 
 "\""				        { BEGIN(STRING_STATE); return '"'; }
 <STRING_STATE>"\""		{ BEGIN(INITIAL); return '"'; }
-<STRING_STATE>[^\"]*		{ yylval.string=strdup(yytext); return STRING;}
+<STRING_STATE>[^\"]*		{ yylval.val.string=strdup(yytext); return STRING;}
 
 %%
 

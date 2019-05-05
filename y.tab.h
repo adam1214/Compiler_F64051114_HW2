@@ -58,25 +58,26 @@ extern int yydebug;
     MODASGN = 268,
     AND = 269,
     OR = 270,
-    PRINT = 271,
-    IF = 272,
-    ELSE = 273,
-    FOR = 274,
-    WHILE = 275,
-    INT = 276,
-    FLOAT = 277,
-    VOID = 278,
-    BOOL = 279,
-    TRUE = 280,
-    FALSE = 281,
-    RET = 282,
-    CONT = 283,
-    BREAK = 284,
-    ID = 285,
+    STR_TYPE = 271,
+    PRINT = 272,
+    IF = 273,
+    ELSE = 274,
+    FOR = 275,
+    WHILE = 276,
+    INT = 277,
+    FLOAT = 278,
+    VOID = 279,
+    BOOL = 280,
+    TRUE = 281,
+    FALSE = 282,
+    RET = 283,
+    CONT = 284,
+    BREAK = 285,
     NEWLINE = 286,
     I_CONST = 287,
     F_CONST = 288,
-    STRING = 289
+    STRING = 289,
+    ID = 290
   };
 #endif
 /* Tokens.  */
@@ -93,36 +94,35 @@ extern int yydebug;
 #define MODASGN 268
 #define AND 269
 #define OR 270
-#define PRINT 271
-#define IF 272
-#define ELSE 273
-#define FOR 274
-#define WHILE 275
-#define INT 276
-#define FLOAT 277
-#define VOID 278
-#define BOOL 279
-#define TRUE 280
-#define FALSE 281
-#define RET 282
-#define CONT 283
-#define BREAK 284
-#define ID 285
+#define STR_TYPE 271
+#define PRINT 272
+#define IF 273
+#define ELSE 274
+#define FOR 275
+#define WHILE 276
+#define INT 277
+#define FLOAT 278
+#define VOID 279
+#define BOOL 280
+#define TRUE 281
+#define FALSE 282
+#define RET 283
+#define CONT 284
+#define BREAK 285
 #define NEWLINE 286
 #define I_CONST 287
 #define F_CONST 288
 #define STRING 289
+#define ID 290
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 
 union YYSTYPE
 {
-#line 22 "compiler_hw2.y" /* yacc.c:1909  */
+#line 24 "compiler_hw2.y" /* yacc.c:1909  */
 
-    int i_val;
-    double f_val;
-    char* string;
+    Value val;
 
 #line 128 "y.tab.h" /* yacc.c:1909  */
 };

@@ -1,8 +1,10 @@
 /*	Definition section */
 %{
+	#include "global.h"
     #include <stdio.h>
     #include <string.h>
     #include <stdbool.h>
+	
 extern int yylineno;
 extern int yylex();
 extern char* yytext;   // Get current token from lex
@@ -20,25 +22,31 @@ void dump_symbol();
  * nonterminal and token type
  */
 %union {
-    int i_val;
-    double f_val;
-    char* string;
+    struct Value val;
 }
 
 /* Token without return */
 %token INC DEC MTE LTE EQ 
 %token NE ADDASGN SUBASGN MULASGN DIVASGN MODASGN
-%token AND OR
+%token AND OR STR_TYPE
 %token PRINT IF ELSE FOR WHILE INT FLOAT VOID BOOL
-%token TRUE FALSE RET CONT BREAK ID NEWLINE
+%token TRUE FALSE RET CONT BREAK NEWLINE
 
 /* Token with return, which need to sepcify type */
-%token <i_val> I_CONST
-%token <f_val> F_CONST
-%token <string> STRING
+%token <val> I_CONST
+%token <val> F_CONST
+%token <val> STRING
+%token <val> ID
 
 /* Nonterminal with return, which need to sepcify type */
-/*%type <f_val> stat*/
+%type <val> primary_expression postfix_expression argument_expression_list unary_expression cast_expression 
+%type <val> multiplicative_expression additive_expression shift_expression relational_expression
+%type <val> equality_expression and_expression exclusive_or_expression inclusive_or_expression logical_and_expression
+%type <val> logical_or_expression conditional_expression assignment_expression expression constant_expression declaration 
+%type <val> init_declarator_list init_declarator declarator direct_declarator parameter_type_list parameter_list
+%type <val> parameter_declaration identifier_list type_name abstract_declarator direct_abstract_declarator initializer
+%type <val> initializer_list statement labeled_statement compound_statement declaration_list statement_list expression_statement
+%type <val> selection_statement iteration_statement jump_statement external_declaration function_definition
 
 /* Yacc will start at this nonterminal */
 %start program
@@ -168,6 +176,8 @@ assignment_operator
 expression
 	: assignment_expression
 	| expression ',' assignment_expression
+	| TRUE
+	| FALSE
 	;
 
 constant_expression
@@ -198,6 +208,8 @@ type_specifier
 	: VOID
 	| INT
 	| FLOAT
+	| BOOL
+	| STR_TYPE
 	;
 
 specifier_qualifier_list
@@ -348,15 +360,6 @@ function_definition
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
 	;
-
-/* actions can be taken when meet the token or rule */
-/*type
-    : INT { $$ = $1; }
-    | FLOAT { $$ = $1; }
-    | BOOL  { $$ = $1; }
-    | STRING { $$ = $1; }
-    | VOID { $$ = $1; }
-;*/
 
 %%
 

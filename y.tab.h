@@ -45,109 +45,73 @@ extern int yydebug;
 # define YYTOKENTYPE
   enum yytokentype
   {
-    ADD = 258,
-    SUB = 259,
-    MUL = 260,
-    DIV = 261,
-    MOD = 262,
-    INC = 263,
-    DEC = 264,
-    MT = 265,
-    LT = 266,
-    MTE = 267,
-    LTE = 268,
-    EQ = 269,
-    NE = 270,
-    ASGN = 271,
-    ADDASGN = 272,
-    SUBASGN = 273,
-    MULASGN = 274,
-    DIVASGN = 275,
-    MODASGN = 276,
-    AND = 277,
-    OR = 278,
-    NOT = 279,
-    LB = 280,
-    RB = 281,
-    LCB = 282,
-    RCB = 283,
-    LSB = 284,
-    RSB = 285,
-    COMMA = 286,
-    SEMICOLON = 287,
-    PRINT = 288,
-    IF = 289,
-    ELSE = 290,
-    WHILE = 291,
-    INT = 292,
-    FLOAT = 293,
-    VOID = 294,
-    BOOL = 295,
-    TRUE = 296,
-    FALSE = 297,
-    RET = 298,
-    CONT = 299,
-    BREAK = 300,
-    ID = 301,
-    NEWLINE = 302,
-    QUOTA = 303,
-    FOR = 304,
-    I_CONST = 305,
-    F_CONST = 306,
-    STRING = 307
+    INC = 258,
+    DEC = 259,
+    MTE = 260,
+    LTE = 261,
+    EQ = 262,
+    NE = 263,
+    ADDASGN = 264,
+    SUBASGN = 265,
+    MULASGN = 266,
+    DIVASGN = 267,
+    MODASGN = 268,
+    AND = 269,
+    OR = 270,
+    PRINT = 271,
+    IF = 272,
+    ELSE = 273,
+    FOR = 274,
+    WHILE = 275,
+    INT = 276,
+    FLOAT = 277,
+    VOID = 278,
+    BOOL = 279,
+    TRUE = 280,
+    FALSE = 281,
+    RET = 282,
+    CONT = 283,
+    BREAK = 284,
+    ID = 285,
+    NEWLINE = 286,
+    I_CONST = 287,
+    F_CONST = 288,
+    STRING = 289
   };
 #endif
 /* Tokens.  */
-#define ADD 258
-#define SUB 259
-#define MUL 260
-#define DIV 261
-#define MOD 262
-#define INC 263
-#define DEC 264
-#define MT 265
-#define LT 266
-#define MTE 267
-#define LTE 268
-#define EQ 269
-#define NE 270
-#define ASGN 271
-#define ADDASGN 272
-#define SUBASGN 273
-#define MULASGN 274
-#define DIVASGN 275
-#define MODASGN 276
-#define AND 277
-#define OR 278
-#define NOT 279
-#define LB 280
-#define RB 281
-#define LCB 282
-#define RCB 283
-#define LSB 284
-#define RSB 285
-#define COMMA 286
-#define SEMICOLON 287
-#define PRINT 288
-#define IF 289
-#define ELSE 290
-#define WHILE 291
-#define INT 292
-#define FLOAT 293
-#define VOID 294
-#define BOOL 295
-#define TRUE 296
-#define FALSE 297
-#define RET 298
-#define CONT 299
-#define BREAK 300
-#define ID 301
-#define NEWLINE 302
-#define QUOTA 303
-#define FOR 304
-#define I_CONST 305
-#define F_CONST 306
-#define STRING 307
+#define INC 258
+#define DEC 259
+#define MTE 260
+#define LTE 261
+#define EQ 262
+#define NE 263
+#define ADDASGN 264
+#define SUBASGN 265
+#define MULASGN 266
+#define DIVASGN 267
+#define MODASGN 268
+#define AND 269
+#define OR 270
+#define PRINT 271
+#define IF 272
+#define ELSE 273
+#define FOR 274
+#define WHILE 275
+#define INT 276
+#define FLOAT 277
+#define VOID 278
+#define BOOL 279
+#define TRUE 280
+#define FALSE 281
+#define RET 282
+#define CONT 283
+#define BREAK 284
+#define ID 285
+#define NEWLINE 286
+#define I_CONST 287
+#define F_CONST 288
+#define STRING 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -160,7 +124,7 @@ union YYSTYPE
     double f_val;
     char* string;
 
-#line 164 "y.tab.h" /* yacc.c:1909  */
+#line 128 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

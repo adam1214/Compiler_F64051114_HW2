@@ -26,11 +26,11 @@ void dump_symbol();
 }
 
 /* Token without return */
-%token ADD SUB MUL DIV MOD INC DEC MT LT MTE LTE EQ 
-%token NE ASGN ADDASGN SUBASGN MULASGN DIVASGN MODASGN
-%token AND OR NOT LB RB LCB RCB LSB RSB COMMA SEMICOLON
-%token PRINT IF ELSE WHILE INT FLOAT VOID BOOL
-%token TRUE FALSE RET CONT BREAK ID NEWLINE QUOTA FOR
+%token INC DEC MTE LTE EQ 
+%token NE ADDASGN SUBASGN MULASGN DIVASGN MODASGN
+%token AND OR
+%token PRINT IF ELSE FOR WHILE INT FLOAT VOID BOOL
+%token TRUE FALSE RET CONT BREAK ID NEWLINE
 
 /* Token with return, which need to sepcify type */
 %token <i_val> I_CONST
@@ -46,22 +46,308 @@ void dump_symbol();
 /* Grammar section */
 %%
 
-program
-    : program stat
-    |
-;
+primary_expression
+	: ID
+	| I_CONST 
+    | F_CONST
+	| '"' STRING '"'
+	| '(' expression ')'
+	;
 
-stat
-    : declaration
-    /*| compound_stat
-    | expression_stat
-    | print_func*/
-;
+postfix_expression
+	: primary_expression
+	| postfix_expression '[' expression ']'
+	| postfix_expression '(' ')'
+	| postfix_expression '(' argument_expression_list ')'
+	| postfix_expression '.' ID
+	| postfix_expression INC
+	| postfix_expression DEC
+	;
+
+argument_expression_list
+	: assignment_expression
+	| argument_expression_list ',' assignment_expression
+	;
+
+unary_expression
+	: postfix_expression
+	| INC unary_expression
+	| DEC unary_expression
+	| unary_operator cast_expression
+	;
+
+unary_operator
+	: '&'
+	| '*'
+	| '+'
+	| '-'
+	| '~'
+	| '!'
+	;
+
+cast_expression
+	: unary_expression
+	| '(' type_name ')' cast_expression
+	;
+
+multiplicative_expression
+	: cast_expression
+	| multiplicative_expression '*' cast_expression
+	| multiplicative_expression '/' cast_expression
+	| multiplicative_expression '%' cast_expression
+	;
+
+additive_expression
+	: multiplicative_expression
+	| additive_expression '+' multiplicative_expression
+	| additive_expression '-' multiplicative_expression
+	;
+
+shift_expression
+	: additive_expression
+	;
+
+relational_expression
+	: shift_expression
+	| relational_expression '<' shift_expression
+	| relational_expression '>' shift_expression
+	| relational_expression LTE shift_expression
+	| relational_expression MTE shift_expression
+	;
+
+equality_expression
+	: relational_expression
+	| equality_expression EQ relational_expression
+	| equality_expression NE relational_expression
+	;
+
+and_expression
+	: equality_expression
+	| and_expression '&' equality_expression
+	;
+
+exclusive_or_expression
+	: and_expression
+	| exclusive_or_expression '^' and_expression
+	;
+
+inclusive_or_expression
+	: exclusive_or_expression
+	| inclusive_or_expression '|' exclusive_or_expression
+	;
+
+logical_and_expression
+	: inclusive_or_expression
+	| logical_and_expression AND inclusive_or_expression
+	;
+
+logical_or_expression
+	: logical_and_expression
+	| logical_or_expression OR logical_and_expression
+	;
+
+conditional_expression
+	: logical_or_expression
+	| logical_or_expression '?' expression ':' conditional_expression
+	;
+
+assignment_expression
+	: conditional_expression
+	| unary_expression assignment_operator assignment_expression
+	;
+
+assignment_operator
+	: '='
+	| MULASGN
+	| DIVASGN
+	| MODASGN
+	| ADDASGN
+	| SUBASGN
+	;
+
+expression
+	: assignment_expression
+	| expression ',' assignment_expression
+	;
+
+constant_expression
+	: conditional_expression
+	;
 
 declaration
-    : /*type ID '=' initializer SEMICOLON
-    | type ID SEMICOLON*/
-;
+	: declaration_specifiers ';'
+	| declaration_specifiers init_declarator_list ';'
+	;
+
+declaration_specifiers
+	: type_specifier
+	| type_specifier declaration_specifiers
+	;
+
+init_declarator_list
+	: init_declarator
+	| init_declarator_list ',' init_declarator
+	;
+
+init_declarator
+	: declarator
+	| declarator '=' initializer
+	;
+
+type_specifier
+	: VOID
+	| INT
+	| FLOAT
+	;
+
+specifier_qualifier_list
+	: type_specifier specifier_qualifier_list
+	| type_specifier
+	;
+
+declarator
+	: pointer direct_declarator
+	| direct_declarator
+	;
+
+direct_declarator
+	: ID
+	| '(' declarator ')'
+	| direct_declarator '[' constant_expression ']'
+	| direct_declarator '[' ']'
+	| direct_declarator '(' parameter_type_list ')'
+	| direct_declarator '(' identifier_list ')'
+	| direct_declarator '(' ')'
+	;
+
+pointer
+	: '*'
+	| '*' pointer
+	;
+
+parameter_type_list
+	: parameter_list
+	;
+
+parameter_list
+	: parameter_declaration
+	| parameter_list ',' parameter_declaration
+	;
+
+parameter_declaration
+	: declaration_specifiers declarator
+	| declaration_specifiers abstract_declarator
+	| declaration_specifiers
+	;
+
+identifier_list
+	: ID
+	| identifier_list ',' ID
+	;
+
+type_name
+	: specifier_qualifier_list
+	| specifier_qualifier_list abstract_declarator
+	;
+
+abstract_declarator
+	: pointer
+	| direct_abstract_declarator
+	| pointer direct_abstract_declarator
+	;
+
+direct_abstract_declarator
+	: '(' abstract_declarator ')'
+	| '[' ']'
+	| '[' constant_expression ']'
+	| direct_abstract_declarator '[' ']'
+	| direct_abstract_declarator '[' constant_expression ']'
+	| '(' ')'
+	| '(' parameter_type_list ')'
+	| direct_abstract_declarator '(' ')'
+	| direct_abstract_declarator '(' parameter_type_list ')'
+	;
+
+initializer
+	: assignment_expression
+	| '{' initializer_list '}'
+	| '{' initializer_list ',' '}'
+	;
+
+initializer_list
+	: initializer
+	| initializer_list ',' initializer
+	;
+
+statement
+	: labeled_statement
+	| compound_statement
+	| expression_statement
+	| selection_statement
+	| iteration_statement
+	| jump_statement
+	;
+
+labeled_statement
+	: ID ':' statement
+	;
+
+compound_statement
+	: '{' '}'
+	| '{' statement_list '}'
+	| '{' declaration_list '}'
+	| '{' declaration_list statement_list '}'
+	;
+
+declaration_list
+	: declaration
+	| declaration_list declaration
+	;
+
+statement_list
+	: statement
+	| statement_list statement
+	;
+
+expression_statement
+	: ';'
+	| expression ';'
+	;
+
+selection_statement
+	: IF '(' expression ')' statement
+	| IF '(' expression ')' statement ELSE statement
+	;
+
+iteration_statement
+	: WHILE '(' expression ')' statement
+	| FOR '(' expression_statement expression_statement ')' statement
+	| FOR '(' expression_statement expression_statement expression ')' statement
+	;
+
+jump_statement
+	: CONT ';'
+	| BREAK ';'
+	| RET ';'
+	| RET expression ';'
+	;
+
+program
+	: external_declaration
+	| program external_declaration
+	;
+
+external_declaration
+	: function_definition
+	| declaration
+	;
+
+function_definition
+	: declaration_specifiers declarator declaration_list compound_statement
+	| declaration_specifiers declarator compound_statement
+	| declarator declaration_list compound_statement
+	| declarator compound_statement
+	;
 
 /* actions can be taken when meet the token or rule */
 /*type

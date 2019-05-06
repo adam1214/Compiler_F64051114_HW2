@@ -1,7 +1,7 @@
 /* Definition section */
 %{
-	#include "y.tab.h"
 	#include "global.h"
+	#include "y.tab.h"
 	#include <stdio.h>
 	#include <stdlib.h>
 	#include <string.h>
@@ -33,68 +33,74 @@ number {digit}+
 /* Rules section */
 %%
 
-"+" 	{ /*printf("%s \t ADD\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '+';}
-"-"		{ /*printf("%s \t SUB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '-';}
-"*"		{ /*printf("%s \t MUL\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '*';}
-"/"		{ /*printf("%s \t DIV\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '/';}
-"%"		{ /*printf("%s \t MOD\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '%';}
-"++"		{ /*printf("%s \t INC\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return INC;}
-"--"		{ /*printf("%s \t DEC\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return DEC;}
-">"		{ /*printf("%s \t MT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '>';}
-"<"		{ /*printf("%s \t LT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '<';}
-">="		{ /*printf("%s \t MTE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return MTE;}
-"<="		{ /*printf("%s \t LTE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return LTE;}
-"=="		{ /*printf("%s \t EQ\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return EQ;}
-"!="		{ /*printf("%s \t NE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return NE;}
-"="		{ /*printf("%s \t ASGN\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '=';}
-"+="		{ /*printf("%s \t ADDASGN\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ADDASGN;}
-"-="		{ /*printf("%s \t SUBASGN\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return SUBASGN;}
-"*="		{ /*printf("%s \t MULASGN\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return MULASGN;}
-"/="		{ /*printf("%s \t DIVASGN\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return DIVASGN;}
-"%="		{ /*printf("%s \t MODASGN\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return MODASGN;}
-"&&"		{ /*printf("%s \t AND\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return AND;}
-"||"		{ /*printf("%s \t OR\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return OR;}
+"+" 	{ /*printf("%s \t ADD\n", yytext);*/printf("%s",yytext);return '+';}
+"-"		{ /*printf("%s \t SUB\n", yytext);*/printf("%s",yytext);return '-';}
+"*"		{ /*printf("%s \t MUL\n", yytext);*/printf("%s",yytext);return '*';}
+"/"		{ /*printf("%s \t DIV\n", yytext);*/printf("%s",yytext);return '/';}
+"%"		{ /*printf("%s \t MOD\n", yytext);*/printf("%s",yytext);return '%';}
+"++"		{ /*printf("%s \t INC\n", yytext);*/printf("%s",yytext);return INC;}
+"--"		{ /*printf("%s \t DEC\n", yytext);*/printf("%s",yytext);return DEC;}
+">"		{ /*printf("%s \t MT\n", yytext);*/printf("%s",yytext);return '>';}
+"<"		{ /*printf("%s \t LT\n", yytext);*/printf("%s",yytext);return '<';}
+">="		{ /*printf("%s \t MTE\n", yytext);*/printf("%s",yytext);return MTE;}
+"<="		{ /*printf("%s \t LTE\n", yytext);*/printf("%s",yytext);return LTE;}
+"=="		{ /*printf("%s \t EQ\n", yytext);*/printf("%s",yytext);return EQ;}
+"!="		{ /*printf("%s \t NE\n", yytext);*/printf("%s",yytext);return NE;}
+"="		{ /*printf("%s \t ASGN\n", yytext);*/printf("%s",yytext);return '=';}
+"+="		{ /*printf("%s \t ADDASGN\n", yytext);*/printf("%s",yytext);return ADDASGN;}
+"-="		{ /*printf("%s \t SUBASGN\n", yytext);*/printf("%s",yytext);return SUBASGN;}
+"*="		{ /*printf("%s \t MULASGN\n", yytext);*/printf("%s",yytext);return MULASGN;}
+"/="		{ /*printf("%s \t DIVASGN\n", yytext);*/printf("%s",yytext);return DIVASGN;}
+"%="		{ /*printf("%s \t MODASGN\n", yytext);*/printf("%s",yytext);return MODASGN;}
+"&&"		{ /*printf("%s \t AND\n", yytext);*/printf("%s",yytext);return AND;}
+"||"		{ /*printf("%s \t OR\n", yytext);*/printf("%s",yytext);return OR;}
 
-"!"		{ /*printf("%s \t NOT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '!';}
-"("		{ /*printf("%s \t LB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '(';}
-")"		{ /*printf("%s \t RB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ')';}
-"{"		{ /*printf("%s \t LCB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '{';}
-"}"		{ /*printf("%s \t RCB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '}';}
-"["		{ /*printf("%s \t LSB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return '[';}
-"]"		{ /*printf("%s \t RSB\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ']';}
-","		{ /*printf("%s \t COMMA\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ',';}
-";"		{ /*printf("%s \t SEMICOLON\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ';';}
+"!"		{ /*printf("%s \t NOT\n", yytext);*/printf("%s",yytext);return '!';}
+"("		{ /*printf("%s \t LB\n", yytext);*/printf("%s",yytext);return '(';}
+")"		{ /*printf("%s \t RB\n", yytext);*/printf("%s",yytext);return ')';}
+"{"		{ /*printf("%s \t LCB\n", yytext);*/printf("%s",yytext);return '{';}
+"}"		{ /*printf("%s \t RCB\n", yytext);*/printf("%s",yytext);return '}';}
+"["		{ /*printf("%s \t LSB\n", yytext);*/printf("%s",yytext);return '[';}
+"]"		{ /*printf("%s \t RSB\n", yytext);*/printf("%s",yytext);return ']';}
+","		{ /*printf("%s \t COMMA\n", yytext);*/printf("%s",yytext);return ',';}
+";"		{ /*printf("%s \t SEMICOLON\n", yytext);*/printf("%s",yytext);return ';';}
 
-"string"		{ /*printf("%s \t STRING\n", yytext);*/  return STR_TYPE;}
-"print"		{ /*printf("%s \t PRINT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return PRINT;}
-"if"		{ /*printf("%s \t IF\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return IF;}
-"else"		{ /*printf("%s \t ELSE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return ELSE;}
-"for"		{ /*printf("%s \t FOR\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return FOR;}
-"while"		{ /*printf("%s \t WHILE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return WHILE;}
+"string"		{ /*printf("%s \t STRING\n", yytext);*/  printf("%s",yytext);return STR_TYPE;}
+"print"		{ /*printf("%s \t PRINT\n", yytext);*/printf("%s",yytext);return PRINT;}
+"if"		{ /*printf("%s \t IF\n", yytext);*/printf("%s",yytext);return IF;}
+"else"		{ /*printf("%s \t ELSE\n", yytext);*/printf("%s",yytext);return ELSE;}
+"for"		{ /*printf("%s \t FOR\n", yytext);*/printf("%s",yytext);return FOR;}
+"while"		{ /*printf("%s \t WHILE\n", yytext);*/printf("%s",yytext);return WHILE;}
 
-"int"		{ /*printf("%s \t INT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);return INT;}
-"float"		{ /*printf("%s \t FLOAT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);return FLOAT;}
-"void"		{ /*printf("%s \t VOID\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return VOID;}
-"bool"		{ /*printf("%s \t BOOL\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return BOOL;}
-"true"		{ /*printf("%s \t TRUE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return TRUE;}
-"false"		{ /*printf("%s \t FALSE\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return FALSE;}
-"return"		{ /*printf("%s \t RET\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return RET;}
-"continue"		{ /*printf("%s \t CONT\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return CONT;}
-"break"		{ /*printf("%s \t BREAK\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); return BREAK;}
-{number}		{ /*printf("%s \t I_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);yylval.val.i_val=atoi(yytext); return I_CONST;}
-{number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); yylval.val.f_val=atof(yytext); return F_CONST;}
+"int"		{ /*printf("%s \t INT\n", yytext);*/printf("%s",yytext);return INT;}
+"float"		{ /*printf("%s \t FLOAT\n", yytext);*/printf("%s",yytext);return FLOAT;}
+"void"		{ /*printf("%s \t VOID\n", yytext);*/printf("%s",yytext);return VOID;}
+"bool"		{ /*printf("%s \t BOOL\n", yytext);*/printf("%s",yytext);return BOOL;}
+"true"		{ /*printf("%s \t TRUE\n", yytext);*/printf("%s",yytext);return TRUE;}
+"false"		{ /*printf("%s \t FALSE\n", yytext);*/printf("%s",yytext);return FALSE;}
+"return"		{ /*printf("%s \t RET\n", yytext);*/printf("%s",yytext);return RET;}
+"continue"		{ /*printf("%s \t CONT\n", yytext);*/printf("%s",yytext);return CONT;}
+"break"		{ /*printf("%s \t BREAK\n", yytext);*/printf("%s",yytext);return BREAK;}
+{number}		{ /*printf("%s \t I_CONST\n", yytext);*/printf("%s",yytext);yylval.val.i_val=atoi(yytext); return I_CONST;}
+{number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/printf("%s",yytext);yylval.val.f_val=atof(yytext); return F_CONST;}
 
-"/*"		{ /*C_comment();*/ if(line_cnt==1){printf("1: ");} printf("%s", yytext);}
-"//"		{ /*CPP_comment();*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext);}
+"/*"        { BEGIN(COMMENT);printf("/*");}
+<COMMENT>"*/"   { BEGIN(INITIAL);printf("*/");}
+<COMMENT>\n     {printf("\n");}
+<COMMENT>. {printf("%s", yytext);}
 
-{id}	{ /*printf("%s \t ID\n", yytext);*/ if(line_cnt==1){printf("1: ");}  printf("%s", yytext); printf("%s", yytext);yylval.val.string=strdup(yytext); return ID;}
-\n			{ /*line_cnt++;*/ printf("%s%d: ", yytext,++line_cnt); return NEWLINE;} 
-[ \t]		{ if(line_cnt==1){printf("1: ");} printf("%s", yytext); }
+"//".*		{ /*CPP_comment();*/printf("%s", yytext);}
+
+"\""				        { BEGIN(STRING_STATE); printf("\"");return '"'; }
+<STRING_STATE>"\""		{ BEGIN(INITIAL); printf("\"");return '"'; }
+<STRING_STATE>[^\"]*		{ printf("%s",yytext);yylval.val.string=strdup(yytext); return STRING;}
+
+{id}	{ /*printf("%s \t ID\n", yytext);*/printf("%s",yytext);yylval.val.string=strdup(yytext); return ID;}
+\n			{ printf("\n");line_cnt++;} 
+[ \t]		{printf("%s", yytext); }
 .			{ /* ignore bad characters */ }
 
-"\""				        { BEGIN(STRING_STATE); return '"'; }
-<STRING_STATE>"\""		{ BEGIN(INITIAL); return '"'; }
-<STRING_STATE>[^\"]*		{ yylval.val.string=strdup(yytext); return STRING;}
+
 
 %%
 

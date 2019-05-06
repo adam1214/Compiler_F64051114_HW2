@@ -1,8 +1,8 @@
 /*	Definition section */
 %{
-	#include "global.h"
     #include <stdio.h>
     #include <string.h>
+	#include "global.h"
     #include <stdbool.h>
 	
 extern int yylineno;
@@ -30,13 +30,10 @@ void dump_symbol();
 %token NE ADDASGN SUBASGN MULASGN DIVASGN MODASGN
 %token AND OR STR_TYPE
 %token PRINT IF ELSE FOR WHILE INT FLOAT VOID BOOL
-%token TRUE FALSE RET CONT BREAK NEWLINE
+%token TRUE FALSE RET CONT BREAK
 
 /* Token with return, which need to sepcify type */
-%token <val> I_CONST
-%token <val> F_CONST
-%token <val> STRING
-%token <val> ID
+%token <val> I_CONST F_CONST STRING ID
 
 /* Nonterminal with return, which need to sepcify type */
 %type <val> primary_expression postfix_expression argument_expression_list unary_expression cast_expression 
@@ -178,6 +175,12 @@ expression
 	| expression ',' assignment_expression
 	| TRUE
 	| FALSE
+	| PRINT '(' print_arg ')'
+	;
+
+print_arg
+	: '"' STRING '"' 
+	| ID
 	;
 
 constant_expression
@@ -208,7 +211,7 @@ type_specifier
 	: VOID
 	| INT
 	| FLOAT
-	| BOOL
+	| BOOL 
 	| STR_TYPE
 	;
 

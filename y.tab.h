@@ -73,11 +73,10 @@ extern int yydebug;
     RET = 283,
     CONT = 284,
     BREAK = 285,
-    NEWLINE = 286,
-    I_CONST = 287,
-    F_CONST = 288,
-    STRING = 289,
-    ID = 290
+    I_CONST = 286,
+    F_CONST = 287,
+    STRING = 288,
+    ID = 289
   };
 #endif
 /* Tokens.  */
@@ -109,11 +108,10 @@ extern int yydebug;
 #define RET 283
 #define CONT 284
 #define BREAK 285
-#define NEWLINE 286
-#define I_CONST 287
-#define F_CONST 288
-#define STRING 289
-#define ID 290
+#define I_CONST 286
+#define F_CONST 287
+#define STRING 288
+#define ID 289
 
 /* Value type.  */
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
@@ -122,9 +120,9 @@ union YYSTYPE
 {
 #line 24 "compiler_hw2.y" /* yacc.c:1909  */
 
-    Value val;
+    struct Value val;
 
-#line 128 "y.tab.h" /* yacc.c:1909  */
+#line 126 "y.tab.h" /* yacc.c:1909  */
 };
 
 typedef union YYSTYPE YYSTYPE;

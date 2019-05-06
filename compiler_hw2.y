@@ -372,10 +372,11 @@ int main(int argc, char** argv)
     extern FILE *yyin;
     yyin = fopen(argv[1],"r");
     //yylineno = 0;
-
+	printf("1: ");
     yyparse();
     extern int line_cnt;
-	printf("\nTotal lines: %d \n",--line_cnt);
+	int act_line=line_cnt-2;
+	printf("\nTotal lines: %d \n",act_line);
 
     return 0;
 }

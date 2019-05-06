@@ -9,7 +9,7 @@
 	void C_comment();
 	void CPP_comment();
 	void str_const();
-	int line_cnt=1;
+	int line_cnt=2;
 	int comm_cnt=0;
 
 	extern YYSTYPE yylval; //YYSTYPE
@@ -86,7 +86,7 @@ number {digit}+
 
 "/*"        { BEGIN(COMMENT);printf("/*");}
 <COMMENT>"*/"   { BEGIN(INITIAL);printf("*/");}
-<COMMENT>\n     {printf("\n");}
+<COMMENT>\n     {printf("\n");printf("%d: ",line_cnt);line_cnt++;}
 <COMMENT>. {printf("%s", yytext);}
 
 "//".*		{ /*CPP_comment();*/printf("%s", yytext);}
@@ -96,7 +96,7 @@ number {digit}+
 <STRING_STATE>[^\"]*		{ printf("%s",yytext);yylval.val.string=strdup(yytext); return STRING;}
 
 {id}	{ /*printf("%s \t ID\n", yytext);*/printf("%s",yytext);yylval.val.string=strdup(yytext); return ID;}
-\n			{ printf("\n");line_cnt++;} 
+\n			{ printf("\n%");printf("%d: ",line_cnt);line_cnt++;} 
 [ \t]		{printf("%s", yytext); }
 .			{ /* ignore bad characters */ }
 

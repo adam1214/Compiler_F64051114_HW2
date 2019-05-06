@@ -598,7 +598,7 @@ char *yytext;
 	void C_comment();
 	void CPP_comment();
 	void str_const();
-	int line_cnt=1;
+	int line_cnt=2;
 	int comm_cnt=0;
 
 	extern YYSTYPE yylval; //YYSTYPE
@@ -1148,7 +1148,7 @@ case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
 #line 89 "compiler_hw2.l"
-{printf("\n");}
+{printf("\n");printf("%d: ",line_cnt);line_cnt++;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
@@ -1185,7 +1185,7 @@ case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
 #line 99 "compiler_hw2.l"
-{ printf("\n");line_cnt++;} 
+{ printf("\n%");printf("%d: ",line_cnt);line_cnt++;} 
 	YY_BREAK
 case 58:
 YY_RULE_SETUP

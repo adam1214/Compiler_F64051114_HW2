@@ -1137,7 +1137,7 @@ YY_RULE_SETUP
 case 48:
 YY_RULE_SETUP
 #line 87 "compiler_hw2.l"
-{ BEGIN(COMMENT);printf("/*");}
+{ BEGIN(COMMENT); printf("/*");}
 	YY_BREAK
 case 49:
 YY_RULE_SETUP
@@ -1148,7 +1148,7 @@ case 50:
 /* rule 50 can match eol */
 YY_RULE_SETUP
 #line 89 "compiler_hw2.l"
-{printf("\n");printf("%d: ",line_cnt);line_cnt++;}
+{printf("\n");printf("%d: ",yylineno);line_cnt++;}
 	YY_BREAK
 case 51:
 YY_RULE_SETUP
@@ -1185,7 +1185,7 @@ case 57:
 /* rule 57 can match eol */
 YY_RULE_SETUP
 #line 99 "compiler_hw2.l"
-{ printf("\n%");printf("%d: ",line_cnt);line_cnt++;} 
+{ printf("\n"); printf("%d: ",yylineno); line_cnt++;} 
 	YY_BREAK
 case 58:
 YY_RULE_SETUP

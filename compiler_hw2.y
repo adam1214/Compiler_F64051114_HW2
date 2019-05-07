@@ -37,6 +37,8 @@ int lookup_symbol(const Header *header, const char *id);
 Header* create_symbol();
 void insert_symbol(Header *header, Value *id_ptr);
 void dump_symbol(const Header *header);
+void new_scope();
+void dump_scope();
 
 %}
 
@@ -375,15 +377,15 @@ program
 	;
 
 external_declaration
-	: function_definition
+	: function_definition 
 	| declaration
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator compound_statement
-	| declarator declaration_list compound_statement
-	| declarator compound_statement
+	: declaration_specifiers declarator declaration_list {new_scope();} compound_statement {dump_scope();}
+	| declaration_specifiers declarator {new_scope();} compound_statement {dump_scope();}
+	| declarator declaration_list {new_scope();} compound_statement {dump_scope();}
+	| declarator {new_scope();} compound_statement {dump_scope();}
 	;
 
 %%
@@ -393,12 +395,14 @@ int main(int argc, char** argv)
 {
     extern FILE *yyin;
     yyin = fopen(argv[1],"r");
-    //yylineno = 0;
-	printf("1: ");
+
+	yylineno = 0;
+	new_scope();
     yyparse();
     extern int line_cnt;
-	int act_line=line_cnt-2;
-	printf("\nTotal lines: %d \n",act_line);
+
+	dump_scope();
+	printf("\nTotal lines: %d \n",yylineno);
 
     return 0;
 }
@@ -467,7 +471,7 @@ int lookup_symbol(const Header *header, const char *id)
 }
 void dump_symbol(const Header *header) 
 {
-    printf("\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
+    printf("\n\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
            "Index", "Name", "Kind", "Type", "Scope", "Attribute");
 	if (header->table_root == NULL) 
 	{
@@ -489,5 +493,22 @@ void dump_symbol(const Header *header)
         free(tmp);
         tmp = NULL;
     }
-
 }
+
+void new_scope()
+{
+    Header *ptr = create_symbol();
+    ptr->pre = cur_header;
+    cur_header = ptr;
+}
+
+void dump_scope()
+{
+    Header *tmp = cur_header;
+    cur_header = cur_header->pre;
+    dump_symbol(tmp);
+    free(tmp);
+    tmp = NULL;
+    depth--;
+}
+

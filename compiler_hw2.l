@@ -84,9 +84,9 @@ number {digit}+
 {number}		{ /*printf("%s \t I_CONST\n", yytext);*/printf("%s",yytext);yylval.val.i_val=atoi(yytext); return I_CONST;}
 {number}"."{number}		{ /*printf("%s \t F_CONST\n", yytext);*/printf("%s",yytext);yylval.val.f_val=atof(yytext); return F_CONST;}
 
-"/*"        { BEGIN(COMMENT);printf("/*");}
+"/*"        { BEGIN(COMMENT); printf("/*");}
 <COMMENT>"*/"   { BEGIN(INITIAL);printf("*/");}
-<COMMENT>\n     {printf("\n");printf("%d: ",line_cnt);line_cnt++;}
+<COMMENT>\n     {printf("\n");printf("%d: ",yylineno);line_cnt++;}
 <COMMENT>. {printf("%s", yytext);}
 
 "//".*		{ /*CPP_comment();*/printf("%s", yytext);}
@@ -96,7 +96,7 @@ number {digit}+
 <STRING_STATE>[^\"]*		{ printf("%s",yytext);yylval.val.string=strdup(yytext);yylval.val.type = S_T; return STRING;}
 
 {id}	{ /*printf("%s \t ID\n", yytext);*/ printf("%s",yytext); yylval.val.id_name=strdup(yytext);yylval.val.type = ID_T; return ID;}
-\n			{ printf("\n%");printf("%d: ",line_cnt);line_cnt++;} 
+\n			{ printf("\n"); printf("%d: ",yylineno); line_cnt++;} 
 [ \t]		{printf("%s", yytext); }
 .			{ /* ignore bad characters */ }
 

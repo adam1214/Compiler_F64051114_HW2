@@ -4,17 +4,39 @@
     #include <string.h>
 	#include "global.h"
     #include <stdbool.h>
-	
+
+typedef struct Entry Entry;
+struct Entry {  //表中的一行
+    int index;
+    Value *id_ptr;
+    Entry *next;
+	char *Kind;
+	int Scope;
+	char *Attribute;
+};
+
+typedef struct Header Header;
+struct Header { //一張表
+    int depth;
+	int entry_num;
+    Entry *table_root;
+    Entry *table_tail;
+    Header *pre;
+};
+Header *header_root = NULL;
+Header *cur_header = NULL;
+int depth = 0;
+
 extern int yylineno;
 extern int yylex();
 extern char* yytext;   // Get current token from lex
 extern char buf[256];  // Get current code line from lex
 
 /* Symbol table function - you can add new function if needed. */
-int lookup_symbol();
-void create_symbol();
-void insert_symbol();
-void dump_symbol();
+int lookup_symbol(const Header *header, const char *id);
+Header* create_symbol();
+void insert_symbol(Header *header, Value *id_ptr);
+void dump_symbol(const Header *header);
 
 %}
 
@@ -389,10 +411,83 @@ void yyerror(char *s)
     printf("\n|-----------------------------------------------|\n\n");
 }
 
-void create_symbol() {}
-void insert_symbol() {}
-int lookup_symbol() {}
-void dump_symbol() {
+Header* create_symbol() 
+{
+	Header *ptr = malloc(sizeof(Header)); //創新的table
+	ptr->depth=depth++;
+	ptr->table_root=malloc(sizeof(Entry));
+	ptr->table_root->next = NULL;
+	ptr->table_tail = ptr->table_root;
+	ptr->pre = NULL;
+	ptr->entry_num=-1;
+	return ptr;
+}
+void insert_symbol(Header *header, Value *id_ptr) 
+{
+	if (cur_header == NULL) //無table
+	{
+        cur_header = create_symbol();
+        header_root = cur_header;
+        header = cur_header;
+    }
+    if (lookup_symbol(cur_header, id_ptr->id_name) == NULL) 
+	{
+        printf("Insert a symbol: %s\n", id_ptr->id_name);
+        Entry *tmp = malloc(sizeof(Entry));
+		cur_header->entry_num=(cur_header->entry_num)+1;
+        tmp->index = cur_header->entry_num;
+        tmp->id_ptr = id_ptr;
+        tmp->next = NULL;
+        header->table_tail->next = tmp;
+        header->table_tail = header->table_tail->next;
+    } 
+	else 
+	{
+        char errmsg[64];
+        sprintf(errmsg, "redefined variable \'%s\'", id_ptr->id_name);
+        yyerror(errmsg);
+    }
+}
+int lookup_symbol(const Header *header, const char *id) 
+{
+	if (header->table_root == NULL) 
+	{
+        return NULL;
+    }
+    Entry *cur = header->table_root->next;
+    while (cur != NULL)
+	{
+        if (strcmp(cur->id_ptr->id_name, id) == 0)
+		{
+            return cur->index;
+        }
+        cur = cur->next;
+    }
+    return NULL;
+}
+void dump_symbol(const Header *header) 
+{
     printf("\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
            "Index", "Name", "Kind", "Type", "Scope", "Attribute");
+	if (header->table_root == NULL) 
+	{
+        return;
+    }
+
+    Entry *cur = header->table_root->next;
+    while (cur != NULL)
+	{
+		printf("\n%-10d%-10s%-12s%-10s%-10d%-10s\n",
+           cur->index, cur->id_ptr->id_name, cur->Kind, cur->id_ptr->val_ptr->type, cur->Scope, cur->Attribute);
+		   
+        Entry *tmp = cur;
+        cur = cur->next;
+        free(tmp->id_ptr->val_ptr);
+        tmp->id_ptr->val_ptr = NULL;
+        free(tmp->id_ptr);
+        tmp->id_ptr = NULL;
+        free(tmp);
+        tmp = NULL;
+    }
+
 }

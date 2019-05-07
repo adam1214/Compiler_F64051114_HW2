@@ -72,10 +72,10 @@ number {digit}+
 "for"		{ /*printf("%s \t FOR\n", yytext);*/printf("%s",yytext);return FOR;}
 "while"		{ /*printf("%s \t WHILE\n", yytext);*/printf("%s",yytext);return WHILE;}
 
-"int"		{ /*printf("%s \t INT\n", yytext);*/printf("%s",yytext);return INT;}
-"float"		{ /*printf("%s \t FLOAT\n", yytext);*/printf("%s",yytext);return FLOAT;}
-"void"		{ /*printf("%s \t VOID\n", yytext);*/printf("%s",yytext);return VOID;}
-"bool"		{ /*printf("%s \t BOOL\n", yytext);*/printf("%s",yytext);return BOOL;}
+"int"		{ /*printf("%s \t INT\n", yytext);*/printf("%s",yytext);yylval.val.type = I_T;return INT;}
+"float"		{ /*printf("%s \t FLOAT\n", yytext);*/printf("%s",yytext);yylval.val.type = F_T;return FLOAT;}
+"void"		{ /*printf("%s \t VOID\n", yytext);*/printf("%s",yytext);yylval.val.type = V_T;return VOID;}
+"bool"		{ /*printf("%s \t BOOL\n", yytext);*/printf("%s",yytext);yylval.val.type = B_T;return BOOL;}
 "true"		{ /*printf("%s \t TRUE\n", yytext);*/printf("%s",yytext);return TRUE;}
 "false"		{ /*printf("%s \t FALSE\n", yytext);*/printf("%s",yytext);return FALSE;}
 "return"		{ /*printf("%s \t RET\n", yytext);*/printf("%s",yytext);return RET;}
@@ -93,9 +93,9 @@ number {digit}+
 
 "\""				        { BEGIN(STRING_STATE); printf("\"");return '"'; }
 <STRING_STATE>"\""		{ BEGIN(INITIAL); printf("\"");return '"'; }
-<STRING_STATE>[^\"]*		{ printf("%s",yytext);yylval.val.string=strdup(yytext); return STRING;}
+<STRING_STATE>[^\"]*		{ printf("%s",yytext);yylval.val.string=strdup(yytext);yylval.val.type = S_T; return STRING;}
 
-{id}	{ /*printf("%s \t ID\n", yytext);*/printf("%s",yytext);yylval.val.string=strdup(yytext); return ID;}
+{id}	{ /*printf("%s \t ID\n", yytext);*/ printf("%s",yytext); yylval.val.id_name=strdup(yytext);yylval.val.type = ID_T; return ID;}
 \n			{ printf("\n%");printf("%d: ",line_cnt);line_cnt++;} 
 [ \t]		{printf("%s", yytext); }
 .			{ /* ignore bad characters */ }

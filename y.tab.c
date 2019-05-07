@@ -68,20 +68,42 @@
     #include <string.h>
 	#include "global.h"
     #include <stdbool.h>
-	
+
+typedef struct Entry Entry;
+struct Entry {  //表中的一行
+    int index;
+    Value *id_ptr;
+    Entry *next;
+	char *Kind;
+	int Scope;
+	char *Attribute;
+};
+
+typedef struct Header Header;
+struct Header { //一張表
+    int depth;
+	int entry_num;
+    Entry *table_root;
+    Entry *table_tail;
+    Header *pre;
+};
+Header *header_root = NULL;
+Header *cur_header = NULL;
+int depth = 0;
+
 extern int yylineno;
 extern int yylex();
 extern char* yytext;   // Get current token from lex
 extern char buf[256];  // Get current code line from lex
 
 /* Symbol table function - you can add new function if needed. */
-int lookup_symbol();
-void create_symbol();
-void insert_symbol();
-void dump_symbol();
+int lookup_symbol(const Header *header, const char *id);
+Header* create_symbol();
+void insert_symbol(Header *header, Value *id_ptr);
+void dump_symbol(const Header *header);
 
 
-#line 85 "y.tab.c" /* yacc.c:339  */
+#line 107 "y.tab.c" /* yacc.c:339  */
 
 # ifndef YY_NULLPTR
 #  if defined __cplusplus && 201103L <= __cplusplus
@@ -189,11 +211,11 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 24 "compiler_hw2.y" /* yacc.c:355  */
+#line 46 "compiler_hw2.y" /* yacc.c:355  */
 
     struct Value val;
 
-#line 197 "y.tab.c" /* yacc.c:355  */
+#line 219 "y.tab.c" /* yacc.c:355  */
 };
 
 typedef union YYSTYPE YYSTYPE;
@@ -210,7 +232,7 @@ int yyparse (void);
 
 /* Copy the second part of user declarations.  */
 
-#line 214 "y.tab.c" /* yacc.c:358  */
+#line 236 "y.tab.c" /* yacc.c:358  */
 
 #ifdef short
 # undef short
@@ -510,22 +532,22 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    55,    55,    56,    57,    58,    59,    63,    64,    65,
-      66,    67,    68,    69,    73,    74,    78,    79,    80,    81,
-      85,    86,    87,    88,    89,    90,    94,    95,    99,   100,
-     101,   102,   106,   107,   108,   112,   116,   117,   118,   119,
-     120,   124,   125,   126,   130,   131,   135,   136,   140,   141,
-     145,   146,   150,   151,   155,   156,   160,   161,   165,   166,
-     167,   168,   169,   170,   174,   175,   176,   177,   178,   182,
-     183,   187,   191,   192,   196,   197,   201,   202,   206,   207,
-     211,   212,   213,   214,   215,   219,   220,   224,   225,   229,
-     230,   231,   232,   233,   234,   235,   239,   240,   244,   248,
-     249,   253,   254,   255,   259,   260,   264,   265,   269,   270,
-     271,   275,   276,   277,   278,   279,   280,   281,   282,   283,
-     287,   288,   289,   293,   294,   298,   299,   300,   301,   302,
-     303,   307,   311,   312,   313,   314,   318,   319,   323,   324,
-     328,   329,   333,   334,   338,   339,   340,   344,   345,   346,
-     347,   351,   352,   356,   357,   361,   362,   363,   364
+       0,    77,    77,    78,    79,    80,    81,    85,    86,    87,
+      88,    89,    90,    91,    95,    96,   100,   101,   102,   103,
+     107,   108,   109,   110,   111,   112,   116,   117,   121,   122,
+     123,   124,   128,   129,   130,   134,   138,   139,   140,   141,
+     142,   146,   147,   148,   152,   153,   157,   158,   162,   163,
+     167,   168,   172,   173,   177,   178,   182,   183,   187,   188,
+     189,   190,   191,   192,   196,   197,   198,   199,   200,   204,
+     205,   209,   213,   214,   218,   219,   223,   224,   228,   229,
+     233,   234,   235,   236,   237,   241,   242,   246,   247,   251,
+     252,   253,   254,   255,   256,   257,   261,   262,   266,   270,
+     271,   275,   276,   277,   281,   282,   286,   287,   291,   292,
+     293,   297,   298,   299,   300,   301,   302,   303,   304,   305,
+     309,   310,   311,   315,   316,   320,   321,   322,   323,   324,
+     325,   329,   333,   334,   335,   336,   340,   341,   345,   346,
+     350,   351,   355,   356,   360,   361,   362,   366,   367,   368,
+     369,   373,   374,   378,   379,   383,   384,   385,   386
 };
 #endif
 
@@ -1595,7 +1617,7 @@ yyreduce:
   switch (yyn)
     {
       
-#line 1599 "y.tab.c" /* yacc.c:1646  */
+#line 1621 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -1823,7 +1845,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 367 "compiler_hw2.y" /* yacc.c:1906  */
+#line 389 "compiler_hw2.y" /* yacc.c:1906  */
 
 
 /* C code section */
@@ -1849,10 +1871,83 @@ void yyerror(char *s)
     printf("\n|-----------------------------------------------|\n\n");
 }
 
-void create_symbol() {}
-void insert_symbol() {}
-int lookup_symbol() {}
-void dump_symbol() {
+Header* create_symbol() 
+{
+	Header *ptr = malloc(sizeof(Header)); //創新的table
+	ptr->depth=depth++;
+	ptr->table_root=malloc(sizeof(Entry));
+	ptr->table_root->next = NULL;
+	ptr->table_tail = ptr->table_root;
+	ptr->pre = NULL;
+	ptr->entry_num=-1;
+	return ptr;
+}
+void insert_symbol(Header *header, Value *id_ptr) 
+{
+	if (cur_header == NULL) //無table
+	{
+        cur_header = create_symbol();
+        header_root = cur_header;
+        header = cur_header;
+    }
+    if (lookup_symbol(cur_header, id_ptr->id_name) == NULL) 
+	{
+        printf("Insert a symbol: %s\n", id_ptr->id_name);
+        Entry *tmp = malloc(sizeof(Entry));
+		cur_header->entry_num=(cur_header->entry_num)+1;
+        tmp->index = cur_header->entry_num;
+        tmp->id_ptr = id_ptr;
+        tmp->next = NULL;
+        header->table_tail->next = tmp;
+        header->table_tail = header->table_tail->next;
+    } 
+	else 
+	{
+        char errmsg[64];
+        sprintf(errmsg, "redefined variable \'%s\'", id_ptr->id_name);
+        yyerror(errmsg);
+    }
+}
+int lookup_symbol(const Header *header, const char *id) 
+{
+	if (header->table_root == NULL) 
+	{
+        return NULL;
+    }
+    Entry *cur = header->table_root->next;
+    while (cur != NULL)
+	{
+        if (strcmp(cur->id_ptr->id_name, id) == 0)
+		{
+            return cur->index;
+        }
+        cur = cur->next;
+    }
+    return NULL;
+}
+void dump_symbol(const Header *header) 
+{
     printf("\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
            "Index", "Name", "Kind", "Type", "Scope", "Attribute");
+	if (header->table_root == NULL) 
+	{
+        return;
+    }
+
+    Entry *cur = header->table_root->next;
+    while (cur != NULL)
+	{
+		printf("\n%-10d%-10s%-12s%-10s%-10d%-10s\n",
+           cur->index, cur->id_ptr->id_name, cur->Kind, cur->id_ptr->val_ptr->type, cur->Scope, cur->Attribute);
+		   
+        Entry *tmp = cur;
+        cur = cur->next;
+        free(tmp->id_ptr->val_ptr);
+        tmp->id_ptr->val_ptr = NULL;
+        free(tmp->id_ptr);
+        tmp->id_ptr = NULL;
+        free(tmp);
+        tmp = NULL;
+    }
+
 }

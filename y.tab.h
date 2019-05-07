@@ -118,7 +118,7 @@ extern int yydebug;
 
 union YYSTYPE
 {
-#line 24 "compiler_hw2.y" /* yacc.c:1909  */
+#line 46 "compiler_hw2.y" /* yacc.c:1909  */
 
     struct Value val;
 

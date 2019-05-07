@@ -1082,22 +1082,22 @@ YY_RULE_SETUP
 case 37:
 YY_RULE_SETUP
 #line 75 "compiler_hw2.l"
-{ /*printf("%s \t INT\n", yytext);*/printf("%s",yytext);return INT;}
+{ /*printf("%s \t INT\n", yytext);*/printf("%s",yytext);yylval.val.type = I_T;return INT;}
 	YY_BREAK
 case 38:
 YY_RULE_SETUP
 #line 76 "compiler_hw2.l"
-{ /*printf("%s \t FLOAT\n", yytext);*/printf("%s",yytext);return FLOAT;}
+{ /*printf("%s \t FLOAT\n", yytext);*/printf("%s",yytext);yylval.val.type = F_T;return FLOAT;}
 	YY_BREAK
 case 39:
 YY_RULE_SETUP
 #line 77 "compiler_hw2.l"
-{ /*printf("%s \t VOID\n", yytext);*/printf("%s",yytext);return VOID;}
+{ /*printf("%s \t VOID\n", yytext);*/printf("%s",yytext);yylval.val.type = V_T;return VOID;}
 	YY_BREAK
 case 40:
 YY_RULE_SETUP
 #line 78 "compiler_hw2.l"
-{ /*printf("%s \t BOOL\n", yytext);*/printf("%s",yytext);return BOOL;}
+{ /*printf("%s \t BOOL\n", yytext);*/printf("%s",yytext);yylval.val.type = B_T;return BOOL;}
 	YY_BREAK
 case 41:
 YY_RULE_SETUP
@@ -1174,12 +1174,12 @@ case 55:
 /* rule 55 can match eol */
 YY_RULE_SETUP
 #line 96 "compiler_hw2.l"
-{ printf("%s",yytext);yylval.val.string=strdup(yytext); return STRING;}
+{ printf("%s",yytext);yylval.val.string=strdup(yytext);yylval.val.type = S_T; return STRING;}
 	YY_BREAK
 case 56:
 YY_RULE_SETUP
 #line 98 "compiler_hw2.l"
-{ /*printf("%s \t ID\n", yytext);*/printf("%s",yytext);yylval.val.string=strdup(yytext); return ID;}
+{ /*printf("%s \t ID\n", yytext);*/ printf("%s",yytext); yylval.val.id_name=strdup(yytext);yylval.val.type = ID_T; return ID;}
 	YY_BREAK
 case 57:
 /* rule 57 can match eol */

@@ -10,9 +10,10 @@ struct Entry {  //表中的一行
     int index;
     Value *id_ptr;
     Entry *next;
-	char *Kind;
+	char Kind[50];
 	int Scope;
-	char *Attribute;
+	char Attribute[50];
+	char type[50];
 };
 
 typedef struct Header Header;
@@ -35,10 +36,11 @@ extern char buf[256];  // Get current code line from lex
 /* Symbol table function - you can add new function if needed. */
 int lookup_symbol(const Header *header, const char *id);
 Header* create_symbol();
-void insert_symbol(Header *header, Value *id_ptr);
+void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind);
 void dump_symbol(const Header *header);
 void new_scope();
 void dump_scope();
+void dump_all_scopes();
 
 %}
 
@@ -68,6 +70,7 @@ void dump_scope();
 %type <val> parameter_declaration identifier_list type_name abstract_declarator direct_abstract_declarator initializer
 %type <val> initializer_list statement labeled_statement compound_statement declaration_list statement_list expression_statement
 %type <val> selection_statement iteration_statement jump_statement external_declaration function_definition
+%type <val> type_specifier declaration_specifiers
 
 /* Yacc will start at this nonterminal */
 %start program
@@ -76,18 +79,18 @@ void dump_scope();
 %%
 
 primary_expression
-	: ID
+	: ID {$$ = yylval.val;printf("333");}
 	| I_CONST 
     | F_CONST
 	| '"' STRING '"'
-	| '(' expression ')'
+	| '('expression ')'
 	;
 
 postfix_expression
 	: primary_expression
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
-	| postfix_expression '(' argument_expression_list ')'
+	| postfix_expression '('argument_expression_list ')'
 	| postfix_expression '.' ID
 	| postfix_expression INC
 	| postfix_expression DEC
@@ -217,8 +220,8 @@ declaration
 	;
 
 declaration_specifiers
-	: type_specifier
-	| type_specifier declaration_specifiers
+	: type_specifier {$$=$1;}
+	| type_specifier declaration_specifiers  
 	;
 
 init_declarator_list
@@ -232,31 +235,31 @@ init_declarator
 	;
 
 type_specifier
-	: VOID
-	| INT
-	| FLOAT
-	| BOOL 
-	| STR_TYPE
+	: VOID { $$ = yylval.val;printf("222"); }
+	| INT { $$ = yylval.val;printf("222"); }
+	| FLOAT { $$ = yylval.val;printf("222"); }
+	| BOOL  { $$ = yylval.val;printf("222");}
+	| STR_TYPE { $$ = yylval.val;printf("222"); }
 	;
 
 specifier_qualifier_list
-	: type_specifier specifier_qualifier_list
+	: type_specifier specifier_qualifier_list 
 	| type_specifier
 	;
 
 declarator
 	: pointer direct_declarator
-	| direct_declarator
+	| direct_declarator {$$=$1;}
 	;
 
 direct_declarator
-	: ID
+	: ID {$$ = yylval.val;printf("111");}
 	| '(' declarator ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
-	| direct_declarator '(' parameter_type_list ')'
+	| direct_declarator '(' {new_scope();} parameter_type_list ')'
 	| direct_declarator '(' identifier_list ')'
-	| direct_declarator '(' ')'
+	| direct_declarator '(' {new_scope();}  ')'
 	;
 
 pointer
@@ -274,13 +277,13 @@ parameter_list
 	;
 
 parameter_declaration
-	: declaration_specifiers declarator
-	| declaration_specifiers abstract_declarator
-	| declaration_specifiers
+	: declaration_specifiers declarator {Value *v1=&$1;Value *v2=&$2; insert_symbol(cur_header,v1,v2,"parameter");}
+	| declaration_specifiers abstract_declarator 
+	| declaration_specifiers 
 	;
 
 identifier_list
-	: ID
+	: ID 
 	| identifier_list ',' ID
 	;
 
@@ -377,15 +380,15 @@ program
 	;
 
 external_declaration
-	: function_definition 
+	: function_definition{dump_scope();}
 	| declaration
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list {new_scope();} compound_statement {dump_scope();}
-	| declaration_specifiers declarator {new_scope();} compound_statement {dump_scope();}
-	| declarator declaration_list {new_scope();} compound_statement {dump_scope();}
-	| declarator {new_scope();} compound_statement {dump_scope();}
+	: declaration_specifiers declarator declaration_list compound_statement
+	| declaration_specifiers declarator compound_statement
+	| declarator declaration_list compound_statement
+	| declarator compound_statement
 	;
 
 %%
@@ -397,11 +400,10 @@ int main(int argc, char** argv)
     yyin = fopen(argv[1],"r");
 
 	yylineno = 0;
-	new_scope();
     yyparse();
     extern int line_cnt;
 
-	dump_scope();
+	dump_all_scopes();
 	printf("\nTotal lines: %d \n",yylineno);
 
     return 0;
@@ -418,7 +420,8 @@ void yyerror(char *s)
 Header* create_symbol() 
 {
 	Header *ptr = malloc(sizeof(Header)); //創新的table
-	ptr->depth=depth++;
+	ptr->depth=depth;
+	depth++;
 	ptr->table_root=malloc(sizeof(Entry));
 	ptr->table_root->next = NULL;
 	ptr->table_tail = ptr->table_root;
@@ -426,7 +429,7 @@ Header* create_symbol()
 	ptr->entry_num=-1;
 	return ptr;
 }
-void insert_symbol(Header *header, Value *id_ptr) 
+void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind) 
 {
 	if (cur_header == NULL) //無table
 	{
@@ -436,12 +439,44 @@ void insert_symbol(Header *header, Value *id_ptr)
     }
     if (lookup_symbol(cur_header, id_ptr->id_name) == NULL) 
 	{
-        printf("Insert a symbol: %s\n", id_ptr->id_name);
+        //printf("Insert a symbol: %s in table %d\n", id_ptr->id_name, header->depth);
         Entry *tmp = malloc(sizeof(Entry));
-		cur_header->entry_num=(cur_header->entry_num)+1;
-        tmp->index = cur_header->entry_num;
+		header->entry_num=(header->entry_num)+1;
+        tmp->index = header->entry_num;
         tmp->id_ptr = id_ptr;
         tmp->next = NULL;
+		strcpy(tmp->Kind,kind);
+		if(strcmp(kind,"function")==0)
+		{
+
+		}
+		else //只有kind為function的,Attribute才有內容
+		{
+			strcat(tmp->Attribute,"");
+		}
+
+		//TYPE
+		if(t_ptr->type==V_T)
+		{
+			strcat(tmp->type,"void");
+		}	
+		else if(t_ptr->type==I_T)
+		{
+			strcat(tmp->type,"int");
+		}	
+		else if(t_ptr->type==F_T)
+		{
+			strcat(tmp->type,"float");
+		}
+		else if(t_ptr->type==S_T)
+		{
+			strcat(tmp->type,"string");
+		}
+		else if(t_ptr->type==B_T)
+		{
+			strcat(tmp->type,"bool");
+		}
+
         header->table_tail->next = tmp;
         header->table_tail = header->table_tail->next;
     } 
@@ -481,18 +516,23 @@ void dump_symbol(const Header *header)
     Entry *cur = header->table_root->next;
     while (cur != NULL)
 	{
-		printf("\n%-10d%-10s%-12s%-10s%-10d%-10s\n",
-           cur->index, cur->id_ptr->id_name, cur->Kind, cur->id_ptr->val_ptr->type, cur->Scope, cur->Attribute);
-		   
+		printf("\n%-10d%-10s%-12s%-10s%-10d%-10s",
+		cur->index, cur->id_ptr->id_name, cur->Kind, cur->type, cur->Scope, cur->Attribute);
+		//printf("\n%d %s\n",cur->index, cur->id_ptr->id_name);
         Entry *tmp = cur;
         cur = cur->next;
+
+		/*
         free(tmp->id_ptr->val_ptr);
         tmp->id_ptr->val_ptr = NULL;
         free(tmp->id_ptr);
         tmp->id_ptr = NULL;
         free(tmp);
         tmp = NULL;
+		*/
+		
     }
+	printf("\n");
 }
 
 void new_scope()
@@ -505,10 +545,19 @@ void new_scope()
 void dump_scope()
 {
     Header *tmp = cur_header;
+	printf("\ndump_scope: %d",tmp->depth);
     cur_header = cur_header->pre;
     dump_symbol(tmp);
     free(tmp);
     tmp = NULL;
     depth--;
+}
+
+void dump_all_scopes()
+{
+	while (cur_header != NULL) 
+	{
+        dump_scope();
+    }
 }
 

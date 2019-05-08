@@ -37,7 +37,7 @@ extern char buf[256];  // Get current code line from lex
 int lookup_symbol(const Header *header, const char *id);
 Header* create_symbol();
 void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind);
-void dump_symbol(const Header *header);
+void dump_symbol(Header *header);
 void new_scope();
 void dump_scope();
 void dump_all_scopes();
@@ -80,14 +80,14 @@ void dump_all_scopes();
 
 primary_expression
 	: ID {$$ = yylval.val;printf("333");}
-	| I_CONST 
-    | F_CONST
-	| '"' STRING '"'
+	| I_CONST {$$=yylval.val;}
+    | F_CONST {$$=yylval.val;}
+	| '"' STRING '"' {$$=yylval.val;}
 	| '('expression ')'
 	;
 
 postfix_expression
-	: primary_expression
+	: primary_expression {$$=$1;}
 	| postfix_expression '[' expression ']'
 	| postfix_expression '(' ')'
 	| postfix_expression '('argument_expression_list ')'
@@ -102,7 +102,7 @@ argument_expression_list
 	;
 
 unary_expression
-	: postfix_expression
+	: postfix_expression {$$=$1;}
 	| INC unary_expression
 	| DEC unary_expression
 	| unary_operator cast_expression
@@ -118,29 +118,29 @@ unary_operator
 	;
 
 cast_expression
-	: unary_expression
+	: unary_expression {$$=$1;}
 	| '(' type_name ')' cast_expression
 	;
 
 multiplicative_expression
-	: cast_expression
+	: cast_expression {$$=$1;}
 	| multiplicative_expression '*' cast_expression
 	| multiplicative_expression '/' cast_expression
 	| multiplicative_expression '%' cast_expression
 	;
 
 additive_expression
-	: multiplicative_expression
+	: multiplicative_expression {$$=$1;}
 	| additive_expression '+' multiplicative_expression
 	| additive_expression '-' multiplicative_expression
 	;
 
 shift_expression
-	: additive_expression
+	: additive_expression {$$=$1;}
 	;
 
 relational_expression
-	: shift_expression
+	: shift_expression {$$=$1;}
 	| relational_expression '<' shift_expression
 	| relational_expression '>' shift_expression
 	| relational_expression LTE shift_expression
@@ -148,43 +148,43 @@ relational_expression
 	;
 
 equality_expression
-	: relational_expression
+	: relational_expression {$$=$1;}
 	| equality_expression EQ relational_expression
 	| equality_expression NE relational_expression
 	;
 
 and_expression
-	: equality_expression
+	: equality_expression {$$=$1;}
 	| and_expression '&' equality_expression
 	;
 
 exclusive_or_expression
-	: and_expression
+	: and_expression {$$=$1;}
 	| exclusive_or_expression '^' and_expression
 	;
 
 inclusive_or_expression
-	: exclusive_or_expression
+	: exclusive_or_expression {$$=$1;}
 	| inclusive_or_expression '|' exclusive_or_expression
 	;
 
 logical_and_expression
-	: inclusive_or_expression
+	: inclusive_or_expression {$$=$1;}
 	| logical_and_expression AND inclusive_or_expression
 	;
 
 logical_or_expression
-	: logical_and_expression
+	: logical_and_expression {$$=$1;}
 	| logical_or_expression OR logical_and_expression
 	;
 
 conditional_expression
-	: logical_or_expression
+	: logical_or_expression {$$=$1;}
 	| logical_or_expression '?' expression ':' conditional_expression
 	;
 
 assignment_expression
-	: conditional_expression
+	: conditional_expression {$$=$1;}
 	| unary_expression assignment_operator assignment_expression
 	;
 
@@ -215,8 +215,8 @@ constant_expression
 	;
 
 declaration
-	: declaration_specifiers ';'
-	| declaration_specifiers init_declarator_list ';'
+	: declaration_specifiers ';' 
+	| declaration_specifiers init_declarator_list ';' {Value *v1=&$1;Value *v2=&$2; insert_symbol(cur_header,v1,v2,"variable");}
 	;
 
 declaration_specifiers
@@ -225,13 +225,13 @@ declaration_specifiers
 	;
 
 init_declarator_list
-	: init_declarator
+	: init_declarator {$$=$1;}
 	| init_declarator_list ',' init_declarator
 	;
 
 init_declarator
-	: declarator
-	| declarator '=' initializer
+	: declarator {$$=$1;}
+	| declarator '=' initializer {$$=$1;}
 	;
 
 type_specifier
@@ -311,7 +311,7 @@ direct_abstract_declarator
 	;
 
 initializer
-	: assignment_expression
+	: assignment_expression {$$=$1;}
 	| '{' initializer_list '}'
 	| '{' initializer_list ',' '}'
 	;
@@ -439,12 +439,14 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
     }
     if (lookup_symbol(cur_header, id_ptr->id_name) == NULL) 
 	{
-        //printf("Insert a symbol: %s in table %d\n", id_ptr->id_name, header->depth);
+        
         Entry *tmp = malloc(sizeof(Entry));
 		header->entry_num=(header->entry_num)+1;
         tmp->index = header->entry_num;
         tmp->id_ptr = id_ptr;
+		printf("Insert a symbol: %s in table %d\n", tmp->id_ptr->id_name, header->depth);
         tmp->next = NULL;
+		tmp->Scope=header->depth;
 		strcpy(tmp->Kind,kind);
 		if(strcmp(kind,"function")==0)
 		{
@@ -482,6 +484,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
     } 
 	else 
 	{
+		//printf("lookup_symbol=%d\n",lookup_symbol(cur_header, id_ptr->id_name));
         char errmsg[64];
         sprintf(errmsg, "redefined variable \'%s\'", id_ptr->id_name);
         yyerror(errmsg);
@@ -496,6 +499,9 @@ int lookup_symbol(const Header *header, const char *id)
     Entry *cur = header->table_root->next;
     while (cur != NULL)
 	{
+		printf("\nindex:%d\n",cur->index);
+		printf("\n%s\n",id);
+		printf("\n%s\n",cur->id_ptr->id_name);
         if (strcmp(cur->id_ptr->id_name, id) == 0)
 		{
             return cur->index;
@@ -504,7 +510,7 @@ int lookup_symbol(const Header *header, const char *id)
     }
     return NULL;
 }
-void dump_symbol(const Header *header) 
+void dump_symbol(Header *header) 
 {
     printf("\n\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
            "Index", "Name", "Kind", "Type", "Scope", "Attribute");
@@ -521,16 +527,15 @@ void dump_symbol(const Header *header)
 		//printf("\n%d %s\n",cur->index, cur->id_ptr->id_name);
         Entry *tmp = cur;
         cur = cur->next;
-
-		/*
-        free(tmp->id_ptr->val_ptr);
-        tmp->id_ptr->val_ptr = NULL;
-        free(tmp->id_ptr);
-        tmp->id_ptr = NULL;
-        free(tmp);
-        tmp = NULL;
-		*/
 		
+		/*free(tmp->id_ptr->val_ptr);
+        tmp->id_ptr->val_ptr = NULL;
+		
+		free(tmp->id_ptr);
+        tmp->id_ptr = NULL;*/
+		
+		free(tmp);
+        tmp = NULL;
     }
 	printf("\n");
 }

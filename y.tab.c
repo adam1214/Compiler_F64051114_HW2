@@ -1619,7 +1619,7 @@ yyreduce:
     {
         case 2:
 #line 82 "compiler_hw2.y" /* yacc.c:1646  */
-    {(yyval.val) = yylval.val;printf("333");}
+    {(yyval.val) = yylval.val;/*printf("333");*/}
 #line 1624 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1763,31 +1763,31 @@ yyreduce:
 
   case 80:
 #line 238 "compiler_hw2.y" /* yacc.c:1646  */
-    { (yyval.val) = yylval.val;printf("222"); }
+    { (yyval.val) = yylval.val;/*printf("222");*/ }
 #line 1768 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
 #line 239 "compiler_hw2.y" /* yacc.c:1646  */
-    { (yyval.val) = yylval.val;printf("222"); }
+    { (yyval.val) = yylval.val;/*printf("222");*/ }
 #line 1774 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
 #line 240 "compiler_hw2.y" /* yacc.c:1646  */
-    { (yyval.val) = yylval.val;printf("222"); }
+    { (yyval.val) = yylval.val;/*printf("222");*/ }
 #line 1780 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
 #line 241 "compiler_hw2.y" /* yacc.c:1646  */
-    { (yyval.val) = yylval.val;printf("222");}
+    { (yyval.val) = yylval.val;/*printf("222");*/}
 #line 1786 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
 #line 242 "compiler_hw2.y" /* yacc.c:1646  */
-    { (yyval.val) = yylval.val;printf("222"); }
+    { (yyval.val) = yylval.val;/*printf("222");*/ }
 #line 1792 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -1799,7 +1799,7 @@ yyreduce:
 
   case 89:
 #line 256 "compiler_hw2.y" /* yacc.c:1646  */
-    {(yyval.val) = yylval.val;printf("111");}
+    {(yyval.val) = yylval.val;/*printf("111");*/}
 #line 1804 "y.tab.c" /* yacc.c:1646  */
     break;
 

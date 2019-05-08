@@ -79,7 +79,7 @@ void dump_all_scopes();
 %%
 
 primary_expression
-	: ID {$$ = yylval.val;printf("333");}
+	: ID {$$ = yylval.val;/*printf("333");*/}
 	| I_CONST {$$=yylval.val;}
     | F_CONST {$$=yylval.val;}
 	| '"' STRING '"' {$$=yylval.val;}
@@ -235,11 +235,11 @@ init_declarator
 	;
 
 type_specifier
-	: VOID { $$ = yylval.val;printf("222"); }
-	| INT { $$ = yylval.val;printf("222"); }
-	| FLOAT { $$ = yylval.val;printf("222"); }
-	| BOOL  { $$ = yylval.val;printf("222");}
-	| STR_TYPE { $$ = yylval.val;printf("222"); }
+	: VOID { $$ = yylval.val;/*printf("222");*/ }
+	| INT { $$ = yylval.val;/*printf("222");*/ }
+	| FLOAT { $$ = yylval.val;/*printf("222");*/ }
+	| BOOL  { $$ = yylval.val;/*printf("222");*/}
+	| STR_TYPE { $$ = yylval.val;/*printf("222");*/ }
 	;
 
 specifier_qualifier_list
@@ -253,7 +253,7 @@ declarator
 	;
 
 direct_declarator
-	: ID {$$ = yylval.val;printf("111");}
+	: ID {$$ = yylval.val;/*printf("111");*/}
 	| '(' declarator ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'

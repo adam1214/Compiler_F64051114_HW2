@@ -16,7 +16,7 @@ struct Value
 		struct //for ID
 		{
             char *id_name;
-            Value *val_ptr;
+            //Value *val_ptr;
 		};
 	};
 };

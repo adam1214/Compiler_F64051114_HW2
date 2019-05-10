@@ -85,7 +85,7 @@ struct Header { //一張表
     int depth;
 	int entry_num;
     Entry *table_root;
-    Entry *table_tail;
+    //Entry *table_tail;
     Header *pre;
 };
 Header *header_root = NULL;
@@ -2095,8 +2095,9 @@ Header* create_symbol()
 	ptr->depth=depth;
 	depth++;
 	ptr->table_root=malloc(sizeof(Entry));
-	ptr->table_root->next = NULL;
-	ptr->table_tail = ptr->table_root;
+	ptr->table_root=NULL;
+	//ptr->table_root->next = NULL;
+	//ptr->table_tail = ptr->table_root;
 	ptr->pre = NULL;
 	ptr->entry_num=-1;
 	return ptr;
@@ -2116,7 +2117,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 		header->entry_num=(header->entry_num)+1;
         tmp->index = header->entry_num;
         tmp->id_ptr = id_ptr;
-		printf("Insert a symbol: %s in table %d\n", tmp->id_ptr->id_name, header->depth);
+		printf("Insert a symbol: %s in table %d,INDEX: %d\n", tmp->id_ptr->id_name, header->depth,tmp->index);
         tmp->next = NULL;
 		tmp->Scope=header->depth;
 		strcpy(tmp->Kind,kind);
@@ -2151,8 +2152,23 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 			strcat(tmp->type,"bool");
 		}
 
-        header->table_tail->next = tmp;
-        header->table_tail = header->table_tail->next;
+        //header->table_tail->next = tmp;
+        //header->table_tail = header->table_tail->next;
+		
+		Entry *e=cur_header->table_root;
+		if(e==NULL)
+		{
+			cur_header->table_root=tmp;
+			printf("NAME:%s\n",cur_header->table_root->id_ptr->id_name);
+		}
+		else
+		{
+			while(e->next!=NULL)
+			{
+				e=e->next;
+			}
+			e->next=tmp;
+		}
     } 
 	else 
 	{
@@ -2166,14 +2182,15 @@ int lookup_symbol(const Header *header, const char *id)
 {
 	if (header->table_root == NULL) 
 	{
+		printf("NULLLLLLLL\n");
         return NULL;
     }
-    Entry *cur = header->table_root->next;
+    Entry *cur = header->table_root;
     while (cur != NULL)
 	{
 		printf("\nindex:%d\n",cur->index);
-		printf("\n%s\n",id);
-		printf("\n%s\n",cur->id_ptr->id_name);
+		printf("%s\n",id);
+		printf("%s\n",cur->id_ptr->id_name);
         if (strcmp(cur->id_ptr->id_name, id) == 0)
 		{
             return cur->index;
@@ -2191,7 +2208,7 @@ void dump_symbol(Header *header)
         return;
     }
 
-    Entry *cur = header->table_root->next;
+    Entry *cur = header->table_root;
     while (cur != NULL)
 	{
 		printf("\n%-10d%-10s%-12s%-10s%-10d%-10s",

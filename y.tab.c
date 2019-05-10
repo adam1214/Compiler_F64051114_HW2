@@ -2104,6 +2104,13 @@ Header* create_symbol()
 }
 void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind) 
 {
+	printf("%s\n",id_ptr->id_name);
+
+	Value* id_ptr_copy=malloc(sizeof(Value));
+	id_ptr_copy->id_name=malloc(sizeof(char)*50);
+	strcpy(id_ptr_copy->id_name,id_ptr->id_name);
+
+
 	if (cur_header == NULL) //無table
 	{
         cur_header = create_symbol();
@@ -2116,8 +2123,9 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
         Entry *tmp = malloc(sizeof(Entry));
 		header->entry_num=(header->entry_num)+1;
         tmp->index = header->entry_num;
-        tmp->id_ptr = id_ptr;
-		printf("Insert a symbol: %s in table %d,INDEX: %d\n", tmp->id_ptr->id_name, header->depth,tmp->index);
+		
+        tmp->id_ptr = id_ptr_copy;
+		//printf("Insert a symbol: %s in table %d,INDEX: %d\n", tmp->id_ptr->id_name, header->depth,tmp->index);
         tmp->next = NULL;
 		tmp->Scope=header->depth;
 		strcpy(tmp->Kind,kind);
@@ -2159,7 +2167,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 		if(e==NULL)
 		{
 			cur_header->table_root=tmp;
-			printf("NAME:%s\n",cur_header->table_root->id_ptr->id_name);
+			//printf("NAME:%s\n",cur_header->table_root->id_ptr->id_name);
 		}
 		else
 		{
@@ -2182,15 +2190,15 @@ int lookup_symbol(const Header *header, const char *id)
 {
 	if (header->table_root == NULL) 
 	{
-		printf("NULLLLLLLL\n");
+		//printf("NULLLLLLLL\n");
         return NULL;
     }
     Entry *cur = header->table_root;
     while (cur != NULL)
 	{
-		printf("\nindex:%d\n",cur->index);
-		printf("%s\n",id);
-		printf("%s\n",cur->id_ptr->id_name);
+		//printf("\nindex:%d\n",cur->index);
+		//printf("%s\n",id);
+		//printf("%s\n",cur->id_ptr->id_name);
         if (strcmp(cur->id_ptr->id_name, id) == 0)
 		{
             return cur->index;
@@ -2239,7 +2247,7 @@ void new_scope()
 void dump_scope()
 {
     Header *tmp = cur_header;
-	printf("\ndump_scope: %d",tmp->depth);
+	//printf("\ndump_scope: %d",tmp->depth);
     cur_header = cur_header->pre;
     dump_symbol(tmp);
     free(tmp);

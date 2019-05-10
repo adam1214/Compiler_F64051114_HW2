@@ -9,6 +9,7 @@ struct Value
 	Type type;
 	union 
 	{
+		
 		int i_val;
 		float f_val;
 		char* string; //for string constant

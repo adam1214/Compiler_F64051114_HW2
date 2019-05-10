@@ -1052,7 +1052,7 @@ YY_RULE_SETUP
 case 31:
 YY_RULE_SETUP
 #line 68 "compiler_hw2.l"
-{ /*printf("%s \t STRING\n", yytext);  printf("%s",yytext);*/CONCAT;return STR_TYPE;}
+{ /*printf("%s \t STRING\n", yytext);  printf("%s",yytext);*/CONCAT;yylval.val.type = S_T;return STR_TYPE;}
 	YY_BREAK
 case 32:
 YY_RULE_SETUP

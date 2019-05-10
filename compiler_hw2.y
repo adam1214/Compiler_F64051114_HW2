@@ -432,7 +432,7 @@ Header* create_symbol()
 }
 void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind) 
 {
-	printf("%s\n",id_ptr->id_name);
+	//printf("%s\n",id_ptr->id_name);
 
 	Value* id_ptr_copy=malloc(sizeof(Value));
 	id_ptr_copy->id_name=malloc(sizeof(char)*50);

@@ -65,7 +65,7 @@ number {digit}+
 ","		{ /*printf("%s \t COMMA\n", yytext);printf("%s",yytext);*/CONCAT;return ',';}
 ";"		{ /*printf("%s \t SEMICOLON\n", yytext);printf("%s",yytext);*/CONCAT;return ';';}
 
-"string"		{ /*printf("%s \t STRING\n", yytext);  printf("%s",yytext);*/CONCAT;return STR_TYPE;}
+"string"		{ /*printf("%s \t STRING\n", yytext);  printf("%s",yytext);*/CONCAT;yylval.val.type = S_T;return STR_TYPE;}
 "print"		{ /*printf("%s \t PRINT\n", yytext);printf("%s",yytext);*/CONCAT;return PRINT;}
 "if"		{ /*printf("%s \t IF\n", yytext);printf("%s",yytext);*/CONCAT;return IF;}
 "else"		{ /*printf("%s \t ELSE\n", yytext);printf("%s",yytext);*/CONCAT;return ELSE;}

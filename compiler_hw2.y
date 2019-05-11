@@ -37,6 +37,7 @@ extern char buf[256];  // Get current code line from lex
 int lookup_symbol(const Header *header, const char *id);
 Header* create_symbol();
 void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind);
+void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind);
 void dump_symbol(Header *header);
 void new_scope();
 void dump_scope();
@@ -386,7 +387,7 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator compound_statement
+	| declaration_specifiers declarator compound_statement {Value *v1=&$1;Value *v2=&$2;insert_symbol_forfun(cur_header,v1,v2,"function");}
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
 	;
@@ -400,6 +401,7 @@ int main(int argc, char** argv)
     yyin = fopen(argv[1],"r");
 
 	yylineno = 0;
+	new_scope();
     yyparse();
     extern int line_cnt;
 
@@ -487,15 +489,85 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 		{
 			strcat(tmp->type,"bool");
 		}
-
-        //header->table_tail->next = tmp;
-        //header->table_tail = header->table_tail->next;
-		
 		Entry *e=cur_header->table_root;
 		if(e==NULL)
 		{
 			cur_header->table_root=tmp;
-			//printf("NAME:%s\n",cur_header->table_root->id_ptr->id_name);
+		}
+		else
+		{
+			while(e->next!=NULL)
+			{
+				e=e->next;
+			}
+			e->next=tmp;
+		}
+    } 
+	else 
+	{
+		//printf("lookup_symbol=%d\n",lookup_symbol(cur_header, id_ptr->id_name));
+        char errmsg[64];
+        sprintf(errmsg, "redefined variable \'%s\'", id_ptr->id_name);
+        yyerror(errmsg);
+    }
+}
+
+void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind) 
+{
+	//printf("%s\n",id_ptr->id_name);
+	int table_or_not=1; //have table yet
+	Value* id_ptr_copy=malloc(sizeof(Value));
+	id_ptr_copy->id_name=malloc(sizeof(char)*50);
+	strcpy(id_ptr_copy->id_name,id_ptr->id_name);
+
+	if (cur_header == NULL) //無table
+	{
+		table_or_not=0; //not have table yet
+        cur_header = create_symbol();
+        header_root = cur_header;
+        header = cur_header;
+    }
+    if (lookup_symbol(cur_header->pre, id_ptr->id_name) == NULL) 
+	{
+        if(table_or_not==1)
+		{
+			header=header->pre;
+		}
+        Entry *tmp = malloc(sizeof(Entry));
+		header->entry_num=(header->entry_num)+1;
+        tmp->index = header->entry_num;
+		
+        tmp->id_ptr = id_ptr_copy;
+		//printf("Insert a symbol: %s in table %d,INDEX: %d\n", tmp->id_ptr->id_name, header->depth,tmp->index);
+        tmp->next = NULL;
+		tmp->Scope=header->depth;
+		strcpy(tmp->Kind,kind);
+		
+		//TYPE
+		if(t_ptr->type==V_T)
+		{
+			strcat(tmp->type,"void");
+		}	
+		else if(t_ptr->type==I_T)
+		{
+			strcat(tmp->type,"int");
+		}	
+		else if(t_ptr->type==F_T)
+		{
+			strcat(tmp->type,"float");
+		}
+		else if(t_ptr->type==S_T)
+		{
+			strcat(tmp->type,"string");
+		}
+		else if(t_ptr->type==B_T)
+		{
+			strcat(tmp->type,"bool");
+		}
+		Entry *e=header->table_root;
+		if(e==NULL)
+		{
+			header->table_root=tmp;
 		}
 		else
 		{
@@ -562,7 +634,7 @@ void dump_symbol(Header *header)
 		free(tmp);
         tmp = NULL;
     }
-	printf("\n");
+	printf("\n\n");
 }
 
 void new_scope()

@@ -2180,6 +2180,42 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 			}
 			e->next=tmp;
 		}
+
+		//insert Attribute in previous table
+		if(strcmp(kind,"parameter")==0)
+		{
+			Header* p=cur_header->pre;
+			Entry* e=p->table_root;
+			if(e!=NULL)
+			{
+				while(e->next!=NULL)
+				{
+					e=e->next;
+				}
+				if(e->index!=-8)
+				{
+					Entry *t = malloc(sizeof(Entry));
+					t->next=NULL;
+					t->index=-8; // use to identify that this entry hasn't had function name yet
+					strcat(t->Attribute,tmp->type);
+					e->next=t;
+				}
+				else
+				{
+					strcat(e->Attribute,", ");
+					strcat(e->Attribute,tmp->type);
+				}
+			}
+			else
+			{
+				Entry *t = malloc(sizeof(Entry));
+				t->next=NULL;
+				t->index=-8; // use to identify that this entry hasn't had function name yet
+				strcat(t->Attribute,tmp->type);
+				p->table_root=t;
+			}
+			
+		}
     } 
 	else 
 	{
@@ -2216,7 +2252,7 @@ void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind
         tmp->index = header->entry_num;
 		
         tmp->id_ptr = id_ptr_copy;
-		//printf("Insert a symbol: %s in table %d,INDEX: %d\n", tmp->id_ptr->id_name, header->depth,tmp->index);
+		//printf("Insert a function: %s in table %d,INDEX: %d\n", tmp->id_ptr->id_name, header->depth,tmp->index);
         tmp->next = NULL;
 		tmp->Scope=header->depth;
 		strcpy(tmp->Kind,kind);
@@ -2242,19 +2278,65 @@ void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind
 		{
 			strcat(tmp->type,"bool");
 		}
-		Entry *e=header->table_root;
-		if(e==NULL)
+
+		//要去檢查前一個table的最後一個entry是不是有Attribute存在,如果有,則直接使用該entry,若無,則須創新的entry
+		if(cur_header->pre!=NULL&&cur_header->pre->table_root!=NULL) 
 		{
-			header->table_root=tmp;
+			//printf("7777777\n");
+			Entry *tr=cur_header->pre->table_root;
+			//printf("17171717\n");
+			while(tr->next!=NULL)
+			{
+				//printf("767676\n");
+				tr=tr->next;
+			}
+			
+			if(strcmp(tr->Attribute,"")!=0&&tr->index==-8) //有Attribute存在
+			{
+				
+				//printf("88888888\n");
+				tr->index=tmp->index;
+				tr->id_ptr=tmp->id_ptr;
+				strcpy(tr->Kind,tmp->Kind);
+				strcat(tr->type,tmp->type);
+				tr->Scope=tmp->Scope;
+			}
+			else //無Attribute存在
+			{
+				//printf("999999\n");
+				Entry *e=header->table_root;
+				if(e==NULL)
+				{
+					header->table_root=tmp;
+				}
+				else
+				{
+					while(e->next!=NULL)
+					{
+						e=e->next;
+					}
+					e->next=tmp;
+				}
+
+			}
 		}
 		else
 		{
-			while(e->next!=NULL)
+			Entry *e=header->table_root;
+			if(e==NULL)
 			{
-				e=e->next;
+				header->table_root=tmp;
 			}
-			e->next=tmp;
+			else
+			{
+				while(e->next!=NULL)
+				{
+					e=e->next;
+				}
+				e->next=tmp;
+			}
 		}
+		
     } 
 	else 
 	{
@@ -2277,8 +2359,9 @@ int lookup_symbol(const Header *header, const char *id)
 		//printf("\nindex:%d\n",cur->index);
 		//printf("%s\n",id);
 		//printf("%s\n",cur->id_ptr->id_name);
-        if (strcmp(cur->id_ptr->id_name, id) == 0)
+        if (cur->id_ptr!=NULL&&strcmp(cur->id_ptr->id_name, id) == 0)
 		{
+			printf("55555\n");
             return cur->index;
         }
         cur = cur->next;
@@ -2340,4 +2423,3 @@ void dump_all_scopes()
         dump_scope();
     }
 }
-

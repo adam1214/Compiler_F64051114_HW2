@@ -1,4 +1,12 @@
-狀態 245 衝突：1 項偏移/縮減
+狀態 0 衝突：8 項偏移/縮減
+狀態 12 衝突：6 項偏移/縮減
+狀態 15 衝突：9 項偏移/縮減
+狀態 23 衝突：6 項偏移/縮減
+狀態 25 衝突：30 項偏移/縮減
+狀態 29 衝突：6 項偏移/縮減
+狀態 40 衝突：6 項偏移/縮減
+狀態 86 衝突：30 項偏移/縮減
+狀態 247 衝突：1 項偏移/縮減
 
 
 文法
@@ -99,126 +107,127 @@
 
    71 declaration: declaration_specifiers ';'
    72            | declaration_specifiers init_declarator_list ';'
+   73            | %empty
 
-   73 declaration_specifiers: type_specifier
-   74                       | type_specifier declaration_specifiers
+   74 declaration_specifiers: type_specifier
+   75                       | type_specifier declaration_specifiers
 
-   75 init_declarator_list: init_declarator
-   76                     | init_declarator_list ',' init_declarator
+   76 init_declarator_list: init_declarator
+   77                     | init_declarator_list ',' init_declarator
 
-   77 init_declarator: declarator
-   78                | declarator '=' initializer
+   78 init_declarator: declarator
+   79                | declarator '=' initializer
 
-   79 type_specifier: VOID
-   80               | INT
-   81               | FLOAT
-   82               | BOOL
-   83               | STR_TYPE
+   80 type_specifier: VOID
+   81               | INT
+   82               | FLOAT
+   83               | BOOL
+   84               | STR_TYPE
 
-   84 specifier_qualifier_list: type_specifier specifier_qualifier_list
-   85                         | type_specifier
+   85 specifier_qualifier_list: type_specifier specifier_qualifier_list
+   86                         | type_specifier
 
-   86 declarator: pointer direct_declarator
-   87           | direct_declarator
+   87 declarator: pointer direct_declarator
+   88           | direct_declarator
 
-   88 direct_declarator: ID
-   89                  | '(' declarator ')'
-   90                  | direct_declarator '[' constant_expression ']'
-   91                  | direct_declarator '[' ']'
+   89 direct_declarator: ID
+   90                  | '(' declarator ')'
+   91                  | direct_declarator '[' constant_expression ']'
+   92                  | direct_declarator '[' ']'
 
-   92 $@1: %empty
+   93 $@1: %empty
 
-   93 direct_declarator: direct_declarator '(' $@1 parameter_type_list ')'
-   94                  | direct_declarator '(' identifier_list ')'
+   94 direct_declarator: direct_declarator '(' $@1 parameter_type_list ')'
+   95                  | direct_declarator '(' identifier_list ')'
 
-   95 $@2: %empty
+   96 $@2: %empty
 
-   96 direct_declarator: direct_declarator '(' $@2 ')'
+   97 direct_declarator: direct_declarator '(' $@2 ')'
 
-   97 pointer: '*'
-   98        | '*' pointer
+   98 pointer: '*'
+   99        | '*' pointer
 
-   99 parameter_type_list: parameter_list
+  100 parameter_type_list: parameter_list
 
-  100 parameter_list: parameter_declaration
-  101               | parameter_list ',' parameter_declaration
+  101 parameter_list: parameter_declaration
+  102               | parameter_list ',' parameter_declaration
 
-  102 parameter_declaration: declaration_specifiers declarator
-  103                      | declaration_specifiers abstract_declarator
-  104                      | declaration_specifiers
+  103 parameter_declaration: declaration_specifiers declarator
+  104                      | declaration_specifiers abstract_declarator
+  105                      | declaration_specifiers
 
-  105 identifier_list: ID
-  106                | identifier_list ',' ID
+  106 identifier_list: ID
+  107                | identifier_list ',' ID
 
-  107 type_name: specifier_qualifier_list
-  108          | specifier_qualifier_list abstract_declarator
+  108 type_name: specifier_qualifier_list
+  109          | specifier_qualifier_list abstract_declarator
 
-  109 abstract_declarator: pointer
-  110                    | direct_abstract_declarator
-  111                    | pointer direct_abstract_declarator
+  110 abstract_declarator: pointer
+  111                    | direct_abstract_declarator
+  112                    | pointer direct_abstract_declarator
 
-  112 direct_abstract_declarator: '(' abstract_declarator ')'
-  113                           | '[' ']'
-  114                           | '[' constant_expression ']'
-  115                           | direct_abstract_declarator '[' ']'
-  116                           | direct_abstract_declarator '[' constant_expression ']'
-  117                           | '(' ')'
-  118                           | '(' parameter_type_list ')'
-  119                           | direct_abstract_declarator '(' ')'
-  120                           | direct_abstract_declarator '(' parameter_type_list ')'
+  113 direct_abstract_declarator: '(' abstract_declarator ')'
+  114                           | '[' ']'
+  115                           | '[' constant_expression ']'
+  116                           | direct_abstract_declarator '[' ']'
+  117                           | direct_abstract_declarator '[' constant_expression ']'
+  118                           | '(' ')'
+  119                           | '(' parameter_type_list ')'
+  120                           | direct_abstract_declarator '(' ')'
+  121                           | direct_abstract_declarator '(' parameter_type_list ')'
 
-  121 initializer: assignment_expression
-  122            | '{' initializer_list '}'
-  123            | '{' initializer_list ',' '}'
+  122 initializer: assignment_expression
+  123            | '{' initializer_list '}'
+  124            | '{' initializer_list ',' '}'
 
-  124 initializer_list: initializer
-  125                 | initializer_list ',' initializer
+  125 initializer_list: initializer
+  126                 | initializer_list ',' initializer
 
-  126 statement: labeled_statement
-  127          | compound_statement
-  128          | expression_statement
-  129          | selection_statement
-  130          | iteration_statement
-  131          | jump_statement
+  127 statement: labeled_statement
+  128          | compound_statement
+  129          | expression_statement
+  130          | selection_statement
+  131          | iteration_statement
+  132          | jump_statement
 
-  132 labeled_statement: ID ':' statement
+  133 labeled_statement: ID ':' statement
 
-  133 compound_statement: '{' '}'
-  134                   | '{' statement_list '}'
-  135                   | '{' declaration_list '}'
-  136                   | '{' declaration_list statement_list '}'
+  134 compound_statement: '{' '}'
+  135                   | '{' statement_list '}'
+  136                   | '{' declaration_list '}'
+  137                   | '{' declaration_list statement_list '}'
 
-  137 declaration_list: declaration
-  138                 | declaration_list declaration
+  138 declaration_list: declaration
+  139                 | declaration_list declaration
 
-  139 statement_list: statement
-  140               | statement_list statement
+  140 statement_list: statement declaration
+  141               | statement_list statement declaration
 
-  141 expression_statement: ';'
-  142                     | expression ';'
+  142 expression_statement: ';'
+  143                     | expression ';'
 
-  143 selection_statement: IF '(' expression ')' statement
-  144                    | IF '(' expression ')' statement ELSE statement
+  144 selection_statement: IF '(' expression ')' statement
+  145                    | IF '(' expression ')' statement ELSE statement
 
-  145 iteration_statement: WHILE '(' expression ')' statement
-  146                    | FOR '(' expression_statement expression_statement ')' statement
-  147                    | FOR '(' expression_statement expression_statement expression ')' statement
+  146 iteration_statement: WHILE '(' expression ')' statement
+  147                    | FOR '(' expression_statement expression_statement ')' statement
+  148                    | FOR '(' expression_statement expression_statement expression ')' statement
 
-  148 jump_statement: CONT ';'
-  149               | BREAK ';'
-  150               | RET ';'
-  151               | RET expression ';'
+  149 jump_statement: CONT ';'
+  150               | BREAK ';'
+  151               | RET ';'
+  152               | RET expression ';'
 
-  152 program: external_declaration
-  153        | program external_declaration
+  153 program: external_declaration
+  154        | program external_declaration
 
-  154 external_declaration: function_definition
-  155                     | declaration
+  155 external_declaration: function_definition
+  156                     | declaration
 
-  156 function_definition: declaration_specifiers declarator declaration_list compound_statement
-  157                    | declaration_specifiers declarator compound_statement
-  158                    | declarator declaration_list compound_statement
-  159                    | declarator compound_statement
+  157 function_definition: declaration_specifiers declarator declaration_list compound_statement
+  158                    | declaration_specifiers declarator compound_statement
+  159                    | declarator declaration_list compound_statement
+  160                    | declarator compound_statement
 
 
 終結語詞，附有它們出現處的規則
@@ -228,28 +237,28 @@ $end (0) 0
 '"' (34) 4 68
 '%' (37) 30
 '&' (38) 19 44
-'(' (40) 5 8 9 26 67 89 93 94 96 112 117 118 119 120 143 144 145 146
-    147
-')' (41) 5 8 9 26 67 89 93 94 96 112 117 118 119 120 143 144 145 146
-    147
-'*' (42) 20 28 97 98
+'(' (40) 5 8 9 26 67 90 94 95 97 113 118 119 120 121 144 145 146 147
+    148
+')' (41) 5 8 9 26 67 90 94 95 97 113 118 119 120 121 144 145 146 147
+    148
+'*' (42) 20 28 98 99
 '+' (43) 21 32
-',' (44) 14 64 76 101 106 123 125
+',' (44) 14 64 77 102 107 124 126
 '-' (45) 22 33
 '.' (46) 10
 '/' (47) 29
-':' (58) 54 132
-';' (59) 71 72 141 142 148 149 150 151
+':' (58) 54 133
+';' (59) 71 72 142 143 149 150 151 152
 '<' (60) 36
-'=' (61) 57 78
+'=' (61) 57 79
 '>' (62) 37
 '?' (63) 54
-'[' (91) 7 90 91 113 114 115 116
-']' (93) 7 90 91 113 114 115 116
+'[' (91) 7 91 92 114 115 116 117
+']' (93) 7 91 92 114 115 116 117
 '^' (94) 46
-'{' (123) 122 123 133 134 135 136
+'{' (123) 123 124 134 135 136 137
 '|' (124) 48
-'}' (125) 122 123 133 134 135 136
+'}' (125) 123 124 134 135 136 137
 '~' (126) 23
 error (256)
 INC (258) 11 16
@@ -265,25 +274,25 @@ DIVASGN (267) 59
 MODASGN (268) 60
 AND (269) 50
 OR (270) 52
-STR_TYPE (271) 83
+STR_TYPE (271) 84
 PRINT (272) 67
-IF (273) 143 144
-ELSE (274) 144
-FOR (275) 146 147
-WHILE (276) 145
-INT (277) 80
-FLOAT (278) 81
-VOID (279) 79
-BOOL (280) 82
+IF (273) 144 145
+ELSE (274) 145
+FOR (275) 147 148
+WHILE (276) 146
+INT (277) 81
+FLOAT (278) 82
+VOID (279) 80
+BOOL (280) 83
 TRUE (281) 65
 FALSE (282) 66
-RET (283) 150 151
-CONT (284) 148
-BREAK (285) 149
+RET (283) 151 152
+CONT (284) 149
+BREAK (285) 150
 I_CONST (286) 2
 F_CONST (287) 3
 STRING (288) 4 68
-ID (289) 1 10 69 88 105 106 132
+ID (289) 1 10 69 89 106 107 133
 
 
 非終結語詞，附有它們出現處的規則
@@ -325,83 +334,83 @@ logical_or_expression (76)
 conditional_expression (77)
     於左側： 53 54, 於右側： 54 55 70
 assignment_expression (78)
-    於左側： 55 56, 於右側： 13 14 56 63 64 121
+    於左側： 55 56, 於右側： 13 14 56 63 64 122
 assignment_operator (79)
     於左側： 57 58 59 60 61 62, 於右側： 56
 expression (80)
-    於左側： 63 64 65 66 67, 於右側： 5 7 54 64 142 143 144
-    145 147 151
+    於左側： 63 64 65 66 67, 於右側： 5 7 54 64 143 144 145
+    146 148 152
 print_arg (81)
     於左側： 68 69, 於右側： 67
 constant_expression (82)
-    於左側： 70, 於右側： 90 114 116
+    於左側： 70, 於右側： 91 115 117
 declaration (83)
-    於左側： 71 72, 於右側： 137 138 155
+    於左側： 71 72 73, 於右側： 138 139 140 141 156
 declaration_specifiers (84)
-    於左側： 73 74, 於右側： 71 72 74 102 103 104 156 157
+    於左側： 74 75, 於右側： 71 72 75 103 104 105 157 158
 init_declarator_list (85)
-    於左側： 75 76, 於右側： 72 76
+    於左側： 76 77, 於右側： 72 77
 init_declarator (86)
-    於左側： 77 78, 於右側： 75 76
+    於左側： 78 79, 於右側： 76 77
 type_specifier (87)
-    於左側： 79 80 81 82 83, 於右側： 73 74 84 85
+    於左側： 80 81 82 83 84, 於右側： 74 75 85 86
 specifier_qualifier_list (88)
-    於左側： 84 85, 於右側： 84 107 108
+    於左側： 85 86, 於右側： 85 108 109
 declarator (89)
-    於左側： 86 87, 於右側： 77 78 89 102 156 157 158 159
+    於左側： 87 88, 於右側： 78 79 90 103 157 158 159 160
 direct_declarator (90)
-    於左側： 88 89 90 91 93 94 96, 於右側： 86 87 90 91 93
-    94 96
+    於左側： 89 90 91 92 94 95 97, 於右側： 87 88 91 92 94
+    95 97
 $@1 (91)
-    於左側： 92, 於右側： 93
+    於左側： 93, 於右側： 94
 $@2 (92)
-    於左側： 95, 於右側： 96
+    於左側： 96, 於右側： 97
 pointer (93)
-    於左側： 97 98, 於右側： 86 98 109 111
+    於左側： 98 99, 於右側： 87 99 110 112
 parameter_type_list (94)
-    於左側： 99, 於右側： 93 118 120
+    於左側： 100, 於右側： 94 119 121
 parameter_list (95)
-    於左側： 100 101, 於右側： 99 101
+    於左側： 101 102, 於右側： 100 102
 parameter_declaration (96)
-    於左側： 102 103 104, 於右側： 100 101
+    於左側： 103 104 105, 於右側： 101 102
 identifier_list (97)
-    於左側： 105 106, 於右側： 94 106
+    於左側： 106 107, 於右側： 95 107
 type_name (98)
-    於左側： 107 108, 於右側： 26
+    於左側： 108 109, 於右側： 26
 abstract_declarator (99)
-    於左側： 109 110 111, 於右側： 103 108 112
+    於左側： 110 111 112, 於右側： 104 109 113
 direct_abstract_declarator (100)
-    於左側： 112 113 114 115 116 117 118 119 120, 於右側：
-    110 111 115 116 119 120
+    於左側： 113 114 115 116 117 118 119 120 121, 於右側：
+    111 112 116 117 120 121
 initializer (101)
-    於左側： 121 122 123, 於右側： 78 124 125
+    於左側： 122 123 124, 於右側： 79 125 126
 initializer_list (102)
-    於左側： 124 125, 於右側： 122 123 125
+    於左側： 125 126, 於右側： 123 124 126
 statement (103)
-    於左側： 126 127 128 129 130 131, 於右側： 132 139 140
-    143 144 145 146 147
+    於左側： 127 128 129 130 131 132, 於右側： 133 140 141
+    144 145 146 147 148
 labeled_statement (104)
-    於左側： 132, 於右側： 126
+    於左側： 133, 於右側： 127
 compound_statement (105)
-    於左側： 133 134 135 136, 於右側： 127 156 157 158 159
+    於左側： 134 135 136 137, 於右側： 128 157 158 159 160
 declaration_list (106)
-    於左側： 137 138, 於右側： 135 136 138 156 158
+    於左側： 138 139, 於右側： 136 137 139 157 159
 statement_list (107)
-    於左側： 139 140, 於右側： 134 136 140
+    於左側： 140 141, 於右側： 135 137 141
 expression_statement (108)
-    於左側： 141 142, 於右側： 128 146 147
+    於左側： 142 143, 於右側： 129 147 148
 selection_statement (109)
-    於左側： 143 144, 於右側： 129
+    於左側： 144 145, 於右側： 130
 iteration_statement (110)
-    於左側： 145 146 147, 於右側： 130
+    於左側： 146 147 148, 於右側： 131
 jump_statement (111)
-    於左側： 148 149 150 151, 於右側： 131
+    於左側： 149 150 151 152, 於右側： 132
 program (112)
-    於左側： 152 153, 於右側： 0 153
+    於左側： 153 154, 於右側： 0 154
 external_declaration (113)
-    於左側： 154 155, 於右側： 152 153
+    於左側： 155 156, 於右側： 153 154
 function_definition (114)
-    於左側： 156 157 158 159, 於右側： 154
+    於左側： 157 158 159 160, 於右側： 155
 
 
 狀態 0
@@ -417,6 +426,16 @@ function_definition (114)
     '('       偏移，並進入狀態 7
     '*'       偏移，並進入狀態 8
 
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    ID        [使用規則 73 以縮減 (declaration)]
+    '('       [使用規則 73 以縮減 (declaration)]
+    '*'       [使用規則 73 以縮減 (declaration)]
+    $預設   使用規則 73 以縮減 (declaration)
+
     declaration             進入狀態 9
     declaration_specifiers  進入狀態 10
     type_specifier          進入狀態 11
@@ -430,49 +449,49 @@ function_definition (114)
 
 狀態 1
 
-   83 type_specifier: STR_TYPE .
+   84 type_specifier: STR_TYPE .
 
-    $預設  使用規則 83 以縮減 (type_specifier)
+    $預設  使用規則 84 以縮減 (type_specifier)
 
 
 狀態 2
 
-   80 type_specifier: INT .
-
-    $預設  使用規則 80 以縮減 (type_specifier)
-
-
-狀態 3
-
-   81 type_specifier: FLOAT .
+   81 type_specifier: INT .
 
     $預設  使用規則 81 以縮減 (type_specifier)
 
 
-狀態 4
+狀態 3
 
-   79 type_specifier: VOID .
-
-    $預設  使用規則 79 以縮減 (type_specifier)
-
-
-狀態 5
-
-   82 type_specifier: BOOL .
+   82 type_specifier: FLOAT .
 
     $預設  使用規則 82 以縮減 (type_specifier)
 
 
+狀態 4
+
+   80 type_specifier: VOID .
+
+    $預設  使用規則 80 以縮減 (type_specifier)
+
+
+狀態 5
+
+   83 type_specifier: BOOL .
+
+    $預設  使用規則 83 以縮減 (type_specifier)
+
+
 狀態 6
 
-   88 direct_declarator: ID .
+   89 direct_declarator: ID .
 
-    $預設  使用規則 88 以縮減 (direct_declarator)
+    $預設  使用規則 89 以縮減 (direct_declarator)
 
 
 狀態 7
 
-   89 direct_declarator: '(' . declarator ')'
+   90 direct_declarator: '(' . declarator ')'
 
     ID   偏移，並進入狀態 6
     '('  偏移，並進入狀態 7
@@ -485,29 +504,29 @@ function_definition (114)
 
 狀態 8
 
-   97 pointer: '*' .
-   98        | '*' . pointer
+   98 pointer: '*' .
+   99        | '*' . pointer
 
     '*'  偏移，並進入狀態 8
 
-    $預設  使用規則 97 以縮減 (pointer)
+    $預設  使用規則 98 以縮減 (pointer)
 
     pointer  進入狀態 19
 
 
 狀態 9
 
-  155 external_declaration: declaration .
+  156 external_declaration: declaration .
 
-    $預設  使用規則 155 以縮減 (external_declaration)
+    $預設  使用規則 156 以縮減 (external_declaration)
 
 
 狀態 10
 
    71 declaration: declaration_specifiers . ';'
    72            | declaration_specifiers . init_declarator_list ';'
-  156 function_definition: declaration_specifiers . declarator declaration_list compound_statement
-  157                    | declaration_specifiers . declarator compound_statement
+  157 function_definition: declaration_specifiers . declarator declaration_list compound_statement
+  158                    | declaration_specifiers . declarator compound_statement
 
     ID   偏移，並進入狀態 6
     '('  偏移，並進入狀態 7
@@ -523,8 +542,8 @@ function_definition (114)
 
 狀態 11
 
-   73 declaration_specifiers: type_specifier .
-   74                       | type_specifier . declaration_specifiers
+   74 declaration_specifiers: type_specifier .
+   75                       | type_specifier . declaration_specifiers
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -532,7 +551,7 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
 
-    $預設  使用規則 73 以縮減 (declaration_specifiers)
+    $預設  使用規則 74 以縮減 (declaration_specifiers)
 
     declaration_specifiers  進入狀態 24
     type_specifier          進入狀態 11
@@ -540,8 +559,8 @@ function_definition (114)
 
 狀態 12
 
-  158 function_definition: declarator . declaration_list compound_statement
-  159                    | declarator . compound_statement
+  159 function_definition: declarator . declaration_list compound_statement
+  160                    | declarator . compound_statement
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -549,6 +568,13 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
     '{'       偏移，並進入狀態 25
+
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    '{'       [使用規則 73 以縮減 (declaration)]
 
     declaration             進入狀態 26
     declaration_specifiers  進入狀態 27
@@ -559,22 +585,22 @@ function_definition (114)
 
 狀態 13
 
-   87 declarator: direct_declarator .
-   90 direct_declarator: direct_declarator . '[' constant_expression ']'
-   91                  | direct_declarator . '[' ']'
-   93                  | direct_declarator . '(' $@1 parameter_type_list ')'
-   94                  | direct_declarator . '(' identifier_list ')'
-   96                  | direct_declarator . '(' $@2 ')'
+   88 declarator: direct_declarator .
+   91 direct_declarator: direct_declarator . '[' constant_expression ']'
+   92                  | direct_declarator . '[' ']'
+   94                  | direct_declarator . '(' $@1 parameter_type_list ')'
+   95                  | direct_declarator . '(' identifier_list ')'
+   97                  | direct_declarator . '(' $@2 ')'
 
     '('  偏移，並進入狀態 30
     '['  偏移，並進入狀態 31
 
-    $預設  使用規則 87 以縮減 (declarator)
+    $預設  使用規則 88 以縮減 (declarator)
 
 
 狀態 14
 
-   86 declarator: pointer . direct_declarator
+   87 declarator: pointer . direct_declarator
 
     ID   偏移，並進入狀態 6
     '('  偏移，並進入狀態 7
@@ -585,7 +611,7 @@ function_definition (114)
 狀態 15
 
     0 $accept: program . $end
-  153 program: program . external_declaration
+  154 program: program . external_declaration
 
     $end      偏移，並進入狀態 33
     STR_TYPE  偏移，並進入狀態 1
@@ -596,6 +622,16 @@ function_definition (114)
     ID        偏移，並進入狀態 6
     '('       偏移，並進入狀態 7
     '*'       偏移，並進入狀態 8
+
+    $end      [使用規則 73 以縮減 (declaration)]
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    ID        [使用規則 73 以縮減 (declaration)]
+    '('       [使用規則 73 以縮減 (declaration)]
+    '*'       [使用規則 73 以縮減 (declaration)]
 
     declaration             進入狀態 9
     declaration_specifiers  進入狀態 10
@@ -609,30 +645,30 @@ function_definition (114)
 
 狀態 16
 
-  152 program: external_declaration .
+  153 program: external_declaration .
 
-    $預設  使用規則 152 以縮減 (program)
+    $預設  使用規則 153 以縮減 (program)
 
 
 狀態 17
 
-  154 external_declaration: function_definition .
+  155 external_declaration: function_definition .
 
-    $預設  使用規則 154 以縮減 (external_declaration)
+    $預設  使用規則 155 以縮減 (external_declaration)
 
 
 狀態 18
 
-   89 direct_declarator: '(' declarator . ')'
+   90 direct_declarator: '(' declarator . ')'
 
     ')'  偏移，並進入狀態 35
 
 
 狀態 19
 
-   98 pointer: '*' pointer .
+   99 pointer: '*' pointer .
 
-    $預設  使用規則 98 以縮減 (pointer)
+    $預設  使用規則 99 以縮減 (pointer)
 
 
 狀態 20
@@ -645,7 +681,7 @@ function_definition (114)
 狀態 21
 
    72 declaration: declaration_specifiers init_declarator_list . ';'
-   76 init_declarator_list: init_declarator_list . ',' init_declarator
+   77 init_declarator_list: init_declarator_list . ',' init_declarator
 
     ','  偏移，並進入狀態 36
     ';'  偏移，並進入狀態 37
@@ -653,17 +689,17 @@ function_definition (114)
 
 狀態 22
 
-   75 init_declarator_list: init_declarator .
+   76 init_declarator_list: init_declarator .
 
-    $預設  使用規則 75 以縮減 (init_declarator_list)
+    $預設  使用規則 76 以縮減 (init_declarator_list)
 
 
 狀態 23
 
-   77 init_declarator: declarator .
-   78                | declarator . '=' initializer
-  156 function_definition: declaration_specifiers declarator . declaration_list compound_statement
-  157                    | declaration_specifiers declarator . compound_statement
+   78 init_declarator: declarator .
+   79                | declarator . '=' initializer
+  157 function_definition: declaration_specifiers declarator . declaration_list compound_statement
+  158                    | declaration_specifiers declarator . compound_statement
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -673,7 +709,13 @@ function_definition (114)
     '='       偏移，並進入狀態 38
     '{'       偏移，並進入狀態 25
 
-    $預設  使用規則 77 以縮減 (init_declarator)
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    '{'       [使用規則 73 以縮減 (declaration)]
+    $預設   使用規則 78 以縮減 (init_declarator)
 
     declaration             進入狀態 26
     declaration_specifiers  進入狀態 27
@@ -684,17 +726,17 @@ function_definition (114)
 
 狀態 24
 
-   74 declaration_specifiers: type_specifier declaration_specifiers .
+   75 declaration_specifiers: type_specifier declaration_specifiers .
 
-    $預設  使用規則 74 以縮減 (declaration_specifiers)
+    $預設  使用規則 75 以縮減 (declaration_specifiers)
 
 
 狀態 25
 
-  133 compound_statement: '{' . '}'
-  134                   | '{' . statement_list '}'
-  135                   | '{' . declaration_list '}'
-  136                   | '{' . declaration_list statement_list '}'
+  134 compound_statement: '{' . '}'
+  135                   | '{' . statement_list '}'
+  136                   | '{' . declaration_list '}'
+  137                   | '{' . declaration_list statement_list '}'
 
     INC       偏移，並進入狀態 41
     DEC       偏移，並進入狀態 42
@@ -726,6 +768,37 @@ function_definition (114)
     ';'       偏移，並進入狀態 63
     '{'       偏移，並進入狀態 25
     '}'       偏移，並進入狀態 64
+
+    INC       [使用規則 73 以縮減 (declaration)]
+    DEC       [使用規則 73 以縮減 (declaration)]
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    PRINT     [使用規則 73 以縮減 (declaration)]
+    IF        [使用規則 73 以縮減 (declaration)]
+    FOR       [使用規則 73 以縮減 (declaration)]
+    WHILE     [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    TRUE      [使用規則 73 以縮減 (declaration)]
+    FALSE     [使用規則 73 以縮減 (declaration)]
+    RET       [使用規則 73 以縮減 (declaration)]
+    CONT      [使用規則 73 以縮減 (declaration)]
+    BREAK     [使用規則 73 以縮減 (declaration)]
+    I_CONST   [使用規則 73 以縮減 (declaration)]
+    F_CONST   [使用規則 73 以縮減 (declaration)]
+    ID        [使用規則 73 以縮減 (declaration)]
+    '"'       [使用規則 73 以縮減 (declaration)]
+    '('       [使用規則 73 以縮減 (declaration)]
+    '&'       [使用規則 73 以縮減 (declaration)]
+    '*'       [使用規則 73 以縮減 (declaration)]
+    '+'       [使用規則 73 以縮減 (declaration)]
+    '-'       [使用規則 73 以縮減 (declaration)]
+    '~'       [使用規則 73 以縮減 (declaration)]
+    '!'       [使用規則 73 以縮減 (declaration)]
+    ';'       [使用規則 73 以縮減 (declaration)]
+    '{'       [使用規則 73 以縮減 (declaration)]
+    '}'       [使用規則 73 以縮減 (declaration)]
 
     primary_expression         進入狀態 65
     postfix_expression         進入狀態 66
@@ -761,9 +834,9 @@ function_definition (114)
 
 狀態 26
 
-  137 declaration_list: declaration .
+  138 declaration_list: declaration .
 
-    $預設  使用規則 137 以縮減 (declaration_list)
+    $預設  使用規則 138 以縮減 (declaration_list)
 
 
 狀態 27
@@ -785,15 +858,15 @@ function_definition (114)
 
 狀態 28
 
-  159 function_definition: declarator compound_statement .
+  160 function_definition: declarator compound_statement .
 
-    $預設  使用規則 159 以縮減 (function_definition)
+    $預設  使用規則 160 以縮減 (function_definition)
 
 
 狀態 29
 
-  138 declaration_list: declaration_list . declaration
-  158 function_definition: declarator declaration_list . compound_statement
+  139 declaration_list: declaration_list . declaration
+  159 function_definition: declarator declaration_list . compound_statement
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -801,6 +874,13 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
     '{'       偏移，並進入狀態 25
+
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    '{'       [使用規則 73 以縮減 (declaration)]
 
     declaration             進入狀態 93
     declaration_specifiers  進入狀態 27
@@ -810,14 +890,14 @@ function_definition (114)
 
 狀態 30
 
-   93 direct_declarator: direct_declarator '(' . $@1 parameter_type_list ')'
-   94                  | direct_declarator '(' . identifier_list ')'
-   96                  | direct_declarator '(' . $@2 ')'
+   94 direct_declarator: direct_declarator '(' . $@1 parameter_type_list ')'
+   95                  | direct_declarator '(' . identifier_list ')'
+   97                  | direct_declarator '(' . $@2 ')'
 
     ID  偏移，並進入狀態 95
 
-    ')'      使用規則 95 以縮減 ($@2)
-    $預設  使用規則 92 以縮減 ($@1)
+    ')'      使用規則 96 以縮減 ($@2)
+    $預設  使用規則 93 以縮減 ($@1)
 
     $@1              進入狀態 96
     $@2              進入狀態 97
@@ -826,8 +906,8 @@ function_definition (114)
 
 狀態 31
 
-   90 direct_declarator: direct_declarator '[' . constant_expression ']'
-   91                  | direct_declarator '[' . ']'
+   91 direct_declarator: direct_declarator '[' . constant_expression ']'
+   92                  | direct_declarator '[' . ']'
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -865,17 +945,17 @@ function_definition (114)
 
 狀態 32
 
-   86 declarator: pointer direct_declarator .
-   90 direct_declarator: direct_declarator . '[' constant_expression ']'
-   91                  | direct_declarator . '[' ']'
-   93                  | direct_declarator . '(' $@1 parameter_type_list ')'
-   94                  | direct_declarator . '(' identifier_list ')'
-   96                  | direct_declarator . '(' $@2 ')'
+   87 declarator: pointer direct_declarator .
+   91 direct_declarator: direct_declarator . '[' constant_expression ']'
+   92                  | direct_declarator . '[' ']'
+   94                  | direct_declarator . '(' $@1 parameter_type_list ')'
+   95                  | direct_declarator . '(' identifier_list ')'
+   97                  | direct_declarator . '(' $@2 ')'
 
     '('  偏移，並進入狀態 30
     '['  偏移，並進入狀態 31
 
-    $預設  使用規則 86 以縮減 (declarator)
+    $預設  使用規則 87 以縮減 (declarator)
 
 
 狀態 33
@@ -887,21 +967,21 @@ function_definition (114)
 
 狀態 34
 
-  153 program: program external_declaration .
+  154 program: program external_declaration .
 
-    $預設  使用規則 153 以縮減 (program)
+    $預設  使用規則 154 以縮減 (program)
 
 
 狀態 35
 
-   89 direct_declarator: '(' declarator ')' .
+   90 direct_declarator: '(' declarator ')' .
 
-    $預設  使用規則 89 以縮減 (direct_declarator)
+    $預設  使用規則 90 以縮減 (direct_declarator)
 
 
 狀態 36
 
-   76 init_declarator_list: init_declarator_list ',' . init_declarator
+   77 init_declarator_list: init_declarator_list ',' . init_declarator
 
     ID   偏移，並進入狀態 6
     '('  偏移，並進入狀態 7
@@ -922,7 +1002,7 @@ function_definition (114)
 
 狀態 38
 
-   78 init_declarator: declarator '=' . initializer
+   79 init_declarator: declarator '=' . initializer
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -961,15 +1041,15 @@ function_definition (114)
 
 狀態 39
 
-  157 function_definition: declaration_specifiers declarator compound_statement .
+  158 function_definition: declaration_specifiers declarator compound_statement .
 
-    $預設  使用規則 157 以縮減 (function_definition)
+    $預設  使用規則 158 以縮減 (function_definition)
 
 
 狀態 40
 
-  138 declaration_list: declaration_list . declaration
-  156 function_definition: declaration_specifiers declarator declaration_list . compound_statement
+  139 declaration_list: declaration_list . declaration
+  157 function_definition: declaration_specifiers declarator declaration_list . compound_statement
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -977,6 +1057,13 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
     '{'       偏移，並進入狀態 25
+
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    '{'       [使用規則 73 以縮減 (declaration)]
 
     declaration             進入狀態 93
     declaration_specifiers  進入狀態 27
@@ -1041,23 +1128,23 @@ function_definition (114)
 
 狀態 44
 
-  143 selection_statement: IF . '(' expression ')' statement
-  144                    | IF . '(' expression ')' statement ELSE statement
+  144 selection_statement: IF . '(' expression ')' statement
+  145                    | IF . '(' expression ')' statement ELSE statement
 
     '('  偏移，並進入狀態 113
 
 
 狀態 45
 
-  146 iteration_statement: FOR . '(' expression_statement expression_statement ')' statement
-  147                    | FOR . '(' expression_statement expression_statement expression ')' statement
+  147 iteration_statement: FOR . '(' expression_statement expression_statement ')' statement
+  148                    | FOR . '(' expression_statement expression_statement expression ')' statement
 
     '('  偏移，並進入狀態 114
 
 
 狀態 46
 
-  145 iteration_statement: WHILE . '(' expression ')' statement
+  146 iteration_statement: WHILE . '(' expression ')' statement
 
     '('  偏移，並進入狀態 115
 
@@ -1078,8 +1165,8 @@ function_definition (114)
 
 狀態 49
 
-  150 jump_statement: RET . ';'
-  151               | RET . expression ';'
+  151 jump_statement: RET . ';'
+  152               | RET . expression ';'
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -1121,14 +1208,14 @@ function_definition (114)
 
 狀態 50
 
-  148 jump_statement: CONT . ';'
+  149 jump_statement: CONT . ';'
 
     ';'  偏移，並進入狀態 118
 
 
 狀態 51
 
-  149 jump_statement: BREAK . ';'
+  150 jump_statement: BREAK . ';'
 
     ';'  偏移，並進入狀態 119
 
@@ -1150,7 +1237,7 @@ function_definition (114)
 狀態 54
 
     1 primary_expression: ID .
-  132 labeled_statement: ID . ':' statement
+  133 labeled_statement: ID . ':' statement
 
     ':'  偏移，並進入狀態 120
 
@@ -1258,16 +1345,16 @@ function_definition (114)
 
 狀態 63
 
-  141 expression_statement: ';' .
+  142 expression_statement: ';' .
 
-    $預設  使用規則 141 以縮減 (expression_statement)
+    $預設  使用規則 142 以縮減 (expression_statement)
 
 
 狀態 64
 
-  133 compound_statement: '{' '}' .
+  134 compound_statement: '{' '}' .
 
-    $預設  使用規則 133 以縮減 (compound_statement)
+    $預設  使用規則 134 以縮減 (compound_statement)
 
 
 狀態 65
@@ -1475,7 +1562,7 @@ function_definition (114)
 狀態 82
 
    64 expression: expression . ',' assignment_expression
-  142 expression_statement: expression . ';'
+  143 expression_statement: expression . ';'
 
     ','  偏移，並進入狀態 156
     ';'  偏移，並進入狀態 157
@@ -1483,30 +1570,40 @@ function_definition (114)
 
 狀態 83
 
-  139 statement_list: statement .
+  140 statement_list: statement . declaration
 
-    $預設  使用規則 139 以縮減 (statement_list)
+    STR_TYPE  偏移，並進入狀態 1
+    INT       偏移，並進入狀態 2
+    FLOAT     偏移，並進入狀態 3
+    VOID      偏移，並進入狀態 4
+    BOOL      偏移，並進入狀態 5
+
+    $預設  使用規則 73 以縮減 (declaration)
+
+    declaration             進入狀態 158
+    declaration_specifiers  進入狀態 27
+    type_specifier          進入狀態 11
 
 
 狀態 84
 
-  126 statement: labeled_statement .
-
-    $預設  使用規則 126 以縮減 (statement)
-
-
-狀態 85
-
-  127 statement: compound_statement .
+  127 statement: labeled_statement .
 
     $預設  使用規則 127 以縮減 (statement)
 
 
+狀態 85
+
+  128 statement: compound_statement .
+
+    $預設  使用規則 128 以縮減 (statement)
+
+
 狀態 86
 
-  135 compound_statement: '{' declaration_list . '}'
-  136                   | '{' declaration_list . statement_list '}'
-  138 declaration_list: declaration_list . declaration
+  136 compound_statement: '{' declaration_list . '}'
+  137                   | '{' declaration_list . statement_list '}'
+  139 declaration_list: declaration_list . declaration
 
     INC       偏移，並進入狀態 41
     DEC       偏移，並進入狀態 42
@@ -1537,7 +1634,38 @@ function_definition (114)
     '!'       偏移，並進入狀態 62
     ';'       偏移，並進入狀態 63
     '{'       偏移，並進入狀態 25
-    '}'       偏移，並進入狀態 158
+    '}'       偏移，並進入狀態 159
+
+    INC       [使用規則 73 以縮減 (declaration)]
+    DEC       [使用規則 73 以縮減 (declaration)]
+    STR_TYPE  [使用規則 73 以縮減 (declaration)]
+    PRINT     [使用規則 73 以縮減 (declaration)]
+    IF        [使用規則 73 以縮減 (declaration)]
+    FOR       [使用規則 73 以縮減 (declaration)]
+    WHILE     [使用規則 73 以縮減 (declaration)]
+    INT       [使用規則 73 以縮減 (declaration)]
+    FLOAT     [使用規則 73 以縮減 (declaration)]
+    VOID      [使用規則 73 以縮減 (declaration)]
+    BOOL      [使用規則 73 以縮減 (declaration)]
+    TRUE      [使用規則 73 以縮減 (declaration)]
+    FALSE     [使用規則 73 以縮減 (declaration)]
+    RET       [使用規則 73 以縮減 (declaration)]
+    CONT      [使用規則 73 以縮減 (declaration)]
+    BREAK     [使用規則 73 以縮減 (declaration)]
+    I_CONST   [使用規則 73 以縮減 (declaration)]
+    F_CONST   [使用規則 73 以縮減 (declaration)]
+    ID        [使用規則 73 以縮減 (declaration)]
+    '"'       [使用規則 73 以縮減 (declaration)]
+    '('       [使用規則 73 以縮減 (declaration)]
+    '&'       [使用規則 73 以縮減 (declaration)]
+    '*'       [使用規則 73 以縮減 (declaration)]
+    '+'       [使用規則 73 以縮減 (declaration)]
+    '-'       [使用規則 73 以縮減 (declaration)]
+    '~'       [使用規則 73 以縮減 (declaration)]
+    '!'       [使用規則 73 以縮減 (declaration)]
+    ';'       [使用規則 73 以縮減 (declaration)]
+    '{'       [使用規則 73 以縮減 (declaration)]
+    '}'       [使用規則 73 以縮減 (declaration)]
 
     primary_expression         進入狀態 65
     postfix_expression         進入狀態 66
@@ -1563,7 +1691,7 @@ function_definition (114)
     statement                  進入狀態 83
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
-    statement_list             進入狀態 159
+    statement_list             進入狀態 160
     expression_statement       進入狀態 88
     selection_statement        進入狀態 89
     iteration_statement        進入狀態 90
@@ -1572,8 +1700,8 @@ function_definition (114)
 
 狀態 87
 
-  134 compound_statement: '{' statement_list . '}'
-  140 statement_list: statement_list . statement
+  135 compound_statement: '{' statement_list . '}'
+  141 statement_list: statement_list . statement declaration
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -1599,7 +1727,7 @@ function_definition (114)
     '!'      偏移，並進入狀態 62
     ';'      偏移，並進入狀態 63
     '{'      偏移，並進入狀態 25
-    '}'      偏移，並進入狀態 160
+    '}'      偏移，並進入狀態 161
 
     primary_expression         進入狀態 65
     postfix_expression         進入狀態 66
@@ -1619,7 +1747,7 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    statement                  進入狀態 161
+    statement                  進入狀態 162
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
     expression_statement       進入狀態 88
@@ -1630,66 +1758,66 @@ function_definition (114)
 
 狀態 88
 
-  128 statement: expression_statement .
-
-    $預設  使用規則 128 以縮減 (statement)
-
-
-狀態 89
-
-  129 statement: selection_statement .
+  129 statement: expression_statement .
 
     $預設  使用規則 129 以縮減 (statement)
 
 
-狀態 90
+狀態 89
 
-  130 statement: iteration_statement .
+  130 statement: selection_statement .
 
     $預設  使用規則 130 以縮減 (statement)
 
 
-狀態 91
+狀態 90
 
-  131 statement: jump_statement .
+  131 statement: iteration_statement .
 
     $預設  使用規則 131 以縮減 (statement)
 
 
+狀態 91
+
+  132 statement: jump_statement .
+
+    $預設  使用規則 132 以縮減 (statement)
+
+
 狀態 92
 
-   77 init_declarator: declarator .
-   78                | declarator . '=' initializer
+   78 init_declarator: declarator .
+   79                | declarator . '=' initializer
 
     '='  偏移，並進入狀態 38
 
-    $預設  使用規則 77 以縮減 (init_declarator)
+    $預設  使用規則 78 以縮減 (init_declarator)
 
 
 狀態 93
 
-  138 declaration_list: declaration_list declaration .
+  139 declaration_list: declaration_list declaration .
 
-    $預設  使用規則 138 以縮減 (declaration_list)
+    $預設  使用規則 139 以縮減 (declaration_list)
 
 
 狀態 94
 
-  158 function_definition: declarator declaration_list compound_statement .
+  159 function_definition: declarator declaration_list compound_statement .
 
-    $預設  使用規則 158 以縮減 (function_definition)
+    $預設  使用規則 159 以縮減 (function_definition)
 
 
 狀態 95
 
-  105 identifier_list: ID .
+  106 identifier_list: ID .
 
-    $預設  使用規則 105 以縮減 (identifier_list)
+    $預設  使用規則 106 以縮減 (identifier_list)
 
 
 狀態 96
 
-   93 direct_declarator: direct_declarator '(' $@1 . parameter_type_list ')'
+   94 direct_declarator: direct_declarator '(' $@1 . parameter_type_list ')'
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -1697,27 +1825,27 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
 
-    declaration_specifiers  進入狀態 162
+    declaration_specifiers  進入狀態 163
     type_specifier          進入狀態 11
-    parameter_type_list     進入狀態 163
-    parameter_list          進入狀態 164
-    parameter_declaration   進入狀態 165
+    parameter_type_list     進入狀態 164
+    parameter_list          進入狀態 165
+    parameter_declaration   進入狀態 166
 
 
 狀態 97
 
-   96 direct_declarator: direct_declarator '(' $@2 . ')'
+   97 direct_declarator: direct_declarator '(' $@2 . ')'
 
-    ')'  偏移，並進入狀態 166
+    ')'  偏移，並進入狀態 167
 
 
 狀態 98
 
-   94 direct_declarator: direct_declarator '(' identifier_list . ')'
-  106 identifier_list: identifier_list . ',' ID
+   95 direct_declarator: direct_declarator '(' identifier_list . ')'
+  107 identifier_list: identifier_list . ',' ID
 
-    ')'  偏移，並進入狀態 167
-    ','  偏移，並進入狀態 168
+    ')'  偏移，並進入狀態 168
+    ','  偏移，並進入狀態 169
 
 
 狀態 99
@@ -1729,9 +1857,9 @@ function_definition (114)
 
 狀態 100
 
-   91 direct_declarator: direct_declarator '[' ']' .
+   92 direct_declarator: direct_declarator '[' ']' .
 
-    $預設  使用規則 91 以縮減 (direct_declarator)
+    $預設  使用規則 92 以縮減 (direct_declarator)
 
 
 狀態 101
@@ -1750,22 +1878,22 @@ function_definition (114)
 
 狀態 103
 
-   90 direct_declarator: direct_declarator '[' constant_expression . ']'
+   91 direct_declarator: direct_declarator '[' constant_expression . ']'
 
-    ']'  偏移，並進入狀態 169
+    ']'  偏移，並進入狀態 170
 
 
 狀態 104
 
-   76 init_declarator_list: init_declarator_list ',' init_declarator .
+   77 init_declarator_list: init_declarator_list ',' init_declarator .
 
-    $預設  使用規則 76 以縮減 (init_declarator_list)
+    $預設  使用規則 77 以縮減 (init_declarator_list)
 
 
 狀態 105
 
-  122 initializer: '{' . initializer_list '}'
-  123            | '{' . initializer_list ',' '}'
+  123 initializer: '{' . initializer_list '}'
+  124            | '{' . initializer_list ',' '}'
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -1799,29 +1927,29 @@ function_definition (114)
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 106
-    initializer                進入狀態 170
-    initializer_list           進入狀態 171
+    initializer                進入狀態 171
+    initializer_list           進入狀態 172
 
 
 狀態 106
 
-  121 initializer: assignment_expression .
+  122 initializer: assignment_expression .
 
-    $預設  使用規則 121 以縮減 (initializer)
+    $預設  使用規則 122 以縮減 (initializer)
 
 
 狀態 107
 
-   78 init_declarator: declarator '=' initializer .
+   79 init_declarator: declarator '=' initializer .
 
-    $預設  使用規則 78 以縮減 (init_declarator)
+    $預設  使用規則 79 以縮減 (init_declarator)
 
 
 狀態 108
 
-  156 function_definition: declaration_specifiers declarator declaration_list compound_statement .
+  157 function_definition: declaration_specifiers declarator declaration_list compound_statement .
 
-    $預設  使用規則 156 以縮減 (function_definition)
+    $預設  使用規則 157 以縮減 (function_definition)
 
 
 狀態 109
@@ -1883,16 +2011,16 @@ function_definition (114)
 
    67 expression: PRINT '(' . print_arg ')'
 
-    ID   偏移，並進入狀態 172
-    '"'  偏移，並進入狀態 173
+    ID   偏移，並進入狀態 173
+    '"'  偏移，並進入狀態 174
 
-    print_arg  進入狀態 174
+    print_arg  進入狀態 175
 
 
 狀態 113
 
-  143 selection_statement: IF '(' . expression ')' statement
-  144                    | IF '(' . expression ')' statement ELSE statement
+  144 selection_statement: IF '(' . expression ')' statement
+  145                    | IF '(' . expression ')' statement ELSE statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -1928,13 +2056,13 @@ function_definition (114)
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
-    expression                 進入狀態 175
+    expression                 進入狀態 176
 
 
 狀態 114
 
-  146 iteration_statement: FOR '(' . expression_statement expression_statement ')' statement
-  147                    | FOR '(' . expression_statement expression_statement expression ')' statement
+  147 iteration_statement: FOR '(' . expression_statement expression_statement ')' statement
+  148                    | FOR '(' . expression_statement expression_statement expression ')' statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -1972,12 +2100,12 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    expression_statement       進入狀態 176
+    expression_statement       進入狀態 177
 
 
 狀態 115
 
-  145 iteration_statement: WHILE '(' . expression ')' statement
+  146 iteration_statement: WHILE '(' . expression ')' statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -2013,42 +2141,42 @@ function_definition (114)
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
-    expression                 進入狀態 177
+    expression                 進入狀態 178
 
 
 狀態 116
 
-  150 jump_statement: RET ';' .
+  151 jump_statement: RET ';' .
 
-    $預設  使用規則 150 以縮減 (jump_statement)
+    $預設  使用規則 151 以縮減 (jump_statement)
 
 
 狀態 117
 
    64 expression: expression . ',' assignment_expression
-  151 jump_statement: RET expression . ';'
+  152 jump_statement: RET expression . ';'
 
     ','  偏移，並進入狀態 156
-    ';'  偏移，並進入狀態 178
+    ';'  偏移，並進入狀態 179
 
 
 狀態 118
 
-  148 jump_statement: CONT ';' .
-
-    $預設  使用規則 148 以縮減 (jump_statement)
-
-
-狀態 119
-
-  149 jump_statement: BREAK ';' .
+  149 jump_statement: CONT ';' .
 
     $預設  使用規則 149 以縮減 (jump_statement)
 
 
+狀態 119
+
+  150 jump_statement: BREAK ';' .
+
+    $預設  使用規則 150 以縮減 (jump_statement)
+
+
 狀態 120
 
-  132 labeled_statement: ID ':' . statement
+  133 labeled_statement: ID ':' . statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -2093,7 +2221,7 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    statement                  進入狀態 179
+    statement                  進入狀態 180
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
     expression_statement       進入狀態 88
@@ -2106,7 +2234,7 @@ function_definition (114)
 
     4 primary_expression: '"' STRING . '"'
 
-    '"'  偏移，並進入狀態 180
+    '"'  偏移，並進入狀態 181
 
 
 狀態 122
@@ -2114,14 +2242,14 @@ function_definition (114)
     5 primary_expression: '(' expression . ')'
    64 expression: expression . ',' assignment_expression
 
-    ')'  偏移，並進入狀態 181
+    ')'  偏移，並進入狀態 182
     ','  偏移，並進入狀態 156
 
 
 狀態 123
 
-   84 specifier_qualifier_list: type_specifier . specifier_qualifier_list
-   85                         | type_specifier .
+   85 specifier_qualifier_list: type_specifier . specifier_qualifier_list
+   86                         | type_specifier .
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -2129,33 +2257,33 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
 
-    $預設  使用規則 85 以縮減 (specifier_qualifier_list)
+    $預設  使用規則 86 以縮減 (specifier_qualifier_list)
 
     type_specifier            進入狀態 123
-    specifier_qualifier_list  進入狀態 182
+    specifier_qualifier_list  進入狀態 183
 
 
 狀態 124
 
-  107 type_name: specifier_qualifier_list .
-  108          | specifier_qualifier_list . abstract_declarator
+  108 type_name: specifier_qualifier_list .
+  109          | specifier_qualifier_list . abstract_declarator
 
-    '('  偏移，並進入狀態 183
-    '['  偏移，並進入狀態 184
+    '('  偏移，並進入狀態 184
+    '['  偏移，並進入狀態 185
     '*'  偏移，並進入狀態 8
 
-    $預設  使用規則 107 以縮減 (type_name)
+    $預設  使用規則 108 以縮減 (type_name)
 
-    pointer                     進入狀態 185
-    abstract_declarator         進入狀態 186
-    direct_abstract_declarator  進入狀態 187
+    pointer                     進入狀態 186
+    abstract_declarator         進入狀態 187
+    direct_abstract_declarator  進入狀態 188
 
 
 狀態 125
 
    26 cast_expression: '(' type_name . ')' cast_expression
 
-    ')'  偏移，並進入狀態 188
+    ')'  偏移，並進入狀態 189
 
 
 狀態 126
@@ -2184,7 +2312,7 @@ function_definition (114)
     ID       偏移，並進入狀態 99
     '"'      偏移，並進入狀態 55
     '('      偏移，並進入狀態 56
-    ')'      偏移，並進入狀態 189
+    ')'      偏移，並進入狀態 190
     '&'      偏移，並進入狀態 57
     '*'      偏移，並進入狀態 58
     '+'      偏移，並進入狀態 59
@@ -2194,7 +2322,7 @@ function_definition (114)
 
     primary_expression         進入狀態 65
     postfix_expression         進入狀態 66
-    argument_expression_list   進入狀態 190
+    argument_expression_list   進入狀態 191
     unary_expression           進入狀態 67
     unary_operator             進入狀態 68
     cast_expression            進入狀態 69
@@ -2209,7 +2337,7 @@ function_definition (114)
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 191
+    assignment_expression      進入狀態 192
 
 
 狀態 129
@@ -2250,14 +2378,14 @@ function_definition (114)
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
-    expression                 進入狀態 192
+    expression                 進入狀態 193
 
 
 狀態 130
 
    10 postfix_expression: postfix_expression '.' . ID
 
-    ID  偏移，並進入狀態 193
+    ID  偏移，並進入狀態 194
 
 
 狀態 131
@@ -2336,7 +2464,7 @@ function_definition (114)
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 194
+    assignment_expression      進入狀態 195
 
 
 狀態 138
@@ -2368,7 +2496,7 @@ function_definition (114)
     postfix_expression  進入狀態 66
     unary_expression    進入狀態 101
     unary_operator      進入狀態 68
-    cast_expression     進入狀態 195
+    cast_expression     進入狀態 196
 
 
 狀態 140
@@ -2393,7 +2521,7 @@ function_definition (114)
     postfix_expression  進入狀態 66
     unary_expression    進入狀態 101
     unary_operator      進入狀態 68
-    cast_expression     進入狀態 196
+    cast_expression     進入狀態 197
 
 
 狀態 141
@@ -2418,7 +2546,7 @@ function_definition (114)
     postfix_expression  進入狀態 66
     unary_expression    進入狀態 101
     unary_operator      進入狀態 68
-    cast_expression     進入狀態 197
+    cast_expression     進入狀態 198
 
 
 狀態 142
@@ -2444,7 +2572,7 @@ function_definition (114)
     unary_expression           進入狀態 101
     unary_operator             進入狀態 68
     cast_expression            進入狀態 69
-    multiplicative_expression  進入狀態 198
+    multiplicative_expression  進入狀態 199
 
 
 狀態 143
@@ -2470,7 +2598,7 @@ function_definition (114)
     unary_expression           進入狀態 101
     unary_operator             進入狀態 68
     cast_expression            進入狀態 69
-    multiplicative_expression  進入狀態 199
+    multiplicative_expression  進入狀態 200
 
 
 狀態 144
@@ -2498,7 +2626,7 @@ function_definition (114)
     cast_expression            進入狀態 69
     multiplicative_expression  進入狀態 70
     additive_expression        進入狀態 71
-    shift_expression           進入狀態 200
+    shift_expression           進入狀態 201
 
 
 狀態 145
@@ -2526,7 +2654,7 @@ function_definition (114)
     cast_expression            進入狀態 69
     multiplicative_expression  進入狀態 70
     additive_expression        進入狀態 71
-    shift_expression           進入狀態 201
+    shift_expression           進入狀態 202
 
 
 狀態 146
@@ -2554,7 +2682,7 @@ function_definition (114)
     cast_expression            進入狀態 69
     multiplicative_expression  進入狀態 70
     additive_expression        進入狀態 71
-    shift_expression           進入狀態 202
+    shift_expression           進入狀態 203
 
 
 狀態 147
@@ -2582,7 +2710,7 @@ function_definition (114)
     cast_expression            進入狀態 69
     multiplicative_expression  進入狀態 70
     additive_expression        進入狀態 71
-    shift_expression           進入狀態 203
+    shift_expression           進入狀態 204
 
 
 狀態 148
@@ -2611,7 +2739,7 @@ function_definition (114)
     multiplicative_expression  進入狀態 70
     additive_expression        進入狀態 71
     shift_expression           進入狀態 72
-    relational_expression      進入狀態 204
+    relational_expression      進入狀態 205
 
 
 狀態 149
@@ -2640,7 +2768,7 @@ function_definition (114)
     multiplicative_expression  進入狀態 70
     additive_expression        進入狀態 71
     shift_expression           進入狀態 72
-    relational_expression      進入狀態 205
+    relational_expression      進入狀態 206
 
 
 狀態 150
@@ -2670,7 +2798,7 @@ function_definition (114)
     additive_expression        進入狀態 71
     shift_expression           進入狀態 72
     relational_expression      進入狀態 73
-    equality_expression        進入狀態 206
+    equality_expression        進入狀態 207
 
 
 狀態 151
@@ -2701,7 +2829,7 @@ function_definition (114)
     shift_expression           進入狀態 72
     relational_expression      進入狀態 73
     equality_expression        進入狀態 74
-    and_expression             進入狀態 207
+    and_expression             進入狀態 208
 
 
 狀態 152
@@ -2733,7 +2861,7 @@ function_definition (114)
     relational_expression      進入狀態 73
     equality_expression        進入狀態 74
     and_expression             進入狀態 75
-    exclusive_or_expression    進入狀態 208
+    exclusive_or_expression    進入狀態 209
 
 
 狀態 153
@@ -2766,7 +2894,7 @@ function_definition (114)
     equality_expression        進入狀態 74
     and_expression             進入狀態 75
     exclusive_or_expression    進入狀態 76
-    inclusive_or_expression    進入狀態 209
+    inclusive_or_expression    進入狀態 210
 
 
 狀態 154
@@ -2800,7 +2928,7 @@ function_definition (114)
     and_expression             進入狀態 75
     exclusive_or_expression    進入狀態 76
     inclusive_or_expression    進入狀態 77
-    logical_and_expression     進入狀態 210
+    logical_and_expression     進入狀態 211
 
 
 狀態 155
@@ -2841,7 +2969,7 @@ function_definition (114)
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
-    expression                 進入狀態 211
+    expression                 進入狀態 212
 
 
 狀態 156
@@ -2878,27 +3006,34 @@ function_definition (114)
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 212
+    assignment_expression      進入狀態 213
 
 
 狀態 157
 
-  142 expression_statement: expression ';' .
+  143 expression_statement: expression ';' .
 
-    $預設  使用規則 142 以縮減 (expression_statement)
+    $預設  使用規則 143 以縮減 (expression_statement)
 
 
 狀態 158
 
-  135 compound_statement: '{' declaration_list '}' .
+  140 statement_list: statement declaration .
 
-    $預設  使用規則 135 以縮減 (compound_statement)
+    $預設  使用規則 140 以縮減 (statement_list)
 
 
 狀態 159
 
-  136 compound_statement: '{' declaration_list statement_list . '}'
-  140 statement_list: statement_list . statement
+  136 compound_statement: '{' declaration_list '}' .
+
+    $預設  使用規則 136 以縮減 (compound_statement)
+
+
+狀態 160
+
+  137 compound_statement: '{' declaration_list statement_list . '}'
+  141 statement_list: statement_list . statement declaration
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -2924,7 +3059,7 @@ function_definition (114)
     '!'      偏移，並進入狀態 62
     ';'      偏移，並進入狀態 63
     '{'      偏移，並進入狀態 25
-    '}'      偏移，並進入狀態 213
+    '}'      偏移，並進入狀態 214
 
     primary_expression         進入狀態 65
     postfix_expression         進入狀態 66
@@ -2944,7 +3079,7 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    statement                  進入狀態 161
+    statement                  進入狀態 162
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
     expression_statement       進入狀態 88
@@ -2953,144 +3088,154 @@ function_definition (114)
     jump_statement             進入狀態 91
 
 
-狀態 160
-
-  134 compound_statement: '{' statement_list '}' .
-
-    $預設  使用規則 134 以縮減 (compound_statement)
-
-
 狀態 161
 
-  140 statement_list: statement_list statement .
+  135 compound_statement: '{' statement_list '}' .
 
-    $預設  使用規則 140 以縮減 (statement_list)
+    $預設  使用規則 135 以縮減 (compound_statement)
 
 
 狀態 162
 
-  102 parameter_declaration: declaration_specifiers . declarator
-  103                      | declaration_specifiers . abstract_declarator
-  104                      | declaration_specifiers .
+  141 statement_list: statement_list statement . declaration
 
-    ID   偏移，並進入狀態 6
-    '('  偏移，並進入狀態 214
-    '['  偏移，並進入狀態 184
-    '*'  偏移，並進入狀態 8
+    STR_TYPE  偏移，並進入狀態 1
+    INT       偏移，並進入狀態 2
+    FLOAT     偏移，並進入狀態 3
+    VOID      偏移，並進入狀態 4
+    BOOL      偏移，並進入狀態 5
 
-    $預設  使用規則 104 以縮減 (parameter_declaration)
+    $預設  使用規則 73 以縮減 (declaration)
 
-    declarator                  進入狀態 215
-    direct_declarator           進入狀態 13
-    pointer                     進入狀態 216
-    abstract_declarator         進入狀態 217
-    direct_abstract_declarator  進入狀態 187
+    declaration             進入狀態 215
+    declaration_specifiers  進入狀態 27
+    type_specifier          進入狀態 11
 
 
 狀態 163
 
-   93 direct_declarator: direct_declarator '(' $@1 parameter_type_list . ')'
+  103 parameter_declaration: declaration_specifiers . declarator
+  104                      | declaration_specifiers . abstract_declarator
+  105                      | declaration_specifiers .
 
-    ')'  偏移，並進入狀態 218
+    ID   偏移，並進入狀態 6
+    '('  偏移，並進入狀態 216
+    '['  偏移，並進入狀態 185
+    '*'  偏移，並進入狀態 8
+
+    $預設  使用規則 105 以縮減 (parameter_declaration)
+
+    declarator                  進入狀態 217
+    direct_declarator           進入狀態 13
+    pointer                     進入狀態 218
+    abstract_declarator         進入狀態 219
+    direct_abstract_declarator  進入狀態 188
 
 
 狀態 164
 
-   99 parameter_type_list: parameter_list .
-  101 parameter_list: parameter_list . ',' parameter_declaration
+   94 direct_declarator: direct_declarator '(' $@1 parameter_type_list . ')'
 
-    ','  偏移，並進入狀態 219
-
-    $預設  使用規則 99 以縮減 (parameter_type_list)
+    ')'  偏移，並進入狀態 220
 
 
 狀態 165
 
-  100 parameter_list: parameter_declaration .
+  100 parameter_type_list: parameter_list .
+  102 parameter_list: parameter_list . ',' parameter_declaration
 
-    $預設  使用規則 100 以縮減 (parameter_list)
+    ','  偏移，並進入狀態 221
+
+    $預設  使用規則 100 以縮減 (parameter_type_list)
 
 
 狀態 166
 
-   96 direct_declarator: direct_declarator '(' $@2 ')' .
+  101 parameter_list: parameter_declaration .
 
-    $預設  使用規則 96 以縮減 (direct_declarator)
+    $預設  使用規則 101 以縮減 (parameter_list)
 
 
 狀態 167
 
-   94 direct_declarator: direct_declarator '(' identifier_list ')' .
+   97 direct_declarator: direct_declarator '(' $@2 ')' .
 
-    $預設  使用規則 94 以縮減 (direct_declarator)
+    $預設  使用規則 97 以縮減 (direct_declarator)
 
 
 狀態 168
 
-  106 identifier_list: identifier_list ',' . ID
+   95 direct_declarator: direct_declarator '(' identifier_list ')' .
 
-    ID  偏移，並進入狀態 220
+    $預設  使用規則 95 以縮減 (direct_declarator)
 
 
 狀態 169
 
-   90 direct_declarator: direct_declarator '[' constant_expression ']' .
+  107 identifier_list: identifier_list ',' . ID
 
-    $預設  使用規則 90 以縮減 (direct_declarator)
+    ID  偏移，並進入狀態 222
 
 
 狀態 170
 
-  124 initializer_list: initializer .
+   91 direct_declarator: direct_declarator '[' constant_expression ']' .
 
-    $預設  使用規則 124 以縮減 (initializer_list)
+    $預設  使用規則 91 以縮減 (direct_declarator)
 
 
 狀態 171
 
-  122 initializer: '{' initializer_list . '}'
-  123            | '{' initializer_list . ',' '}'
-  125 initializer_list: initializer_list . ',' initializer
+  125 initializer_list: initializer .
 
-    ','  偏移，並進入狀態 221
-    '}'  偏移，並進入狀態 222
+    $預設  使用規則 125 以縮減 (initializer_list)
 
 
 狀態 172
+
+  123 initializer: '{' initializer_list . '}'
+  124            | '{' initializer_list . ',' '}'
+  126 initializer_list: initializer_list . ',' initializer
+
+    ','  偏移，並進入狀態 223
+    '}'  偏移，並進入狀態 224
+
+
+狀態 173
 
    69 print_arg: ID .
 
     $預設  使用規則 69 以縮減 (print_arg)
 
 
-狀態 173
+狀態 174
 
    68 print_arg: '"' . STRING '"'
 
-    STRING  偏移，並進入狀態 223
-
-
-狀態 174
-
-   67 expression: PRINT '(' print_arg . ')'
-
-    ')'  偏移，並進入狀態 224
+    STRING  偏移，並進入狀態 225
 
 
 狀態 175
 
-   64 expression: expression . ',' assignment_expression
-  143 selection_statement: IF '(' expression . ')' statement
-  144                    | IF '(' expression . ')' statement ELSE statement
+   67 expression: PRINT '(' print_arg . ')'
 
-    ')'  偏移，並進入狀態 225
-    ','  偏移，並進入狀態 156
+    ')'  偏移，並進入狀態 226
 
 
 狀態 176
 
-  146 iteration_statement: FOR '(' expression_statement . expression_statement ')' statement
-  147                    | FOR '(' expression_statement . expression_statement expression ')' statement
+   64 expression: expression . ',' assignment_expression
+  144 selection_statement: IF '(' expression . ')' statement
+  145                    | IF '(' expression . ')' statement ELSE statement
+
+    ')'  偏移，並進入狀態 227
+    ','  偏移，並進入狀態 156
+
+
+狀態 177
+
+  147 iteration_statement: FOR '(' expression_statement . expression_statement ')' statement
+  148                    | FOR '(' expression_statement . expression_statement expression ')' statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -3128,83 +3273,83 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    expression_statement       進入狀態 226
-
-
-狀態 177
-
-   64 expression: expression . ',' assignment_expression
-  145 iteration_statement: WHILE '(' expression . ')' statement
-
-    ')'  偏移，並進入狀態 227
-    ','  偏移，並進入狀態 156
+    expression_statement       進入狀態 228
 
 
 狀態 178
 
-  151 jump_statement: RET expression ';' .
+   64 expression: expression . ',' assignment_expression
+  146 iteration_statement: WHILE '(' expression . ')' statement
 
-    $預設  使用規則 151 以縮減 (jump_statement)
+    ')'  偏移，並進入狀態 229
+    ','  偏移，並進入狀態 156
 
 
 狀態 179
 
-  132 labeled_statement: ID ':' statement .
+  152 jump_statement: RET expression ';' .
 
-    $預設  使用規則 132 以縮減 (labeled_statement)
+    $預設  使用規則 152 以縮減 (jump_statement)
 
 
 狀態 180
+
+  133 labeled_statement: ID ':' statement .
+
+    $預設  使用規則 133 以縮減 (labeled_statement)
+
+
+狀態 181
 
     4 primary_expression: '"' STRING '"' .
 
     $預設  使用規則 4 以縮減 (primary_expression)
 
 
-狀態 181
+狀態 182
 
     5 primary_expression: '(' expression ')' .
 
     $預設  使用規則 5 以縮減 (primary_expression)
 
 
-狀態 182
-
-   84 specifier_qualifier_list: type_specifier specifier_qualifier_list .
-
-    $預設  使用規則 84 以縮減 (specifier_qualifier_list)
-
-
 狀態 183
 
-  112 direct_abstract_declarator: '(' . abstract_declarator ')'
-  117                           | '(' . ')'
-  118                           | '(' . parameter_type_list ')'
+   85 specifier_qualifier_list: type_specifier specifier_qualifier_list .
+
+    $預設  使用規則 85 以縮減 (specifier_qualifier_list)
+
+
+狀態 184
+
+  113 direct_abstract_declarator: '(' . abstract_declarator ')'
+  118                           | '(' . ')'
+  119                           | '(' . parameter_type_list ')'
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
     FLOAT     偏移，並進入狀態 3
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
-    '('       偏移，並進入狀態 183
-    ')'       偏移，並進入狀態 228
-    '['       偏移，並進入狀態 184
+    '('       偏移，並進入狀態 184
+    ')'       偏移，並進入狀態 230
+    '['       偏移，並進入狀態 185
     '*'       偏移，並進入狀態 8
 
-    declaration_specifiers      進入狀態 162
+    declaration_specifiers      進入狀態 163
     type_specifier              進入狀態 11
-    pointer                     進入狀態 185
-    parameter_type_list         進入狀態 229
-    parameter_list              進入狀態 164
-    parameter_declaration       進入狀態 165
-    abstract_declarator         進入狀態 230
-    direct_abstract_declarator  進入狀態 187
+    pointer                     進入狀態 186
+    parameter_type_list         進入狀態 231
+    parameter_list              進入狀態 165
+    parameter_declaration       進入狀態 166
+    abstract_declarator         進入狀態 232
+    direct_abstract_declarator  進入狀態 188
 
 
-狀態 184
+狀態 185
 
-  113 direct_abstract_declarator: '[' . ']'
-  114                           | '[' . constant_expression ']'
+  114 direct_abstract_declarator: '[' . ']'
+  115                           | '[' . constant_expression ']'
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -3213,7 +3358,7 @@ function_definition (114)
     ID       偏移，並進入狀態 99
     '"'      偏移，並進入狀態 55
     '('      偏移，並進入狀態 56
-    ']'      偏移，並進入狀態 231
+    ']'      偏移，並進入狀態 233
     '&'      偏移，並進入狀態 57
     '*'      偏移，並進入狀態 58
     '+'      偏移，並進入狀態 59
@@ -3237,44 +3382,44 @@ function_definition (114)
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 102
-    constant_expression        進入狀態 232
-
-
-狀態 185
-
-  109 abstract_declarator: pointer .
-  111                    | pointer . direct_abstract_declarator
-
-    '('  偏移，並進入狀態 183
-    '['  偏移，並進入狀態 184
-
-    $預設  使用規則 109 以縮減 (abstract_declarator)
-
-    direct_abstract_declarator  進入狀態 233
+    constant_expression        進入狀態 234
 
 
 狀態 186
 
-  108 type_name: specifier_qualifier_list abstract_declarator .
+  110 abstract_declarator: pointer .
+  112                    | pointer . direct_abstract_declarator
 
-    $預設  使用規則 108 以縮減 (type_name)
+    '('  偏移，並進入狀態 184
+    '['  偏移，並進入狀態 185
+
+    $預設  使用規則 110 以縮減 (abstract_declarator)
+
+    direct_abstract_declarator  進入狀態 235
 
 
 狀態 187
 
-  110 abstract_declarator: direct_abstract_declarator .
-  115 direct_abstract_declarator: direct_abstract_declarator . '[' ']'
-  116                           | direct_abstract_declarator . '[' constant_expression ']'
-  119                           | direct_abstract_declarator . '(' ')'
-  120                           | direct_abstract_declarator . '(' parameter_type_list ')'
+  109 type_name: specifier_qualifier_list abstract_declarator .
 
-    '('  偏移，並進入狀態 234
-    '['  偏移，並進入狀態 235
-
-    $預設  使用規則 110 以縮減 (abstract_declarator)
+    $預設  使用規則 109 以縮減 (type_name)
 
 
 狀態 188
+
+  111 abstract_declarator: direct_abstract_declarator .
+  116 direct_abstract_declarator: direct_abstract_declarator . '[' ']'
+  117                           | direct_abstract_declarator . '[' constant_expression ']'
+  120                           | direct_abstract_declarator . '(' ')'
+  121                           | direct_abstract_declarator . '(' parameter_type_list ')'
+
+    '('  偏移，並進入狀態 236
+    '['  偏移，並進入狀態 237
+
+    $預設  使用規則 111 以縮減 (abstract_declarator)
+
+
+狀態 189
 
    26 cast_expression: '(' type_name ')' . cast_expression
 
@@ -3296,77 +3441,77 @@ function_definition (114)
     postfix_expression  進入狀態 66
     unary_expression    進入狀態 101
     unary_operator      進入狀態 68
-    cast_expression     進入狀態 236
+    cast_expression     進入狀態 238
 
 
-狀態 189
+狀態 190
 
     8 postfix_expression: postfix_expression '(' ')' .
 
     $預設  使用規則 8 以縮減 (postfix_expression)
 
 
-狀態 190
+狀態 191
 
     9 postfix_expression: postfix_expression '(' argument_expression_list . ')'
    14 argument_expression_list: argument_expression_list . ',' assignment_expression
 
-    ')'  偏移，並進入狀態 237
-    ','  偏移，並進入狀態 238
+    ')'  偏移，並進入狀態 239
+    ','  偏移，並進入狀態 240
 
 
-狀態 191
+狀態 192
 
    13 argument_expression_list: assignment_expression .
 
     $預設  使用規則 13 以縮減 (argument_expression_list)
 
 
-狀態 192
+狀態 193
 
     7 postfix_expression: postfix_expression '[' expression . ']'
    64 expression: expression . ',' assignment_expression
 
-    ']'  偏移，並進入狀態 239
+    ']'  偏移，並進入狀態 241
     ','  偏移，並進入狀態 156
 
 
-狀態 193
+狀態 194
 
    10 postfix_expression: postfix_expression '.' ID .
 
     $預設  使用規則 10 以縮減 (postfix_expression)
 
 
-狀態 194
+狀態 195
 
    56 assignment_expression: unary_expression assignment_operator assignment_expression .
 
     $預設  使用規則 56 以縮減 (assignment_expression)
 
 
-狀態 195
+狀態 196
 
    28 multiplicative_expression: multiplicative_expression '*' cast_expression .
 
     $預設  使用規則 28 以縮減 (multiplicative_expression)
 
 
-狀態 196
+狀態 197
 
    29 multiplicative_expression: multiplicative_expression '/' cast_expression .
 
     $預設  使用規則 29 以縮減 (multiplicative_expression)
 
 
-狀態 197
+狀態 198
 
    30 multiplicative_expression: multiplicative_expression '%' cast_expression .
 
     $預設  使用規則 30 以縮減 (multiplicative_expression)
 
 
-狀態 198
+狀態 199
 
    28 multiplicative_expression: multiplicative_expression . '*' cast_expression
    29                          | multiplicative_expression . '/' cast_expression
@@ -3380,7 +3525,7 @@ function_definition (114)
     $預設  使用規則 32 以縮減 (additive_expression)
 
 
-狀態 199
+狀態 200
 
    28 multiplicative_expression: multiplicative_expression . '*' cast_expression
    29                          | multiplicative_expression . '/' cast_expression
@@ -3394,35 +3539,35 @@ function_definition (114)
     $預設  使用規則 33 以縮減 (additive_expression)
 
 
-狀態 200
+狀態 201
 
    39 relational_expression: relational_expression MTE shift_expression .
 
     $預設  使用規則 39 以縮減 (relational_expression)
 
 
-狀態 201
+狀態 202
 
    38 relational_expression: relational_expression LTE shift_expression .
 
     $預設  使用規則 38 以縮減 (relational_expression)
 
 
-狀態 202
+狀態 203
 
    36 relational_expression: relational_expression '<' shift_expression .
 
     $預設  使用規則 36 以縮減 (relational_expression)
 
 
-狀態 203
+狀態 204
 
    37 relational_expression: relational_expression '>' shift_expression .
 
     $預設  使用規則 37 以縮減 (relational_expression)
 
 
-狀態 204
+狀態 205
 
    36 relational_expression: relational_expression . '<' shift_expression
    37                      | relational_expression . '>' shift_expression
@@ -3438,7 +3583,7 @@ function_definition (114)
     $預設  使用規則 41 以縮減 (equality_expression)
 
 
-狀態 205
+狀態 206
 
    36 relational_expression: relational_expression . '<' shift_expression
    37                      | relational_expression . '>' shift_expression
@@ -3454,7 +3599,7 @@ function_definition (114)
     $預設  使用規則 42 以縮減 (equality_expression)
 
 
-狀態 206
+狀態 207
 
    41 equality_expression: equality_expression . EQ relational_expression
    42                    | equality_expression . NE relational_expression
@@ -3466,7 +3611,7 @@ function_definition (114)
     $預設  使用規則 44 以縮減 (and_expression)
 
 
-狀態 207
+狀態 208
 
    44 and_expression: and_expression . '&' equality_expression
    46 exclusive_or_expression: exclusive_or_expression '^' and_expression .
@@ -3476,7 +3621,7 @@ function_definition (114)
     $預設  使用規則 46 以縮減 (exclusive_or_expression)
 
 
-狀態 208
+狀態 209
 
    46 exclusive_or_expression: exclusive_or_expression . '^' and_expression
    48 inclusive_or_expression: inclusive_or_expression '|' exclusive_or_expression .
@@ -3486,7 +3631,7 @@ function_definition (114)
     $預設  使用規則 48 以縮減 (inclusive_or_expression)
 
 
-狀態 209
+狀態 210
 
    48 inclusive_or_expression: inclusive_or_expression . '|' exclusive_or_expression
    50 logical_and_expression: logical_and_expression AND inclusive_or_expression .
@@ -3496,7 +3641,7 @@ function_definition (114)
     $預設  使用規則 50 以縮減 (logical_and_expression)
 
 
-狀態 210
+狀態 211
 
    50 logical_and_expression: logical_and_expression . AND inclusive_or_expression
    52 logical_or_expression: logical_or_expression OR logical_and_expression .
@@ -3506,35 +3651,42 @@ function_definition (114)
     $預設  使用規則 52 以縮減 (logical_or_expression)
 
 
-狀態 211
+狀態 212
 
    54 conditional_expression: logical_or_expression '?' expression . ':' conditional_expression
    64 expression: expression . ',' assignment_expression
 
     ','  偏移，並進入狀態 156
-    ':'  偏移，並進入狀態 240
+    ':'  偏移，並進入狀態 242
 
 
-狀態 212
+狀態 213
 
    64 expression: expression ',' assignment_expression .
 
     $預設  使用規則 64 以縮減 (expression)
 
 
-狀態 213
-
-  136 compound_statement: '{' declaration_list statement_list '}' .
-
-    $預設  使用規則 136 以縮減 (compound_statement)
-
-
 狀態 214
 
-   89 direct_declarator: '(' . declarator ')'
-  112 direct_abstract_declarator: '(' . abstract_declarator ')'
-  117                           | '(' . ')'
-  118                           | '(' . parameter_type_list ')'
+  137 compound_statement: '{' declaration_list statement_list '}' .
+
+    $預設  使用規則 137 以縮減 (compound_statement)
+
+
+狀態 215
+
+  141 statement_list: statement_list statement declaration .
+
+    $預設  使用規則 141 以縮減 (statement_list)
+
+
+狀態 216
+
+   90 direct_declarator: '(' . declarator ')'
+  113 direct_abstract_declarator: '(' . abstract_declarator ')'
+  118                           | '(' . ')'
+  119                           | '(' . parameter_type_list ')'
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -3542,63 +3694,63 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
     ID        偏移，並進入狀態 6
-    '('       偏移，並進入狀態 214
-    ')'       偏移，並進入狀態 228
-    '['       偏移，並進入狀態 184
+    '('       偏移，並進入狀態 216
+    ')'       偏移，並進入狀態 230
+    '['       偏移，並進入狀態 185
     '*'       偏移，並進入狀態 8
 
-    declaration_specifiers      進入狀態 162
+    declaration_specifiers      進入狀態 163
     type_specifier              進入狀態 11
     declarator                  進入狀態 18
     direct_declarator           進入狀態 13
-    pointer                     進入狀態 216
-    parameter_type_list         進入狀態 229
-    parameter_list              進入狀態 164
-    parameter_declaration       進入狀態 165
-    abstract_declarator         進入狀態 230
-    direct_abstract_declarator  進入狀態 187
-
-
-狀態 215
-
-  102 parameter_declaration: declaration_specifiers declarator .
-
-    $預設  使用規則 102 以縮減 (parameter_declaration)
-
-
-狀態 216
-
-   86 declarator: pointer . direct_declarator
-  109 abstract_declarator: pointer .
-  111                    | pointer . direct_abstract_declarator
-
-    ID   偏移，並進入狀態 6
-    '('  偏移，並進入狀態 214
-    '['  偏移，並進入狀態 184
-
-    $預設  使用規則 109 以縮減 (abstract_declarator)
-
-    direct_declarator           進入狀態 32
-    direct_abstract_declarator  進入狀態 233
+    pointer                     進入狀態 218
+    parameter_type_list         進入狀態 231
+    parameter_list              進入狀態 165
+    parameter_declaration       進入狀態 166
+    abstract_declarator         進入狀態 232
+    direct_abstract_declarator  進入狀態 188
 
 
 狀態 217
 
-  103 parameter_declaration: declaration_specifiers abstract_declarator .
+  103 parameter_declaration: declaration_specifiers declarator .
 
     $預設  使用規則 103 以縮減 (parameter_declaration)
 
 
 狀態 218
 
-   93 direct_declarator: direct_declarator '(' $@1 parameter_type_list ')' .
+   87 declarator: pointer . direct_declarator
+  110 abstract_declarator: pointer .
+  112                    | pointer . direct_abstract_declarator
 
-    $預設  使用規則 93 以縮減 (direct_declarator)
+    ID   偏移，並進入狀態 6
+    '('  偏移，並進入狀態 216
+    '['  偏移，並進入狀態 185
+
+    $預設  使用規則 110 以縮減 (abstract_declarator)
+
+    direct_declarator           進入狀態 32
+    direct_abstract_declarator  進入狀態 235
 
 
 狀態 219
 
-  101 parameter_list: parameter_list ',' . parameter_declaration
+  104 parameter_declaration: declaration_specifiers abstract_declarator .
+
+    $預設  使用規則 104 以縮減 (parameter_declaration)
+
+
+狀態 220
+
+   94 direct_declarator: direct_declarator '(' $@1 parameter_type_list ')' .
+
+    $預設  使用規則 94 以縮減 (direct_declarator)
+
+
+狀態 221
+
+  102 parameter_list: parameter_list ',' . parameter_declaration
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
@@ -3606,22 +3758,22 @@ function_definition (114)
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
 
-    declaration_specifiers  進入狀態 162
+    declaration_specifiers  進入狀態 163
     type_specifier          進入狀態 11
-    parameter_declaration   進入狀態 241
+    parameter_declaration   進入狀態 243
 
 
-狀態 220
+狀態 222
 
-  106 identifier_list: identifier_list ',' ID .
+  107 identifier_list: identifier_list ',' ID .
 
-    $預設  使用規則 106 以縮減 (identifier_list)
+    $預設  使用規則 107 以縮減 (identifier_list)
 
 
-狀態 221
+狀態 223
 
-  123 initializer: '{' initializer_list ',' . '}'
-  125 initializer_list: initializer_list ',' . initializer
+  124 initializer: '{' initializer_list ',' . '}'
+  126 initializer_list: initializer_list ',' . initializer
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -3637,7 +3789,7 @@ function_definition (114)
     '~'      偏移，並進入狀態 61
     '!'      偏移，並進入狀態 62
     '{'      偏移，並進入狀態 105
-    '}'      偏移，並進入狀態 242
+    '}'      偏移，並進入狀態 244
 
     primary_expression         進入狀態 65
     postfix_expression         進入狀態 66
@@ -3656,133 +3808,34 @@ function_definition (114)
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 106
-    initializer                進入狀態 243
-
-
-狀態 222
-
-  122 initializer: '{' initializer_list '}' .
-
-    $預設  使用規則 122 以縮減 (initializer)
-
-
-狀態 223
-
-   68 print_arg: '"' STRING . '"'
-
-    '"'  偏移，並進入狀態 244
+    initializer                進入狀態 245
 
 
 狀態 224
+
+  123 initializer: '{' initializer_list '}' .
+
+    $預設  使用規則 123 以縮減 (initializer)
+
+
+狀態 225
+
+   68 print_arg: '"' STRING . '"'
+
+    '"'  偏移，並進入狀態 246
+
+
+狀態 226
 
    67 expression: PRINT '(' print_arg ')' .
 
     $預設  使用規則 67 以縮減 (expression)
 
 
-狀態 225
-
-  143 selection_statement: IF '(' expression ')' . statement
-  144                    | IF '(' expression ')' . statement ELSE statement
-
-    INC      偏移，並進入狀態 41
-    DEC      偏移，並進入狀態 42
-    PRINT    偏移，並進入狀態 43
-    IF       偏移，並進入狀態 44
-    FOR      偏移，並進入狀態 45
-    WHILE    偏移，並進入狀態 46
-    TRUE     偏移，並進入狀態 47
-    FALSE    偏移，並進入狀態 48
-    RET      偏移，並進入狀態 49
-    CONT     偏移，並進入狀態 50
-    BREAK    偏移，並進入狀態 51
-    I_CONST  偏移，並進入狀態 52
-    F_CONST  偏移，並進入狀態 53
-    ID       偏移，並進入狀態 54
-    '"'      偏移，並進入狀態 55
-    '('      偏移，並進入狀態 56
-    '&'      偏移，並進入狀態 57
-    '*'      偏移，並進入狀態 58
-    '+'      偏移，並進入狀態 59
-    '-'      偏移，並進入狀態 60
-    '~'      偏移，並進入狀態 61
-    '!'      偏移，並進入狀態 62
-    ';'      偏移，並進入狀態 63
-    '{'      偏移，並進入狀態 25
-
-    primary_expression         進入狀態 65
-    postfix_expression         進入狀態 66
-    unary_expression           進入狀態 67
-    unary_operator             進入狀態 68
-    cast_expression            進入狀態 69
-    multiplicative_expression  進入狀態 70
-    additive_expression        進入狀態 71
-    shift_expression           進入狀態 72
-    relational_expression      進入狀態 73
-    equality_expression        進入狀態 74
-    and_expression             進入狀態 75
-    exclusive_or_expression    進入狀態 76
-    inclusive_or_expression    進入狀態 77
-    logical_and_expression     進入狀態 78
-    logical_or_expression      進入狀態 79
-    conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 81
-    expression                 進入狀態 82
-    statement                  進入狀態 245
-    labeled_statement          進入狀態 84
-    compound_statement         進入狀態 85
-    expression_statement       進入狀態 88
-    selection_statement        進入狀態 89
-    iteration_statement        進入狀態 90
-    jump_statement             進入狀態 91
-
-
-狀態 226
-
-  146 iteration_statement: FOR '(' expression_statement expression_statement . ')' statement
-  147                    | FOR '(' expression_statement expression_statement . expression ')' statement
-
-    INC      偏移，並進入狀態 41
-    DEC      偏移，並進入狀態 42
-    PRINT    偏移，並進入狀態 43
-    TRUE     偏移，並進入狀態 47
-    FALSE    偏移，並進入狀態 48
-    I_CONST  偏移，並進入狀態 52
-    F_CONST  偏移，並進入狀態 53
-    ID       偏移，並進入狀態 99
-    '"'      偏移，並進入狀態 55
-    '('      偏移，並進入狀態 56
-    ')'      偏移，並進入狀態 246
-    '&'      偏移，並進入狀態 57
-    '*'      偏移，並進入狀態 58
-    '+'      偏移，並進入狀態 59
-    '-'      偏移，並進入狀態 60
-    '~'      偏移，並進入狀態 61
-    '!'      偏移，並進入狀態 62
-
-    primary_expression         進入狀態 65
-    postfix_expression         進入狀態 66
-    unary_expression           進入狀態 67
-    unary_operator             進入狀態 68
-    cast_expression            進入狀態 69
-    multiplicative_expression  進入狀態 70
-    additive_expression        進入狀態 71
-    shift_expression           進入狀態 72
-    relational_expression      進入狀態 73
-    equality_expression        進入狀態 74
-    and_expression             進入狀態 75
-    exclusive_or_expression    進入狀態 76
-    inclusive_or_expression    進入狀態 77
-    logical_and_expression     進入狀態 78
-    logical_or_expression      進入狀態 79
-    conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 81
-    expression                 進入狀態 247
-
-
 狀態 227
 
-  145 iteration_statement: WHILE '(' expression ')' . statement
+  144 selection_statement: IF '(' expression ')' . statement
+  145                    | IF '(' expression ')' . statement ELSE statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -3827,7 +3880,7 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    statement                  進入狀態 248
+    statement                  進入狀態 247
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
     expression_statement       進入狀態 88
@@ -3838,76 +3891,175 @@ function_definition (114)
 
 狀態 228
 
-  117 direct_abstract_declarator: '(' ')' .
+  147 iteration_statement: FOR '(' expression_statement expression_statement . ')' statement
+  148                    | FOR '(' expression_statement expression_statement . expression ')' statement
 
-    $預設  使用規則 117 以縮減 (direct_abstract_declarator)
+    INC      偏移，並進入狀態 41
+    DEC      偏移，並進入狀態 42
+    PRINT    偏移，並進入狀態 43
+    TRUE     偏移，並進入狀態 47
+    FALSE    偏移，並進入狀態 48
+    I_CONST  偏移，並進入狀態 52
+    F_CONST  偏移，並進入狀態 53
+    ID       偏移，並進入狀態 99
+    '"'      偏移，並進入狀態 55
+    '('      偏移，並進入狀態 56
+    ')'      偏移，並進入狀態 248
+    '&'      偏移，並進入狀態 57
+    '*'      偏移，並進入狀態 58
+    '+'      偏移，並進入狀態 59
+    '-'      偏移，並進入狀態 60
+    '~'      偏移，並進入狀態 61
+    '!'      偏移，並進入狀態 62
+
+    primary_expression         進入狀態 65
+    postfix_expression         進入狀態 66
+    unary_expression           進入狀態 67
+    unary_operator             進入狀態 68
+    cast_expression            進入狀態 69
+    multiplicative_expression  進入狀態 70
+    additive_expression        進入狀態 71
+    shift_expression           進入狀態 72
+    relational_expression      進入狀態 73
+    equality_expression        進入狀態 74
+    and_expression             進入狀態 75
+    exclusive_or_expression    進入狀態 76
+    inclusive_or_expression    進入狀態 77
+    logical_and_expression     進入狀態 78
+    logical_or_expression      進入狀態 79
+    conditional_expression     進入狀態 80
+    assignment_expression      進入狀態 81
+    expression                 進入狀態 249
 
 
 狀態 229
 
-  118 direct_abstract_declarator: '(' parameter_type_list . ')'
+  146 iteration_statement: WHILE '(' expression ')' . statement
 
-    ')'  偏移，並進入狀態 249
+    INC      偏移，並進入狀態 41
+    DEC      偏移，並進入狀態 42
+    PRINT    偏移，並進入狀態 43
+    IF       偏移，並進入狀態 44
+    FOR      偏移，並進入狀態 45
+    WHILE    偏移，並進入狀態 46
+    TRUE     偏移，並進入狀態 47
+    FALSE    偏移，並進入狀態 48
+    RET      偏移，並進入狀態 49
+    CONT     偏移，並進入狀態 50
+    BREAK    偏移，並進入狀態 51
+    I_CONST  偏移，並進入狀態 52
+    F_CONST  偏移，並進入狀態 53
+    ID       偏移，並進入狀態 54
+    '"'      偏移，並進入狀態 55
+    '('      偏移，並進入狀態 56
+    '&'      偏移，並進入狀態 57
+    '*'      偏移，並進入狀態 58
+    '+'      偏移，並進入狀態 59
+    '-'      偏移，並進入狀態 60
+    '~'      偏移，並進入狀態 61
+    '!'      偏移，並進入狀態 62
+    ';'      偏移，並進入狀態 63
+    '{'      偏移，並進入狀態 25
+
+    primary_expression         進入狀態 65
+    postfix_expression         進入狀態 66
+    unary_expression           進入狀態 67
+    unary_operator             進入狀態 68
+    cast_expression            進入狀態 69
+    multiplicative_expression  進入狀態 70
+    additive_expression        進入狀態 71
+    shift_expression           進入狀態 72
+    relational_expression      進入狀態 73
+    equality_expression        進入狀態 74
+    and_expression             進入狀態 75
+    exclusive_or_expression    進入狀態 76
+    inclusive_or_expression    進入狀態 77
+    logical_and_expression     進入狀態 78
+    logical_or_expression      進入狀態 79
+    conditional_expression     進入狀態 80
+    assignment_expression      進入狀態 81
+    expression                 進入狀態 82
+    statement                  進入狀態 250
+    labeled_statement          進入狀態 84
+    compound_statement         進入狀態 85
+    expression_statement       進入狀態 88
+    selection_statement        進入狀態 89
+    iteration_statement        進入狀態 90
+    jump_statement             進入狀態 91
 
 
 狀態 230
 
-  112 direct_abstract_declarator: '(' abstract_declarator . ')'
+  118 direct_abstract_declarator: '(' ')' .
 
-    ')'  偏移，並進入狀態 250
+    $預設  使用規則 118 以縮減 (direct_abstract_declarator)
 
 
 狀態 231
 
-  113 direct_abstract_declarator: '[' ']' .
+  119 direct_abstract_declarator: '(' parameter_type_list . ')'
 
-    $預設  使用規則 113 以縮減 (direct_abstract_declarator)
+    ')'  偏移，並進入狀態 251
 
 
 狀態 232
 
-  114 direct_abstract_declarator: '[' constant_expression . ']'
+  113 direct_abstract_declarator: '(' abstract_declarator . ')'
 
-    ']'  偏移，並進入狀態 251
+    ')'  偏移，並進入狀態 252
 
 
 狀態 233
 
-  111 abstract_declarator: pointer direct_abstract_declarator .
-  115 direct_abstract_declarator: direct_abstract_declarator . '[' ']'
-  116                           | direct_abstract_declarator . '[' constant_expression ']'
-  119                           | direct_abstract_declarator . '(' ')'
-  120                           | direct_abstract_declarator . '(' parameter_type_list ')'
+  114 direct_abstract_declarator: '[' ']' .
 
-    '('  偏移，並進入狀態 234
-    '['  偏移，並進入狀態 235
-
-    $預設  使用規則 111 以縮減 (abstract_declarator)
+    $預設  使用規則 114 以縮減 (direct_abstract_declarator)
 
 
 狀態 234
 
-  119 direct_abstract_declarator: direct_abstract_declarator '(' . ')'
-  120                           | direct_abstract_declarator '(' . parameter_type_list ')'
+  115 direct_abstract_declarator: '[' constant_expression . ']'
+
+    ']'  偏移，並進入狀態 253
+
+
+狀態 235
+
+  112 abstract_declarator: pointer direct_abstract_declarator .
+  116 direct_abstract_declarator: direct_abstract_declarator . '[' ']'
+  117                           | direct_abstract_declarator . '[' constant_expression ']'
+  120                           | direct_abstract_declarator . '(' ')'
+  121                           | direct_abstract_declarator . '(' parameter_type_list ')'
+
+    '('  偏移，並進入狀態 236
+    '['  偏移，並進入狀態 237
+
+    $預設  使用規則 112 以縮減 (abstract_declarator)
+
+
+狀態 236
+
+  120 direct_abstract_declarator: direct_abstract_declarator '(' . ')'
+  121                           | direct_abstract_declarator '(' . parameter_type_list ')'
 
     STR_TYPE  偏移，並進入狀態 1
     INT       偏移，並進入狀態 2
     FLOAT     偏移，並進入狀態 3
     VOID      偏移，並進入狀態 4
     BOOL      偏移，並進入狀態 5
-    ')'       偏移，並進入狀態 252
+    ')'       偏移，並進入狀態 254
 
-    declaration_specifiers  進入狀態 162
+    declaration_specifiers  進入狀態 163
     type_specifier          進入狀態 11
-    parameter_type_list     進入狀態 253
-    parameter_list          進入狀態 164
-    parameter_declaration   進入狀態 165
+    parameter_type_list     進入狀態 255
+    parameter_list          進入狀態 165
+    parameter_declaration   進入狀態 166
 
 
-狀態 235
+狀態 237
 
-  115 direct_abstract_declarator: direct_abstract_declarator '[' . ']'
-  116                           | direct_abstract_declarator '[' . constant_expression ']'
+  116 direct_abstract_declarator: direct_abstract_declarator '[' . ']'
+  117                           | direct_abstract_declarator '[' . constant_expression ']'
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -3916,7 +4068,7 @@ function_definition (114)
     ID       偏移，並進入狀態 99
     '"'      偏移，並進入狀態 55
     '('      偏移，並進入狀態 56
-    ']'      偏移，並進入狀態 254
+    ']'      偏移，並進入狀態 256
     '&'      偏移，並進入狀態 57
     '*'      偏移，並進入狀態 58
     '+'      偏移，並進入狀態 59
@@ -3940,24 +4092,24 @@ function_definition (114)
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 102
-    constant_expression        進入狀態 255
+    constant_expression        進入狀態 257
 
 
-狀態 236
+狀態 238
 
    26 cast_expression: '(' type_name ')' cast_expression .
 
     $預設  使用規則 26 以縮減 (cast_expression)
 
 
-狀態 237
+狀態 239
 
     9 postfix_expression: postfix_expression '(' argument_expression_list ')' .
 
     $預設  使用規則 9 以縮減 (postfix_expression)
 
 
-狀態 238
+狀態 240
 
    14 argument_expression_list: argument_expression_list ',' . assignment_expression
 
@@ -3991,17 +4143,17 @@ function_definition (114)
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
     conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 256
+    assignment_expression      進入狀態 258
 
 
-狀態 239
+狀態 241
 
     7 postfix_expression: postfix_expression '[' expression ']' .
 
     $預設  使用規則 7 以縮減 (postfix_expression)
 
 
-狀態 240
+狀態 242
 
    54 conditional_expression: logical_or_expression '?' expression ':' . conditional_expression
 
@@ -4034,51 +4186,51 @@ function_definition (114)
     inclusive_or_expression    進入狀態 77
     logical_and_expression     進入狀態 78
     logical_or_expression      進入狀態 79
-    conditional_expression     進入狀態 257
-
-
-狀態 241
-
-  101 parameter_list: parameter_list ',' parameter_declaration .
-
-    $預設  使用規則 101 以縮減 (parameter_list)
-
-
-狀態 242
-
-  123 initializer: '{' initializer_list ',' '}' .
-
-    $預設  使用規則 123 以縮減 (initializer)
+    conditional_expression     進入狀態 259
 
 
 狀態 243
 
-  125 initializer_list: initializer_list ',' initializer .
+  102 parameter_list: parameter_list ',' parameter_declaration .
 
-    $預設  使用規則 125 以縮減 (initializer_list)
+    $預設  使用規則 102 以縮減 (parameter_list)
 
 
 狀態 244
+
+  124 initializer: '{' initializer_list ',' '}' .
+
+    $預設  使用規則 124 以縮減 (initializer)
+
+
+狀態 245
+
+  126 initializer_list: initializer_list ',' initializer .
+
+    $預設  使用規則 126 以縮減 (initializer_list)
+
+
+狀態 246
 
    68 print_arg: '"' STRING '"' .
 
     $預設  使用規則 68 以縮減 (print_arg)
 
 
-狀態 245
+狀態 247
 
-  143 selection_statement: IF '(' expression ')' statement .
-  144                    | IF '(' expression ')' statement . ELSE statement
+  144 selection_statement: IF '(' expression ')' statement .
+  145                    | IF '(' expression ')' statement . ELSE statement
 
-    ELSE  偏移，並進入狀態 258
+    ELSE  偏移，並進入狀態 260
 
-    ELSE     [使用規則 143 以縮減 (selection_statement)]
-    $預設  使用規則 143 以縮減 (selection_statement)
+    ELSE     [使用規則 144 以縮減 (selection_statement)]
+    $預設  使用規則 144 以縮減 (selection_statement)
 
 
-狀態 246
+狀態 248
 
-  146 iteration_statement: FOR '(' expression_statement expression_statement ')' . statement
+  147 iteration_statement: FOR '(' expression_statement expression_statement ')' . statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -4123,7 +4275,7 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    statement                  進入狀態 259
+    statement                  進入狀態 261
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
     expression_statement       進入狀態 88
@@ -4132,151 +4284,88 @@ function_definition (114)
     jump_statement             進入狀態 91
 
 
-狀態 247
-
-   64 expression: expression . ',' assignment_expression
-  147 iteration_statement: FOR '(' expression_statement expression_statement expression . ')' statement
-
-    ')'  偏移，並進入狀態 260
-    ','  偏移，並進入狀態 156
-
-
-狀態 248
-
-  145 iteration_statement: WHILE '(' expression ')' statement .
-
-    $預設  使用規則 145 以縮減 (iteration_statement)
-
-
 狀態 249
 
-  118 direct_abstract_declarator: '(' parameter_type_list ')' .
+   64 expression: expression . ',' assignment_expression
+  148 iteration_statement: FOR '(' expression_statement expression_statement expression . ')' statement
 
-    $預設  使用規則 118 以縮減 (direct_abstract_declarator)
+    ')'  偏移，並進入狀態 262
+    ','  偏移，並進入狀態 156
 
 
 狀態 250
 
-  112 direct_abstract_declarator: '(' abstract_declarator ')' .
+  146 iteration_statement: WHILE '(' expression ')' statement .
 
-    $預設  使用規則 112 以縮減 (direct_abstract_declarator)
+    $預設  使用規則 146 以縮減 (iteration_statement)
 
 
 狀態 251
 
-  114 direct_abstract_declarator: '[' constant_expression ']' .
-
-    $預設  使用規則 114 以縮減 (direct_abstract_declarator)
-
-
-狀態 252
-
-  119 direct_abstract_declarator: direct_abstract_declarator '(' ')' .
+  119 direct_abstract_declarator: '(' parameter_type_list ')' .
 
     $預設  使用規則 119 以縮減 (direct_abstract_declarator)
 
 
+狀態 252
+
+  113 direct_abstract_declarator: '(' abstract_declarator ')' .
+
+    $預設  使用規則 113 以縮減 (direct_abstract_declarator)
+
+
 狀態 253
 
-  120 direct_abstract_declarator: direct_abstract_declarator '(' parameter_type_list . ')'
-
-    ')'  偏移，並進入狀態 261
-
-
-狀態 254
-
-  115 direct_abstract_declarator: direct_abstract_declarator '[' ']' .
+  115 direct_abstract_declarator: '[' constant_expression ']' .
 
     $預設  使用規則 115 以縮減 (direct_abstract_declarator)
 
 
+狀態 254
+
+  120 direct_abstract_declarator: direct_abstract_declarator '(' ')' .
+
+    $預設  使用規則 120 以縮減 (direct_abstract_declarator)
+
+
 狀態 255
 
-  116 direct_abstract_declarator: direct_abstract_declarator '[' constant_expression . ']'
+  121 direct_abstract_declarator: direct_abstract_declarator '(' parameter_type_list . ')'
 
-    ']'  偏移，並進入狀態 262
+    ')'  偏移，並進入狀態 263
 
 
 狀態 256
+
+  116 direct_abstract_declarator: direct_abstract_declarator '[' ']' .
+
+    $預設  使用規則 116 以縮減 (direct_abstract_declarator)
+
+
+狀態 257
+
+  117 direct_abstract_declarator: direct_abstract_declarator '[' constant_expression . ']'
+
+    ']'  偏移，並進入狀態 264
+
+
+狀態 258
 
    14 argument_expression_list: argument_expression_list ',' assignment_expression .
 
     $預設  使用規則 14 以縮減 (argument_expression_list)
 
 
-狀態 257
+狀態 259
 
    54 conditional_expression: logical_or_expression '?' expression ':' conditional_expression .
 
     $預設  使用規則 54 以縮減 (conditional_expression)
 
 
-狀態 258
-
-  144 selection_statement: IF '(' expression ')' statement ELSE . statement
-
-    INC      偏移，並進入狀態 41
-    DEC      偏移，並進入狀態 42
-    PRINT    偏移，並進入狀態 43
-    IF       偏移，並進入狀態 44
-    FOR      偏移，並進入狀態 45
-    WHILE    偏移，並進入狀態 46
-    TRUE     偏移，並進入狀態 47
-    FALSE    偏移，並進入狀態 48
-    RET      偏移，並進入狀態 49
-    CONT     偏移，並進入狀態 50
-    BREAK    偏移，並進入狀態 51
-    I_CONST  偏移，並進入狀態 52
-    F_CONST  偏移，並進入狀態 53
-    ID       偏移，並進入狀態 54
-    '"'      偏移，並進入狀態 55
-    '('      偏移，並進入狀態 56
-    '&'      偏移，並進入狀態 57
-    '*'      偏移，並進入狀態 58
-    '+'      偏移，並進入狀態 59
-    '-'      偏移，並進入狀態 60
-    '~'      偏移，並進入狀態 61
-    '!'      偏移，並進入狀態 62
-    ';'      偏移，並進入狀態 63
-    '{'      偏移，並進入狀態 25
-
-    primary_expression         進入狀態 65
-    postfix_expression         進入狀態 66
-    unary_expression           進入狀態 67
-    unary_operator             進入狀態 68
-    cast_expression            進入狀態 69
-    multiplicative_expression  進入狀態 70
-    additive_expression        進入狀態 71
-    shift_expression           進入狀態 72
-    relational_expression      進入狀態 73
-    equality_expression        進入狀態 74
-    and_expression             進入狀態 75
-    exclusive_or_expression    進入狀態 76
-    inclusive_or_expression    進入狀態 77
-    logical_and_expression     進入狀態 78
-    logical_or_expression      進入狀態 79
-    conditional_expression     進入狀態 80
-    assignment_expression      進入狀態 81
-    expression                 進入狀態 82
-    statement                  進入狀態 263
-    labeled_statement          進入狀態 84
-    compound_statement         進入狀態 85
-    expression_statement       進入狀態 88
-    selection_statement        進入狀態 89
-    iteration_statement        進入狀態 90
-    jump_statement             進入狀態 91
-
-
-狀態 259
-
-  146 iteration_statement: FOR '(' expression_statement expression_statement ')' statement .
-
-    $預設  使用規則 146 以縮減 (iteration_statement)
-
-
 狀態 260
 
-  147 iteration_statement: FOR '(' expression_statement expression_statement expression ')' . statement
+  145 selection_statement: IF '(' expression ')' statement ELSE . statement
 
     INC      偏移，並進入狀態 41
     DEC      偏移，並進入狀態 42
@@ -4321,7 +4410,7 @@ function_definition (114)
     conditional_expression     進入狀態 80
     assignment_expression      進入狀態 81
     expression                 進入狀態 82
-    statement                  進入狀態 264
+    statement                  進入狀態 265
     labeled_statement          進入狀態 84
     compound_statement         進入狀態 85
     expression_statement       進入狀態 88
@@ -4332,27 +4421,90 @@ function_definition (114)
 
 狀態 261
 
-  120 direct_abstract_declarator: direct_abstract_declarator '(' parameter_type_list ')' .
+  147 iteration_statement: FOR '(' expression_statement expression_statement ')' statement .
 
-    $預設  使用規則 120 以縮減 (direct_abstract_declarator)
+    $預設  使用規則 147 以縮減 (iteration_statement)
 
 
 狀態 262
 
-  116 direct_abstract_declarator: direct_abstract_declarator '[' constant_expression ']' .
+  148 iteration_statement: FOR '(' expression_statement expression_statement expression ')' . statement
 
-    $預設  使用規則 116 以縮減 (direct_abstract_declarator)
+    INC      偏移，並進入狀態 41
+    DEC      偏移，並進入狀態 42
+    PRINT    偏移，並進入狀態 43
+    IF       偏移，並進入狀態 44
+    FOR      偏移，並進入狀態 45
+    WHILE    偏移，並進入狀態 46
+    TRUE     偏移，並進入狀態 47
+    FALSE    偏移，並進入狀態 48
+    RET      偏移，並進入狀態 49
+    CONT     偏移，並進入狀態 50
+    BREAK    偏移，並進入狀態 51
+    I_CONST  偏移，並進入狀態 52
+    F_CONST  偏移，並進入狀態 53
+    ID       偏移，並進入狀態 54
+    '"'      偏移，並進入狀態 55
+    '('      偏移，並進入狀態 56
+    '&'      偏移，並進入狀態 57
+    '*'      偏移，並進入狀態 58
+    '+'      偏移，並進入狀態 59
+    '-'      偏移，並進入狀態 60
+    '~'      偏移，並進入狀態 61
+    '!'      偏移，並進入狀態 62
+    ';'      偏移，並進入狀態 63
+    '{'      偏移，並進入狀態 25
+
+    primary_expression         進入狀態 65
+    postfix_expression         進入狀態 66
+    unary_expression           進入狀態 67
+    unary_operator             進入狀態 68
+    cast_expression            進入狀態 69
+    multiplicative_expression  進入狀態 70
+    additive_expression        進入狀態 71
+    shift_expression           進入狀態 72
+    relational_expression      進入狀態 73
+    equality_expression        進入狀態 74
+    and_expression             進入狀態 75
+    exclusive_or_expression    進入狀態 76
+    inclusive_or_expression    進入狀態 77
+    logical_and_expression     進入狀態 78
+    logical_or_expression      進入狀態 79
+    conditional_expression     進入狀態 80
+    assignment_expression      進入狀態 81
+    expression                 進入狀態 82
+    statement                  進入狀態 266
+    labeled_statement          進入狀態 84
+    compound_statement         進入狀態 85
+    expression_statement       進入狀態 88
+    selection_statement        進入狀態 89
+    iteration_statement        進入狀態 90
+    jump_statement             進入狀態 91
 
 
 狀態 263
 
-  144 selection_statement: IF '(' expression ')' statement ELSE statement .
+  121 direct_abstract_declarator: direct_abstract_declarator '(' parameter_type_list ')' .
 
-    $預設  使用規則 144 以縮減 (selection_statement)
+    $預設  使用規則 121 以縮減 (direct_abstract_declarator)
 
 
 狀態 264
 
-  147 iteration_statement: FOR '(' expression_statement expression_statement expression ')' statement .
+  117 direct_abstract_declarator: direct_abstract_declarator '[' constant_expression ']' .
 
-    $預設  使用規則 147 以縮減 (iteration_statement)
+    $預設  使用規則 117 以縮減 (direct_abstract_declarator)
+
+
+狀態 265
+
+  145 selection_statement: IF '(' expression ')' statement ELSE statement .
+
+    $預設  使用規則 145 以縮減 (selection_statement)
+
+
+狀態 266
+
+  148 iteration_statement: FOR '(' expression_statement expression_statement expression ')' statement .
+
+    $預設  使用規則 148 以縮減 (iteration_statement)

@@ -218,6 +218,7 @@ constant_expression
 declaration
 	: declaration_specifiers ';' 
 	| declaration_specifiers init_declarator_list ';' {Value *v1=&$1;Value *v2=&$2; insert_symbol(cur_header,v1,v2,"variable");}
+	|
 	;
 
 declaration_specifiers
@@ -348,8 +349,8 @@ declaration_list
 	;
 
 statement_list
-	: statement
-	| statement_list statement
+	: statement declaration
+	| statement_list statement declaration
 	;
 
 expression_statement
@@ -683,7 +684,7 @@ int lookup_symbol(const Header *header, const char *id)
 		//printf("%s\n",cur->id_ptr->id_name);
         if (cur->id_ptr!=NULL&&strcmp(cur->id_ptr->id_name, id) == 0)
 		{
-			printf("55555\n");
+			//printf("55555\n");
             return cur->index;
         }
         cur = cur->next;

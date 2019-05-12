@@ -59,7 +59,10 @@ number {digit}+
 "("		{ /*printf("%s \t LB\n", yytext);printf("%s",yytext);*/CONCAT;return '(';}
 ")"		{ /*printf("%s \t RB\n", yytext);printf("%s",yytext);*/CONCAT;return ')';}
 "{"		{ /*printf("%s \t LCB\n", yytext);printf("%s",yytext);*/CONCAT;return '{';}
+
 "}"		{ /*printf("%s \t RCB\n", yytext);printf("%d teeeeeeeeest%s",line_cnt,yytext)*/;CONCAT;return '}';}
+"}\n" 	{printf("%d: %s",yylineno,buf);printf("%s",yytext); return '}';}
+
 "["		{ /*printf("%s \t LSB\n", yytext);printf("%s",yytext);*/CONCAT;return '[';}
 "]"		{ /*printf("%s \t RSB\n", yytext);printf("%s",yytext);*/CONCAT;return ']';}
 ","		{ /*printf("%s \t COMMA\n", yytext);printf("%s",yytext);*/CONCAT;return ',';}

@@ -187,6 +187,17 @@ conditional_expression
 assignment_expression
 	: conditional_expression {$$=$1;}
 	| unary_expression assignment_operator assignment_expression
+	  {
+		$$=$1;
+		//Header *tmp=cur_header;
+		//while()
+		if(lookup_symbol(cur_header,$$.id_name)==-10)
+		{
+			char errmsg[64];
+        	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
+        	yyerror(errmsg);
+		} 
+	  }
 	;
 
 assignment_operator

@@ -189,9 +189,12 @@ assignment_expression
 	| unary_expression assignment_operator assignment_expression
 	  {
 		$$=$1;
-		//Header *tmp=cur_header;
-		//while()
-		if(lookup_symbol(cur_header,$$.id_name)==-10)
+		Header *tmp=cur_header;
+		while(tmp->pre!=NULL)
+		{
+			tmp=tmp->pre;
+		}
+		if(lookup_symbol(cur_header,$$.id_name)==-10&&lookup_symbol(tmp,$$.id_name)==-10)
 		{
 			char errmsg[64];
         	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
@@ -221,7 +224,12 @@ print_arg
 	: '"' STRING '"' 
 	| ID 	
 		{
-			if(lookup_symbol(cur_header,yylval.val.id_name)==-10)
+			Header *tmp=cur_header;
+			while(tmp->pre!=NULL)
+			{
+				tmp=tmp->pre;
+			}
+			if(lookup_symbol(cur_header,yylval.val.id_name)==-10&&lookup_symbol(tmp,yylval.val.id_name)==-10)
 			{
 				char errmsg[64];
         		sprintf(errmsg, "Undeclared variable %s", yylval.val.id_name);

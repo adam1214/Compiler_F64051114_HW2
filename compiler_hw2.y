@@ -83,20 +83,21 @@ void dump_all_scopes();
 primary_expression
 	: ID 
 	  {
-		/*
 		$$ = yylval.val;
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
 			tmp=tmp->pre;
 		}
-		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10 && fun_or_not==0)
+		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
 		{
+			int lineno=yylineno+1;
+			printf("%d: %s\n", lineno, buf);
+			printline_or_not=0;
 			char errmsg[64];
         	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
         	yyerror(errmsg);
 		} 
-		*/
 	  }
 	| I_CONST {$$=yylval.val;}
     | F_CONST {$$=yylval.val;}
@@ -110,6 +111,7 @@ postfix_expression
 	| postfix_expression '(' ')' 
 	  {
 		$$ = $1;
+		//printf("function name: %s",$$.id_name);
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
@@ -125,9 +127,10 @@ postfix_expression
         	yyerror(errmsg);
 		}
 	  }
-	| postfix_expression '('argument_expression_list ')' 
+    | postfix_expression '('argument_expression_list ')' 
 	  {
-		$$ = $1;/*printf("333");*/
+		$$ = $1;
+		//printf("function name: %s",$$.id_name);
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{

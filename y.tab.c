@@ -538,23 +538,23 @@ static const yytype_uint8 yytranslate[] =
   /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_uint16 yyrline[] =
 {
-       0,    84,    84,   101,   102,   103,   104,   108,   109,   110,
-     128,   146,   147,   148,   152,   153,   157,   158,   159,   160,
-     164,   165,   166,   167,   168,   169,   173,   174,   178,   179,
-     180,   181,   185,   186,   187,   191,   195,   196,   197,   198,
-     199,   203,   204,   205,   209,   210,   214,   215,   219,   220,
-     224,   225,   229,   230,   234,   235,   239,   240,   268,   269,
-     270,   271,   272,   273,   277,   278,   279,   280,   281,   285,
-     286,   306,   310,   311,   312,   316,   317,   321,   322,   326,
-     327,   331,   332,   333,   334,   335,   339,   340,   344,   345,
-     349,   350,   351,   352,   353,   353,   354,   355,   355,   359,
-     360,   364,   368,   369,   373,   374,   375,   379,   380,   384,
-     385,   389,   390,   391,   395,   396,   397,   398,   399,   400,
-     401,   402,   403,   407,   408,   409,   413,   414,   418,   419,
-     420,   421,   422,   423,   427,   431,   432,   433,   434,   438,
-     439,   443,   444,   448,   449,   453,   454,   458,   459,   460,
-     464,   465,   466,   467,   471,   472,   476,   477,   481,   482,
-     483,   484
+       0,    84,    84,   102,   103,   104,   105,   109,   110,   111,
+     130,   149,   150,   151,   155,   156,   160,   161,   162,   163,
+     167,   168,   169,   170,   171,   172,   176,   177,   181,   182,
+     183,   184,   188,   189,   190,   194,   198,   199,   200,   201,
+     202,   206,   207,   208,   212,   213,   217,   218,   222,   223,
+     227,   228,   232,   233,   237,   238,   242,   243,   271,   272,
+     273,   274,   275,   276,   280,   281,   282,   283,   284,   288,
+     289,   309,   313,   314,   315,   319,   320,   324,   325,   329,
+     330,   334,   335,   336,   337,   338,   342,   343,   347,   348,
+     352,   353,   354,   355,   356,   356,   357,   358,   358,   362,
+     363,   367,   371,   372,   376,   377,   378,   382,   383,   387,
+     388,   392,   393,   394,   398,   399,   400,   401,   402,   403,
+     404,   405,   406,   410,   411,   412,   416,   417,   421,   422,
+     423,   424,   425,   426,   430,   434,   435,   436,   437,   441,
+     442,   446,   447,   451,   452,   456,   457,   461,   462,   463,
+     467,   468,   469,   470,   474,   475,   479,   480,   484,   485,
+     486,   487
 };
 #endif
 
@@ -1624,52 +1624,54 @@ yyreduce:
         case 2:
 #line 85 "compiler_hw2.y" /* yacc.c:1646  */
     {
-		/*
-		$$ = yylval.val;
+		(yyval.val) = yylval.val;
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
 			tmp=tmp->pre;
 		}
-		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10 && fun_or_not==0)
+		if(lookup_symbol(cur_header,(yyval.val).id_name)==-10 && lookup_symbol(tmp,(yyval.val).id_name)==-10)
 		{
+			int lineno=yylineno+1;
+			printf("%d: %s\n", lineno, buf);
+			printline_or_not=0;
 			char errmsg[64];
-        	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
+        	sprintf(errmsg, "Undeclared variable %s", (yyval.val).id_name);
         	yyerror(errmsg);
 		} 
-		*/
 	  }
-#line 1643 "y.tab.c" /* yacc.c:1646  */
+#line 1644 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 3:
-#line 101 "compiler_hw2.y" /* yacc.c:1646  */
+#line 102 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=yylval.val;}
-#line 1649 "y.tab.c" /* yacc.c:1646  */
+#line 1650 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 4:
-#line 102 "compiler_hw2.y" /* yacc.c:1646  */
+#line 103 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=yylval.val;}
-#line 1655 "y.tab.c" /* yacc.c:1646  */
+#line 1656 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 5:
-#line 103 "compiler_hw2.y" /* yacc.c:1646  */
+#line 104 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=yylval.val;}
-#line 1661 "y.tab.c" /* yacc.c:1646  */
+#line 1662 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 7:
-#line 108 "compiler_hw2.y" /* yacc.c:1646  */
+#line 109 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1667 "y.tab.c" /* yacc.c:1646  */
+#line 1668 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 9:
-#line 111 "compiler_hw2.y" /* yacc.c:1646  */
+#line 112 "compiler_hw2.y" /* yacc.c:1646  */
     {
 		(yyval.val) = (yyvsp[-2].val);
+		//printf("function name: %s",$$.id_name);
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
@@ -1685,13 +1687,14 @@ yyreduce:
         	yyerror(errmsg);
 		}
 	  }
-#line 1689 "y.tab.c" /* yacc.c:1646  */
+#line 1691 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 10:
-#line 129 "compiler_hw2.y" /* yacc.c:1646  */
+#line 131 "compiler_hw2.y" /* yacc.c:1646  */
     {
-		(yyval.val) = (yyvsp[-3].val);/*printf("333");*/
+		(yyval.val) = (yyvsp[-3].val);
+		//printf("function name: %s",$$.id_name);
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
@@ -1707,95 +1710,95 @@ yyreduce:
         	yyerror(errmsg);
 		} 
 	  }
-#line 1711 "y.tab.c" /* yacc.c:1646  */
+#line 1714 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 16:
-#line 157 "compiler_hw2.y" /* yacc.c:1646  */
+#line 160 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1717 "y.tab.c" /* yacc.c:1646  */
+#line 1720 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 26:
-#line 173 "compiler_hw2.y" /* yacc.c:1646  */
+#line 176 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1723 "y.tab.c" /* yacc.c:1646  */
+#line 1726 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 28:
-#line 178 "compiler_hw2.y" /* yacc.c:1646  */
+#line 181 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1729 "y.tab.c" /* yacc.c:1646  */
+#line 1732 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 32:
-#line 185 "compiler_hw2.y" /* yacc.c:1646  */
+#line 188 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1735 "y.tab.c" /* yacc.c:1646  */
+#line 1738 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 35:
-#line 191 "compiler_hw2.y" /* yacc.c:1646  */
+#line 194 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1741 "y.tab.c" /* yacc.c:1646  */
+#line 1744 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 36:
-#line 195 "compiler_hw2.y" /* yacc.c:1646  */
+#line 198 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1747 "y.tab.c" /* yacc.c:1646  */
+#line 1750 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 41:
-#line 203 "compiler_hw2.y" /* yacc.c:1646  */
+#line 206 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1753 "y.tab.c" /* yacc.c:1646  */
+#line 1756 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 44:
-#line 209 "compiler_hw2.y" /* yacc.c:1646  */
+#line 212 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1759 "y.tab.c" /* yacc.c:1646  */
+#line 1762 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 46:
-#line 214 "compiler_hw2.y" /* yacc.c:1646  */
+#line 217 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1765 "y.tab.c" /* yacc.c:1646  */
+#line 1768 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 48:
-#line 219 "compiler_hw2.y" /* yacc.c:1646  */
+#line 222 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1771 "y.tab.c" /* yacc.c:1646  */
+#line 1774 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 50:
-#line 224 "compiler_hw2.y" /* yacc.c:1646  */
+#line 227 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1777 "y.tab.c" /* yacc.c:1646  */
+#line 1780 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 52:
-#line 229 "compiler_hw2.y" /* yacc.c:1646  */
+#line 232 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1783 "y.tab.c" /* yacc.c:1646  */
+#line 1786 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 54:
-#line 234 "compiler_hw2.y" /* yacc.c:1646  */
+#line 237 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1789 "y.tab.c" /* yacc.c:1646  */
+#line 1792 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 56:
-#line 239 "compiler_hw2.y" /* yacc.c:1646  */
+#line 242 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1795 "y.tab.c" /* yacc.c:1646  */
+#line 1798 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 57:
-#line 241 "compiler_hw2.y" /* yacc.c:1646  */
+#line 244 "compiler_hw2.y" /* yacc.c:1646  */
     {
 		/*
 		$$=$1;
@@ -1820,11 +1823,11 @@ yyreduce:
 		} 
 		*/
 	  }
-#line 1824 "y.tab.c" /* yacc.c:1646  */
+#line 1827 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 70:
-#line 287 "compiler_hw2.y" /* yacc.c:1646  */
+#line 290 "compiler_hw2.y" /* yacc.c:1646  */
     {
 			Header *tmp=cur_header;
 			while(tmp->pre!=NULL)
@@ -1841,119 +1844,119 @@ yyreduce:
         		yyerror(errmsg);
 			} 
 		}
-#line 1845 "y.tab.c" /* yacc.c:1646  */
+#line 1848 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 73:
-#line 311 "compiler_hw2.y" /* yacc.c:1646  */
+#line 314 "compiler_hw2.y" /* yacc.c:1646  */
     {Value *v1=&(yyvsp[-2].val);Value *v2=&(yyvsp[-1].val); insert_symbol(cur_header,v1,v2,"variable");}
-#line 1851 "y.tab.c" /* yacc.c:1646  */
+#line 1854 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 75:
-#line 316 "compiler_hw2.y" /* yacc.c:1646  */
+#line 319 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1857 "y.tab.c" /* yacc.c:1646  */
+#line 1860 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 77:
-#line 321 "compiler_hw2.y" /* yacc.c:1646  */
+#line 324 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1863 "y.tab.c" /* yacc.c:1646  */
+#line 1866 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 79:
-#line 326 "compiler_hw2.y" /* yacc.c:1646  */
+#line 329 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1869 "y.tab.c" /* yacc.c:1646  */
+#line 1872 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 80:
-#line 327 "compiler_hw2.y" /* yacc.c:1646  */
+#line 330 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[-2].val);}
-#line 1875 "y.tab.c" /* yacc.c:1646  */
+#line 1878 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 81:
-#line 331 "compiler_hw2.y" /* yacc.c:1646  */
+#line 334 "compiler_hw2.y" /* yacc.c:1646  */
     { (yyval.val) = yylval.val;/*printf("222");*/ }
-#line 1881 "y.tab.c" /* yacc.c:1646  */
+#line 1884 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 82:
-#line 332 "compiler_hw2.y" /* yacc.c:1646  */
+#line 335 "compiler_hw2.y" /* yacc.c:1646  */
     { (yyval.val) = yylval.val;/*printf("222");*/ }
-#line 1887 "y.tab.c" /* yacc.c:1646  */
+#line 1890 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 83:
-#line 333 "compiler_hw2.y" /* yacc.c:1646  */
+#line 336 "compiler_hw2.y" /* yacc.c:1646  */
     { (yyval.val) = yylval.val;/*printf("222");*/ }
-#line 1893 "y.tab.c" /* yacc.c:1646  */
+#line 1896 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 84:
-#line 334 "compiler_hw2.y" /* yacc.c:1646  */
+#line 337 "compiler_hw2.y" /* yacc.c:1646  */
     { (yyval.val) = yylval.val;/*printf("222");*/}
-#line 1899 "y.tab.c" /* yacc.c:1646  */
+#line 1902 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 85:
-#line 335 "compiler_hw2.y" /* yacc.c:1646  */
+#line 338 "compiler_hw2.y" /* yacc.c:1646  */
     { (yyval.val) = yylval.val;/*printf("222");*/ }
-#line 1905 "y.tab.c" /* yacc.c:1646  */
+#line 1908 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 89:
-#line 345 "compiler_hw2.y" /* yacc.c:1646  */
+#line 348 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1911 "y.tab.c" /* yacc.c:1646  */
+#line 1914 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 90:
-#line 349 "compiler_hw2.y" /* yacc.c:1646  */
+#line 352 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val) = yylval.val;/*printf("111");*/}
-#line 1917 "y.tab.c" /* yacc.c:1646  */
+#line 1920 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 94:
-#line 353 "compiler_hw2.y" /* yacc.c:1646  */
+#line 356 "compiler_hw2.y" /* yacc.c:1646  */
     {new_scope();}
-#line 1923 "y.tab.c" /* yacc.c:1646  */
+#line 1926 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 97:
-#line 355 "compiler_hw2.y" /* yacc.c:1646  */
+#line 358 "compiler_hw2.y" /* yacc.c:1646  */
     {new_scope();}
-#line 1929 "y.tab.c" /* yacc.c:1646  */
+#line 1932 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 104:
-#line 373 "compiler_hw2.y" /* yacc.c:1646  */
+#line 376 "compiler_hw2.y" /* yacc.c:1646  */
     {Value *v1=&(yyvsp[-1].val);Value *v2=&(yyvsp[0].val); insert_symbol(cur_header,v1,v2,"parameter");}
-#line 1935 "y.tab.c" /* yacc.c:1646  */
+#line 1938 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 123:
-#line 407 "compiler_hw2.y" /* yacc.c:1646  */
+#line 410 "compiler_hw2.y" /* yacc.c:1646  */
     {(yyval.val)=(yyvsp[0].val);}
-#line 1941 "y.tab.c" /* yacc.c:1646  */
+#line 1944 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 156:
-#line 476 "compiler_hw2.y" /* yacc.c:1646  */
+#line 479 "compiler_hw2.y" /* yacc.c:1646  */
     {dump_scope();}
-#line 1947 "y.tab.c" /* yacc.c:1646  */
+#line 1950 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 159:
-#line 482 "compiler_hw2.y" /* yacc.c:1646  */
+#line 485 "compiler_hw2.y" /* yacc.c:1646  */
     { Value *v1=&(yyvsp[-2].val);Value *v2=&(yyvsp[-1].val); insert_symbol_forfun(cur_header,v1,v2,"function");}
-#line 1953 "y.tab.c" /* yacc.c:1646  */
+#line 1956 "y.tab.c" /* yacc.c:1646  */
     break;
 
 
-#line 1957 "y.tab.c" /* yacc.c:1646  */
+#line 1960 "y.tab.c" /* yacc.c:1646  */
       default: break;
     }
   /* User semantic actions sometimes alter yychar, and that requires
@@ -2181,7 +2184,7 @@ yyreturn:
 #endif
   return yyresult;
 }
-#line 487 "compiler_hw2.y" /* yacc.c:1906  */
+#line 490 "compiler_hw2.y" /* yacc.c:1906  */
 
 
 /* C code section */

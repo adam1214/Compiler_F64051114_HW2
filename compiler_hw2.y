@@ -80,7 +80,21 @@ void dump_all_scopes();
 %%
 
 primary_expression
-	: ID {$$ = yylval.val;/*printf("333");*/}
+	: ID 
+	  {
+		$$ = yylval.val;/*printf("333");*/
+		Header *tmp=cur_header;
+		while(tmp->pre!=NULL)
+		{
+			tmp=tmp->pre;
+		}
+		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
+		{
+			char errmsg[64];
+        	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
+        	yyerror(errmsg);
+		} 
+	  }
 	| I_CONST {$$=yylval.val;}
     | F_CONST {$$=yylval.val;}
 	| '"' STRING '"' {$$=yylval.val;}
@@ -188,18 +202,28 @@ assignment_expression
 	: conditional_expression {$$=$1;}
 	| unary_expression assignment_operator assignment_expression
 	  {
+		/*
 		$$=$1;
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
 			tmp=tmp->pre;
 		}
-		if(lookup_symbol(cur_header,$$.id_name)==-10&&lookup_symbol(tmp,$$.id_name)==-10)
+		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
 		{
 			char errmsg[64];
         	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
         	yyerror(errmsg);
 		} 
+
+		$$=$3;
+		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
+		{
+			char errmsg[64];
+        	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
+        	yyerror(errmsg);
+		} 
+		*/
 	  }
 	;
 
@@ -415,7 +439,7 @@ external_declaration
 
 function_definition
 	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator compound_statement {Value *v1=&$1;Value *v2=&$2;insert_symbol_forfun(cur_header,v1,v2,"function");}
+	| declaration_specifiers declarator compound_statement { Value *v1=&$1;Value *v2=&$2; insert_symbol_forfun(cur_header,v1,v2,"function");}
 	| declarator declaration_list compound_statement
 	| declarator compound_statement
 	;
@@ -473,7 +497,6 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 	Value* id_ptr_copy=malloc(sizeof(Value));
 	id_ptr_copy->id_name=malloc(sizeof(char)*50);
 	strcpy(id_ptr_copy->id_name,id_ptr->id_name);
-
 
 	if (cur_header == NULL) //無table
 	{

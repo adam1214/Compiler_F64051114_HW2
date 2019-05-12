@@ -1027,7 +1027,7 @@ YY_RULE_SETUP
 case 26:
 YY_RULE_SETUP
 #line 62 "compiler_hw2.l"
-{ /*printf("%s \t RCB\n", yytext);printf("%s",yytext);*/CONCAT;return '}';}
+{ /*printf("%s \t RCB\n", yytext);printf("%d teeeeeeeeest%s",line_cnt,yytext)*/;CONCAT;return '}';}
 	YY_BREAK
 case 27:
 YY_RULE_SETUP

@@ -71,7 +71,7 @@ void dump_all_scopes();
 %type <val> parameter_declaration identifier_list type_name abstract_declarator direct_abstract_declarator initializer
 %type <val> initializer_list statement labeled_statement compound_statement declaration_list statement_list expression_statement
 %type <val> selection_statement iteration_statement jump_statement external_declaration function_definition
-%type <val> type_specifier declaration_specifiers
+%type <val> type_specifier declaration_specifiers print_arg
 
 /* Yacc will start at this nonterminal */
 %start program
@@ -208,7 +208,15 @@ expression
 
 print_arg
 	: '"' STRING '"' 
-	| ID
+	| ID 	
+		{
+			if(lookup_symbol(cur_header,yylval.val.id_name)==-10)
+			{
+				char errmsg[64];
+        		sprintf(errmsg, "Undeclared variable %s", yylval.val.id_name);
+        		yyerror(errmsg);
+			} 
+		}
 	;
 
 constant_expression
@@ -414,10 +422,16 @@ int main(int argc, char** argv)
 
 void yyerror(char *s)
 {
+	int lineno=yylineno+1;
     printf("\n|-----------------------------------------------|\n");
-    printf("| Error found in line %d: %s\n", yylineno, buf);
+    printf("| Error found in line %d: %s\n", lineno, buf);
     printf("| %s", s);
     printf("\n|-----------------------------------------------|\n\n");
+
+	if(strcmp(s,"syntax error")==0)
+	{
+		exit(1);
+	}
 }
 
 Header* create_symbol() 
@@ -448,7 +462,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
         header_root = cur_header;
         header = cur_header;
     }
-    if (lookup_symbol(cur_header, id_ptr->id_name) == NULL) 
+    if (lookup_symbol(cur_header, id_ptr->id_name) == -10) 
 	{
         
         Entry *tmp = malloc(sizeof(Entry));
@@ -544,7 +558,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 	{
 		//printf("lookup_symbol=%d\n",lookup_symbol(cur_header, id_ptr->id_name));
         char errmsg[64];
-        sprintf(errmsg, "redefined variable \'%s\'", id_ptr->id_name);
+        sprintf(errmsg, "Redeclared variable %s", id_ptr->id_name);
         yyerror(errmsg);
     }
 }
@@ -564,7 +578,7 @@ void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind
         header_root = cur_header;
         header = cur_header;
     }
-    if (lookup_symbol(cur_header->pre, id_ptr->id_name) == NULL) 
+    if (lookup_symbol(cur_header->pre, id_ptr->id_name) == -10) 
 	{
         if(table_or_not==1)
 		{
@@ -665,7 +679,7 @@ void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind
 	{
 		//printf("lookup_symbol=%d\n",lookup_symbol(cur_header, id_ptr->id_name));
         char errmsg[64];
-        sprintf(errmsg, "redefined variable \'%s\'", id_ptr->id_name);
+        sprintf(errmsg, "Redeclared function %s", id_ptr->id_name);
         yyerror(errmsg);
     }
 }
@@ -674,22 +688,25 @@ int lookup_symbol(const Header *header, const char *id)
 	if (header->table_root == NULL) 
 	{
 		//printf("NULLLLLLLL\n");
-        return NULL;
+        return -10;
     }
     Entry *cur = header->table_root;
     while (cur != NULL)
 	{
-		//printf("\nindex:%d\n",cur->index);
-		//printf("%s\n",id);
-		//printf("%s\n",cur->id_ptr->id_name);
+		/*
+		printf("\nindex:%d\n",cur->index);
+		printf("%s\n",id);
+		if(cur->id_ptr!=NULL)
+			printf("%s\n",cur->id_ptr->id_name);
+		*/
+
         if (cur->id_ptr!=NULL&&strcmp(cur->id_ptr->id_name, id) == 0)
 		{
-			//printf("55555\n");
             return cur->index;
         }
         cur = cur->next;
     }
-    return NULL;
+    return -10;
 }
 void dump_symbol(Header *header) 
 {

@@ -13,6 +13,7 @@
 	int comm_cnt=0;
 
 	extern YYSTYPE yylval; //YYSTYPE
+	extern int printline_or_not;
 	char buf[256];
 
 	/* This macro is used to record code line */
@@ -107,7 +108,7 @@ number {digit}+
 <STRING_STATE>[^\"]*		{ /*printf("%s",yytext);*/ yylval.val.string=strdup(yytext);yylval.val.type = S_T; CONCAT;return STRING;}
 
 {id}	{ /*printf("%s \t ID\n", yytext); printf("%s",yytext);*/ yylval.val.id_name=strdup(yytext);yylval.val.type = ID_T; CONCAT;return ID;}
-\n			{ /*printf("\n"); printf("%d: ",yylineno);*/ line_cnt++;printf("%d: %s\n",yylineno,buf);strcpy(buf,"");} 
+\n			{ /*printf("\n"); printf("%d: ",yylineno);*/ line_cnt++;if(printline_or_not==1){printf("%d: %s\n",yylineno,buf);}strcpy(buf,""); printline_or_not=1;} 
 [ \t]		{/*printf("%s", yytext);*/ CONCAT;}
 .			{ /* ignore bad characters */ }
 

@@ -32,6 +32,7 @@ extern int yylineno;
 extern int yylex();
 extern char* yytext;   // Get current token from lex
 extern char buf[256];  // Get current code line from lex
+int printline_or_not=1;
 
 /* Symbol table function - you can add new function if needed. */
 int lookup_symbol(const Header *header, const char *id);
@@ -82,18 +83,20 @@ void dump_all_scopes();
 primary_expression
 	: ID 
 	  {
-		$$ = yylval.val;/*printf("333");*/
+		/*
+		$$ = yylval.val;
 		Header *tmp=cur_header;
 		while(tmp->pre!=NULL)
 		{
 			tmp=tmp->pre;
 		}
-		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
+		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10 && fun_or_not==0)
 		{
 			char errmsg[64];
         	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
         	yyerror(errmsg);
 		} 
+		*/
 	  }
 	| I_CONST {$$=yylval.val;}
     | F_CONST {$$=yylval.val;}
@@ -104,8 +107,42 @@ primary_expression
 postfix_expression
 	: primary_expression {$$=$1;}
 	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')'
-	| postfix_expression '('argument_expression_list ')'
+	| postfix_expression '(' ')' 
+	  {
+		$$ = $1;
+		Header *tmp=cur_header;
+		while(tmp->pre!=NULL)
+		{
+			tmp=tmp->pre;
+		}
+		if(lookup_symbol(tmp,$$.id_name)==-10)
+		{
+			int lineno=yylineno+1;
+			printf("%d: %s\n", lineno, buf);
+			printline_or_not=0;
+			char errmsg[64];
+        	sprintf(errmsg, "Undeclared function %s", $$.id_name);
+        	yyerror(errmsg);
+		}
+	  }
+	| postfix_expression '('argument_expression_list ')' 
+	  {
+		$$ = $1;/*printf("333");*/
+		Header *tmp=cur_header;
+		while(tmp->pre!=NULL)
+		{
+			tmp=tmp->pre;
+		}
+		if(lookup_symbol(tmp,$$.id_name)==-10)
+		{
+			int lineno=yylineno+1;
+			printf("%d: %s\n", lineno, buf);
+			printline_or_not=0;
+			char errmsg[64];
+        	sprintf(errmsg, "Undeclared function %s", $$.id_name);
+        	yyerror(errmsg);
+		} 
+	  }
 	| postfix_expression '.' ID
 	| postfix_expression INC
 	| postfix_expression DEC
@@ -255,6 +292,9 @@ print_arg
 			}
 			if(lookup_symbol(cur_header,yylval.val.id_name)==-10&&lookup_symbol(tmp,yylval.val.id_name)==-10)
 			{
+				int lineno=yylineno+1;
+				printf("%d: %s\n", lineno, buf);
+				printline_or_not=0;
 				char errmsg[64];
         		sprintf(errmsg, "Undeclared variable %s", yylval.val.id_name);
         		yyerror(errmsg);
@@ -599,7 +639,10 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 	else 
 	{
 		//printf("lookup_symbol=%d\n",lookup_symbol(cur_header, id_ptr->id_name));
-        char errmsg[64];
+        int lineno=yylineno+1;
+		printf("%d: %s\n", lineno, buf);
+		printline_or_not=0;
+		char errmsg[64];
         sprintf(errmsg, "Redeclared variable %s", id_ptr->id_name);
         yyerror(errmsg);
     }
@@ -720,7 +763,10 @@ void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind
 	else 
 	{
 		//printf("lookup_symbol=%d\n",lookup_symbol(cur_header, id_ptr->id_name));
-        char errmsg[64];
+        int lineno=yylineno+1;
+		printf("%d: %s\n", lineno, buf);
+		printline_or_not=0;
+		char errmsg[64];
         sprintf(errmsg, "Redeclared function %s", id_ptr->id_name);
         yyerror(errmsg);
     }

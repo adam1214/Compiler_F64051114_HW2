@@ -72,7 +72,7 @@ void dump_all_scopes();
 %type <val> parameter_declaration identifier_list type_name abstract_declarator direct_abstract_declarator initializer
 %type <val> initializer_list statement labeled_statement compound_statement declaration_list statement_list expression_statement
 %type <val> selection_statement iteration_statement jump_statement external_declaration function_definition
-%type <val> type_specifier declaration_specifiers print_arg
+%type <val> type_specifier declaration_specifiers print_arg postfix_expression_forfun primary_expression_forfun
 
 /* Yacc will start at this nonterminal */
 %start program
@@ -105,10 +105,21 @@ primary_expression
 	| '('expression ')'
 	;
 
+primary_expression_forfun
+	: ID {$$=yylval.val;}
+	| I_CONST {$$=yylval.val;}
+    | F_CONST {$$=yylval.val;}
+	| '"' STRING '"' {$$=yylval.val;}
+	| '('expression ')'
+	;
+
+postfix_expression_forfun
+	: primary_expression_forfun {$$=$1;}
+
 postfix_expression
 	: primary_expression {$$=$1;}
 	| postfix_expression '[' expression ']'
-	| postfix_expression '(' ')' 
+	| postfix_expression_forfun '(' ')' 
 	  {
 		$$ = $1;
 		//printf("function name: %s",$$.id_name);
@@ -127,7 +138,7 @@ postfix_expression
         	yyerror(errmsg);
 		}
 	  }
-    | postfix_expression '('argument_expression_list ')' 
+    | postfix_expression_forfun '('argument_expression_list ')' 
 	  {
 		$$ = $1;
 		//printf("function name: %s",$$.id_name);

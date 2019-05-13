@@ -22,6 +22,7 @@ int main() {
 
     // if condition
     if (a > 10) {
+        int a=4;
         x += a;
         print(x);
     } else {

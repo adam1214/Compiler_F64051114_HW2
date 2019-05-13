@@ -492,8 +492,11 @@ selection_statement
 	;
 
 else_or_not
-	: statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
-	| statement ELSE {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	: statement {dump_scope();} else_stat
+
+else_stat
+	: {new_scope();} ELSE statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	| 
 
 iteration_statement
 	: WHILE '(' expression ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
@@ -839,7 +842,7 @@ int lookup_symbol(const Header *header, const char *id)
 }
 void dump_symbol(Header *header) 
 {
-    printf("\n\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
+    printf("\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
            "Index", "Name", "Kind", "Type", "Scope", "Attribute");
 	if (header->table_root == NULL) 
 	{

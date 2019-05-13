@@ -492,13 +492,13 @@ selection_statement
 	;
 
 else_or_not
-	: statement {dump_scope();}
-	| statement ELSE {dump_scope();new_scope();} statement {dump_scope();}
+	: statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	| statement ELSE {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 
 iteration_statement
-	: WHILE '(' expression ')' {new_scope();} statement {dump_scope();}
-	| FOR '(' expression_statement expression_statement ')' {new_scope();} statement {dump_scope();}
-	| FOR '(' expression_statement expression_statement expression ')' {new_scope();} statement {dump_scope();}
+	: WHILE '(' expression ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	| FOR '(' expression_statement expression_statement ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	| FOR '(' expression_statement expression_statement expression ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 	;
 
 jump_statement
@@ -514,7 +514,7 @@ program
 	;
 
 external_declaration
-	: function_definition{dump_scope();}
+	: function_definition{int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 	| declaration
 	;
 

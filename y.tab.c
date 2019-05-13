@@ -2016,19 +2016,19 @@ yyreduce:
 
   case 153:
 #line 495 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 #line 2021 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 154:
 #line 496 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();new_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();new_scope();}
 #line 2027 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 155:
 #line 496 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 #line 2033 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2040,7 +2040,7 @@ yyreduce:
 
   case 157:
 #line 499 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 #line 2045 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2052,7 +2052,7 @@ yyreduce:
 
   case 159:
 #line 500 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 #line 2057 "y.tab.c" /* yacc.c:1646  */
     break;
 
@@ -2064,13 +2064,13 @@ yyreduce:
 
   case 161:
 #line 501 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 #line 2069 "y.tab.c" /* yacc.c:1646  */
     break;
 
   case 168:
 #line 517 "compiler_hw2.y" /* yacc.c:1646  */
-    {dump_scope();}
+    {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
 #line 2075 "y.tab.c" /* yacc.c:1646  */
     break;
 

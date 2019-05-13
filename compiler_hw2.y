@@ -4,6 +4,7 @@
     #include <string.h>
 	#include "global.h"
     #include <stdbool.h>
+	#include <stdlib.h>
 
 typedef struct Entry Entry;
 struct Entry {  //表中的一行
@@ -83,13 +84,24 @@ void dump_all_scopes();
 primary_expression
 	: ID 
 	  {
+		int symbol_exist_or_not = -10; //not exist
 		$$ = yylval.val;
 		Header *tmp=cur_header;
+		symbol_exist_or_not = lookup_symbol(tmp,$$.id_name);
 		while(tmp->pre!=NULL)
 		{
+			if(symbol_exist_or_not!=-10)
+			{
+				break;
+			}
 			tmp=tmp->pre;
+			symbol_exist_or_not = lookup_symbol(tmp,$$.id_name);
+			if(symbol_exist_or_not!=-10)
+			{
+				break;
+			}
 		}
-		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
+		if(symbol_exist_or_not == -10)
 		{
 			int lineno=yylineno+1;
 			printf("%d: %s\n", lineno, buf);
@@ -299,18 +311,30 @@ print_arg
 	: '"' STRING '"' 
 	| ID 	
 		{
+			int symbol_exist_or_not = -10; //not exist
+			$$ = yylval.val;
 			Header *tmp=cur_header;
+			symbol_exist_or_not = lookup_symbol(tmp,$$.id_name);
 			while(tmp->pre!=NULL)
 			{
+				if(symbol_exist_or_not!=-10)
+				{
+					break;
+				}
 				tmp=tmp->pre;
+				symbol_exist_or_not = lookup_symbol(tmp,$$.id_name);
+				if(symbol_exist_or_not!=-10)
+				{
+					break;
+				}
 			}
-			if(lookup_symbol(cur_header,yylval.val.id_name)==-10&&lookup_symbol(tmp,yylval.val.id_name)==-10)
+			if(symbol_exist_or_not == -10)
 			{
 				int lineno=yylineno+1;
 				printf("%d: %s\n", lineno, buf);
 				printline_or_not=0;
 				char errmsg[64];
-        		sprintf(errmsg, "Undeclared variable %s", yylval.val.id_name);
+        		sprintf(errmsg, "Undeclared variable %s", $$.id_name);
         		yyerror(errmsg);
 			} 
 		}
@@ -360,7 +384,7 @@ declarator
 	;
 
 direct_declarator
-	: ID {$$ = yylval.val;/*printf("111");*/}
+	: ID {$$ = yylval.val;}
 	| '(' declarator ')'
 	| direct_declarator '[' constant_expression ']'
 	| direct_declarator '[' ']'
@@ -464,14 +488,17 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' statement
-	| IF '(' expression ')' statement ELSE statement
+	: IF '(' expression ')' {new_scope();} else_or_not
 	;
 
+else_or_not
+	: statement {dump_scope();}
+	| statement ELSE {dump_scope();new_scope();} statement {dump_scope();}
+
 iteration_statement
-	: WHILE '(' expression ')' statement
-	| FOR '(' expression_statement expression_statement ')' statement
-	| FOR '(' expression_statement expression_statement expression ')' statement
+	: WHILE '(' expression ')' {new_scope();} statement {dump_scope();}
+	| FOR '(' expression_statement expression_statement ')' {new_scope();} statement {dump_scope();}
+	| FOR '(' expression_statement expression_statement expression ')' {new_scope();} statement {dump_scope();}
 	;
 
 jump_statement
@@ -852,7 +879,8 @@ void dump_scope()
     Header *tmp = cur_header;
 	//printf("\ndump_scope: %d",tmp->depth);
     cur_header = cur_header->pre;
-    dump_symbol(tmp);
+	if(tmp->table_root!=NULL)
+    	dump_symbol(tmp);
     free(tmp);
     tmp = NULL;
     depth--;

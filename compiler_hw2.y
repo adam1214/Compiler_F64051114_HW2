@@ -27,6 +27,7 @@ struct Header { //一張表
 };
 Header *header_root = NULL;
 Header *cur_header = NULL;
+Header *header_rec = NULL;
 int depth = 0;
 
 extern int yylineno;
@@ -34,6 +35,9 @@ extern int yylex();
 extern char* yytext;   // Get current token from lex
 extern char buf[256];  // Get current code line from lex
 int printline_or_not=1;
+int right_compound=0;
+int err=0;
+char errmsg[64];
 
 /* Symbol table function - you can add new function if needed. */
 int lookup_symbol(const Header *header, const char *id);
@@ -103,12 +107,8 @@ primary_expression
 		}
 		if(symbol_exist_or_not == -10)
 		{
-			int lineno=yylineno+1;
-			printf("%d: %s\n", lineno, buf);
-			printline_or_not=0;
-			char errmsg[64];
+			err=1;
         	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
-        	yyerror(errmsg);
 		} 
 	  }
 	| I_CONST {$$=yylval.val;}
@@ -142,12 +142,9 @@ postfix_expression
 		}
 		if(lookup_symbol(tmp,$$.id_name)==-10)
 		{
-			int lineno=yylineno+1;
-			printf("%d: %s\n", lineno, buf);
-			printline_or_not=0;
-			char errmsg[64];
+			printf("8888888888\n");
+			err=1;
         	sprintf(errmsg, "Undeclared function %s", $$.id_name);
-        	yyerror(errmsg);
 		}
 	  }
     | postfix_expression_forfun '('argument_expression_list ')' 
@@ -161,12 +158,9 @@ postfix_expression
 		}
 		if(lookup_symbol(tmp,$$.id_name)==-10)
 		{
-			int lineno=yylineno+1;
-			printf("%d: %s\n", lineno, buf);
-			printline_or_not=0;
-			char errmsg[64];
+			//printf("8888888888\n");
+			err=1;
         	sprintf(errmsg, "Undeclared function %s", $$.id_name);
-        	yyerror(errmsg);
 		} 
 	  }
 	| postfix_expression '.' ID
@@ -264,30 +258,6 @@ conditional_expression
 assignment_expression
 	: conditional_expression {$$=$1;}
 	| unary_expression assignment_operator assignment_expression
-	  {
-		/*
-		$$=$1;
-		Header *tmp=cur_header;
-		while(tmp->pre!=NULL)
-		{
-			tmp=tmp->pre;
-		}
-		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
-		{
-			char errmsg[64];
-        	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
-        	yyerror(errmsg);
-		} 
-
-		$$=$3;
-		if(lookup_symbol(cur_header,$$.id_name)==-10 && lookup_symbol(tmp,$$.id_name)==-10)
-		{
-			char errmsg[64];
-        	sprintf(errmsg, "Undeclared variable %s", $$.id_name);
-        	yyerror(errmsg);
-		} 
-		*/
-	  }
 	;
 
 assignment_operator
@@ -330,12 +300,8 @@ print_arg
 			}
 			if(symbol_exist_or_not == -10)
 			{
-				int lineno=yylineno+1;
-				printf("%d: %s\n", lineno, buf);
-				printline_or_not=0;
-				char errmsg[64];
+				err=1;
         		sprintf(errmsg, "Undeclared variable %s", $$.id_name);
-        		yyerror(errmsg);
 			} 
 		}
 	;
@@ -466,11 +432,13 @@ labeled_statement
 	;
 
 compound_statement
-	: '{' '}'
-	| '{' statement_list '}'
-	| '{' declaration_list '}'
-	| '{' declaration_list statement_list '}'
-	;
+	: '{' {new_scope();} after_LCB {right_compound=1;header_rec=cur_header;}
+
+after_LCB
+	: '}'
+	| statement_list '}'
+	| declaration_list '}'
+	| declaration_list statement_list '}'
 
 declaration_list
 	: declaration
@@ -488,20 +456,16 @@ expression_statement
 	;
 
 selection_statement
-	: IF '(' expression ')' {new_scope();} else_or_not
-	;
+	: IF '(' expression ')' {/*new_scope();*/} else_or_not
 
 else_or_not
-	: statement {dump_scope();} else_stat
-
-else_stat
-	: {new_scope();} ELSE statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
-	| 
+	: statement
+	| statement ELSE {/*new_scope();*/} statement
 
 iteration_statement
-	: WHILE '(' expression ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
-	| FOR '(' expression_statement expression_statement ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
-	| FOR '(' expression_statement expression_statement expression ')' {new_scope();} statement {int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	: WHILE '(' expression ')' {/*new_scope();*/} statement {/*int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();*/}
+	| FOR '(' expression_statement expression_statement ')' {/*new_scope();*/} statement {/*int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();*/}
+	| FOR '(' expression_statement expression_statement expression ')' {/*new_scope();*/} statement {/*int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();*/}
 	;
 
 jump_statement
@@ -517,15 +481,22 @@ program
 	;
 
 external_declaration
-	: function_definition{int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();}
+	: function_definition{/*int lineno=yylineno+1;printf("%d: %s\n", lineno, buf);printline_or_not=0;dump_scope();*/}
 	| declaration
 	;
 
 function_definition
-	: declaration_specifiers declarator declaration_list compound_statement
-	| declaration_specifiers declarator compound_statement { Value *v1=&$1;Value *v2=&$2; insert_symbol_forfun(cur_header,v1,v2,"function");}
-	| declarator declaration_list compound_statement
-	| declarator compound_statement
+	: declaration_specifiers declarator declaration_list compound_statement_fun
+	| declaration_specifiers declarator compound_statement_fun { Value *v1=&$1;Value *v2=&$2; insert_symbol_forfun(cur_header,v1,v2,"function");}
+	| declarator declaration_list compound_statement_fun
+	| declarator compound_statement_fun
+	;
+
+compound_statement_fun
+	: '{' '}' {right_compound=1;header_rec=cur_header;}
+	| '{' statement_list '}' {right_compound=1;header_rec=cur_header;}
+	| '{' declaration_list '}' {right_compound=1;header_rec=cur_header;}
+	| '{' declaration_list statement_list '}' {right_compound=1;header_rec=cur_header;}
 	;
 
 %%
@@ -879,11 +850,31 @@ void new_scope()
 
 void dump_scope()
 {
-    Header *tmp = cur_header;
-	//printf("\ndump_scope: %d",tmp->depth);
-    cur_header = cur_header->pre;
+	Header *tmp;
+	if(header_rec!=NULL && cur_header->depth != header_rec->depth)
+	{
+		//printf("cur_header->depth=%d\n",cur_header->depth);
+		//printf("header_rec->depth=%d\n",header_rec->depth);
+		tmp = header_rec;
+		cur_header->depth=cur_header->depth-1;
+		cur_header->pre=header_rec->pre;
+		header_rec=NULL;
+	}
+	else
+	{
+		tmp = cur_header;
+		//printf("\ndump_scope: %d\n",tmp->depth);
+    	cur_header = cur_header->pre;
+	}
+    
 	if(tmp->table_root!=NULL)
-    	dump_symbol(tmp);
+	{
+		dump_symbol(tmp);
+	}
+    else
+	{
+		//printf("EEEEEEEEE\n");
+	}
     free(tmp);
     tmp = NULL;
     depth--;

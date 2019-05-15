@@ -39,6 +39,7 @@ int right_compound=0;
 int err=0;
 char errmsg[64];
 int syntax_err=0;
+int yacc_handle_syntax=1;
 
 /* Symbol table function - you can add new function if needed. */
 int lookup_symbol(const Header *header, const char *id);
@@ -272,7 +273,7 @@ assignment_operator
 	;
 
 expression
-	: expression {err=1;} error
+	: expression {err=1; yacc_handle_syntax=0;} error
 	| assignment_expression
 	| expression ',' assignment_expression
 	| TRUE
@@ -528,28 +529,24 @@ void yyerror_overloading(char *s,int line) //semantic
     printf("| Error found in line %d: %s\n", line, buf);
     printf("| %s", s);
     printf("\n|-----------------------------------------------|\n\n");
-
-	if(strcmp(s,"syntax error")==0)
-	{
-		//exit(1);
-	}
 }
 
 void yyerror(char *s) //sytax
 {
-	syntax_err=1;
-	/*
-	int line=yylineno+1;
-    printf("\n|-----------------------------------------------|\n");
-    printf("| Error found in line %d: %s\n", line, buf);
-    printf("| %s", s);
-    printf("\n|-----------------------------------------------|\n\n");
-
-	if(strcmp(s,"syntax error")==0)
+	if(yacc_handle_syntax==1)
 	{
-		//exit(1);
+		int line=yylineno+1;
+		printf("%d: %s\n",line,buf);
+    	printf("\n|-----------------------------------------------|\n");
+    	printf("| Error found in line %d: %s\n", line, buf);
+    	printf("| %s", s);
+    	printf("\n|-----------------------------------------------|\n\n");
+		exit(1);
 	}
-	*/
+	else
+	{
+		syntax_err=1;
+	}	
 }
 
 Header* create_symbol() 

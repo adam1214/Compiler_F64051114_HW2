@@ -38,6 +38,7 @@ int printline_or_not=1;
 int right_compound=0;
 int err=0;
 char errmsg[64];
+int syntax_err=0;
 
 /* Symbol table function - you can add new function if needed. */
 int lookup_symbol(const Header *header, const char *id);
@@ -48,6 +49,7 @@ void dump_symbol(Header *header);
 void new_scope();
 void dump_scope();
 void dump_all_scopes();
+void yyerror_overloading(char *s,int line);
 
 %}
 
@@ -142,7 +144,7 @@ postfix_expression
 		}
 		if(lookup_symbol(tmp,$$.id_name)==-10)
 		{
-			printf("8888888888\n");
+			//printf("8888888888\n");
 			err=1;
         	sprintf(errmsg, "Undeclared function %s", $$.id_name);
 		}
@@ -165,7 +167,7 @@ postfix_expression
 	  }
 	| postfix_expression '.' ID
 	| postfix_expression INC
-	| postfix_expression DEC
+	| postfix_expression DEC 
 	;
 
 argument_expression_list
@@ -270,11 +272,13 @@ assignment_operator
 	;
 
 expression
-	: assignment_expression
+	: expression {err=1;} error
+	| assignment_expression
 	| expression ',' assignment_expression
 	| TRUE
 	| FALSE
 	| PRINT '(' print_arg ')'
+
 	;
 
 print_arg
@@ -518,18 +522,34 @@ int main(int argc, char** argv)
     return 0;
 }
 
-void yyerror(char *s)
+void yyerror_overloading(char *s,int line) //semantic
 {
-	int lineno=yylineno+1;
     printf("\n|-----------------------------------------------|\n");
-    printf("| Error found in line %d: %s\n", lineno, buf);
+    printf("| Error found in line %d: %s\n", line, buf);
     printf("| %s", s);
     printf("\n|-----------------------------------------------|\n\n");
 
 	if(strcmp(s,"syntax error")==0)
 	{
-		exit(1);
+		//exit(1);
 	}
+}
+
+void yyerror(char *s) //sytax
+{
+	syntax_err=1;
+	/*
+	int line=yylineno+1;
+    printf("\n|-----------------------------------------------|\n");
+    printf("| Error found in line %d: %s\n", line, buf);
+    printf("| %s", s);
+    printf("\n|-----------------------------------------------|\n\n");
+
+	if(strcmp(s,"syntax error")==0)
+	{
+		//exit(1);
+	}
+	*/
 }
 
 Header* create_symbol() 
@@ -659,7 +679,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 		printline_or_not=0;
 		char errmsg[64];
         sprintf(errmsg, "Redeclared variable %s", id_ptr->id_name);
-        yyerror(errmsg);
+        yyerror_overloading(errmsg,lineno);
     }
 }
 
@@ -783,7 +803,7 @@ void insert_symbol_forfun(Header *header, Value *t_ptr, Value *id_ptr,char *kind
 		printline_or_not=0;
 		char errmsg[64];
         sprintf(errmsg, "Redeclared function %s", id_ptr->id_name);
-        yyerror(errmsg);
+        yyerror_overloading(errmsg,lineno);
     }
 }
 int lookup_symbol(const Header *header, const char *id) 
@@ -813,7 +833,7 @@ int lookup_symbol(const Header *header, const char *id)
 }
 void dump_symbol(Header *header) 
 {
-    printf("\n%-10s%-10s%-12s%-10s%-10s%-10s\n\n",
+    printf("\n%-10s%-10s%-12s%-10s%-10s%-10s\n",
            "Index", "Name", "Kind", "Type", "Scope", "Attribute");
 	if (header->table_root == NULL) 
 	{
@@ -859,6 +879,7 @@ void dump_scope()
 		cur_header->depth=cur_header->depth-1;
 		cur_header->pre=header_rec->pre;
 		header_rec=NULL;
+		//depth--;
 	}
 	else
 	{

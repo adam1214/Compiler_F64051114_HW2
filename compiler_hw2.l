@@ -17,6 +17,7 @@
 	extern int right_compound;
 	extern int err;
 	extern char errmsg[64];
+	extern int syntax_err;
 	char buf[256];
 
 	/* This macro is used to record code line */
@@ -117,7 +118,15 @@ number {digit}+
 				line_cnt++;
 				if(printline_or_not==1)
 				{
-					printf("%d: %s\n",yylineno,buf);
+					printf("%d:",yylineno);
+					if(strcmp(buf,"")!=0)
+					{
+						printf(" %s\n",buf);
+					}
+					else
+					{
+						printf("\n");
+					}
 				}
 				if(right_compound==1)
 				{
@@ -125,7 +134,15 @@ number {digit}+
 				}
 				if(err==1)
 				{
-					yyerror(errmsg);
+					yyerror_overloading(errmsg,yylineno);
+				}
+				if(syntax_err==1)
+				{
+    				printf("\n|-----------------------------------------------|\n");
+    				printf("| Error found in line %d: %s\n", yylineno, buf);
+    				printf("| syntax error");
+    				printf("\n|-----------------------------------------------|\n\n");
+					exit(1);
 				}
 				strcpy(buf,""); 
 				printline_or_not=1;

@@ -588,6 +588,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
         tmp->next = NULL;
 		tmp->Scope=header->depth;
 		strcpy(tmp->Kind,kind);
+		/*
 		if(strcmp(kind,"function")==0)
 		{
 
@@ -596,6 +597,7 @@ void insert_symbol(Header *header, Value *t_ptr, Value *id_ptr,char *kind)
 		{
 			strcat(tmp->Attribute,"");
 		}
+		*/
 
 		//TYPE
 		if(t_ptr->type==V_T)
@@ -840,8 +842,22 @@ void dump_symbol(Header *header)
     Entry *cur = header->table_root;
     while (cur != NULL)
 	{
-		printf("\n%-10d%-10s%-12s%-10s%-10d%-10s",
-		cur->index, cur->id_ptr->id_name, cur->Kind, cur->type, cur->Scope, cur->Attribute);
+		printf("\n%-10d%-10s%-12s%-10s%-10d",
+		cur->index, cur->id_ptr->id_name, cur->Kind, cur->type, cur->Scope);
+
+		if(strcmp(cur->Attribute,"")==0)
+		{
+			Entry *tmp = cur;
+        	cur = cur->next;
+			free(tmp);
+        	tmp = NULL;
+			continue;
+		}
+		else
+		{
+			//printf("ATTRIBUTE LEN:%d\n",strlen(cur->Attribute));
+			printf("%-s",cur->Attribute);
+		}
 		//printf("\n%d %s\n",cur->index, cur->id_ptr->id_name);
         Entry *tmp = cur;
         cur = cur->next;
